@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mode Master</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <style>
+    .center-div {
+        width: 50%; /* Example width, adjust as needed */
+        margin: auto;
+        /*border: 1px solid black; /* For visualization */
+        padding: 20px;
+        text-align: center; /* To center text within the div */
+    }
+</style>
+  <h1>🎹 Mode Master 🎹</h1>
+  <p>Select a root note and a mode you wish to play around with!</p>
+
+  <div class="mapper">
+    <label>
+      Choose Root Note: 
+
+
+      <select id="keyInput">
+        <option value="a" > A </option>
+        <option value="a#"> A# </option>
+        <option value="b"> B </option>
+        <option value="c" > C </option>
+        <option value="c#"> C# </option>
+        <option value="d"> D </option>
+        <option value="d#" > D# </option>
+        <option value="e" > E </option>
+        <option value="f"> F </option>
+        <option value="f#"> F# </option>
+        <option value="g" > G </option>
+        <option value="g#"> G# </option>
+      </select>
+
+    </label>
+
+    <label>
+      Choose Mode: 
+      <select id="modeSelect">
+        <option value="1" >  Ionian  (Major)  </option>
+        <option value="2">  Dorian    </option>
+        <option value="3">  Phrygian  </option>
+        <option value="4" >  Lydian    </option>
+        <option value="5">  Mixolydian    </option>
+        <option value="6">  Aeolian  (Minor) </option>
+        <option value="7" >  Locrian   </option>
+      </select>
+    </label>
+
+    <button onclick="generate()" id="enter"> ↲ Enter</button>
+
+  </div>
+
+  <!-- This is where we will display the message -->
+  <div  id="messageArea"> </div>
+
+  <div  id="notesArea"> </div>
+
+  <div class="center-div" id="chordArea"> </div>
+
+  <!-- I don't think a DAW is the best, maybe an area where they can remap  1-7 to other chords, including extended structures -->
+  <div id="dawArea"> </div>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
