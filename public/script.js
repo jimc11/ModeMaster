@@ -60,20 +60,18 @@ function splitListAtValue2(arr, value) {
 
 
 // returns the diatonic notes of the mode that the user selected
-function generateDiatonicNotes(modeNumberHTMLobject, tonicHTMLobject) {
-    modeNumber= modeNumberHTMLobject.value
-    tonic= tonicHTMLobject.value
+function generateDiatonicNotes(modeNumber, tonic) {
     let recenteredNotes = [tonic];
 
     let split = splitListAtValue(notes, tonic);
-    console.log('---split: ' + split)
+    //console.log('---split: ' + split)
     if (split.length > 1) {
         recenteredNotes.push(...split[1]);
     }
     if (split.length > 0) {
         recenteredNotes.push(...split[0]);
     }
-    console.log('---split: ' + split)
+    //console.log('---split: ' + split)
     //console.log("modeNumber: " + modeNumber)
     //console.log("modeSteps: " + modeSteps[modeNumber-1])
     let stepPattern = modeSteps[modeNumber - 1];
@@ -83,7 +81,7 @@ function generateDiatonicNotes(modeNumberHTMLobject, tonicHTMLobject) {
         //console.log("stepPattern: " + stepPattern[i])
         modeReturned.push(recenteredNotes[stepPattern[i]]);
     }
-    console.log('---modeReturned: ' +modeReturned)
+    //console.log('---modeReturned: ' +modeReturned)
     return modeReturned;
 }
 
@@ -146,13 +144,13 @@ function generate() {
     let message = `<br> You selected: ${key.toUpperCase()} ${wordMode} 🎵 <br>`;
     messageArea.innerHTML = message;
     
-    let modeNotes = generateDiatonicNotes(modeSelect, keyInput);
+    let modeNotes = generateDiatonicNotes(modeSelect.value, keyInput.value);
     let modeChords = generateDiatonicChords(modeNotes);
 
     notesArea.innerHTML = "<br> The diatonic notes are: " + modeNotes.map(note => `<span style="margin-right: 10px">${note.toUpperCase()}</span>`).join('');    
     chordArea.innerHTML = `<br> The diatonic chords are:  ${renderChordsTable(modeChords)}`;
 
-    chordArea.innerHTML = `<br> The diatonic chords of the parallel modes are: ${renderParalellModes(key)}`;
+    parallelArea.innerHTML = `<br> The diatonic chords of the parallel modes are: ${renderParalellModes(key)}`;
 }
 
 
@@ -178,8 +176,8 @@ function chordIdentifier(chordToBeDetermined) {
 
     //console.log('splitListAtValue[1,2,3,4,5,6], 4 : ' + splitListAtValue(['1','2','3','4','5','6'], '4' ))
 
-    console.log('chordToBeDetermined[0] : ' + chordToBeDetermined[0])
-    console.log('notesRecentered : ' + notesRecentered)
+    //console.log('chordToBeDetermined[0] : ' + chordToBeDetermined[0])
+    //console.log('notesRecentered : ' + notesRecentered)
 
     let indexroot = notesRecentered.indexOf(chordToBeDetermined[0]); // should always be zero
     let indexMiddle = notesRecentered.indexOf(chordToBeDetermined[1]); 
@@ -187,15 +185,15 @@ function chordIdentifier(chordToBeDetermined) {
 
     let halfsteps = [indexroot, indexMiddle, indexLast]
 
-    console.log('halfsteps : ' + halfsteps)
+   // console.log('halfsteps : ' + halfsteps)
 
     let IsMinor = areArraysEqual(halfsteps, minor )
     let IsMajor = areArraysEqual(halfsteps, major )
     let IsDiminished = areArraysEqual(halfsteps, diminished )
 
-    console.log('IsMinor : ' + IsMinor)
-    console.log('IsMajor : ' + IsMajor)
-    console.log('IsDiminished : ' + IsDiminished)
+    //console.log('IsMinor : ' + IsMinor)
+    //console.log('IsMajor : ' + IsMajor)
+    //console.log('IsDiminished : ' + IsDiminished)
 
     let returnMe
 
@@ -213,23 +211,87 @@ function chordIdentifier(chordToBeDetermined) {
 
 function renderParalellModes(userTonic){
 
-    // computeParalelModes() should return an 6x7x3 array
-    // 6 modes, 7 chords, 3 notes
-    parallelModes = computeParalelModes(userTonic)
-
-    for (let i =0; i<7; i++){
-        renderChordsTable(parallelModes[i])
-    }
-
+    // computeParalelModes() should return an 7x7x3 array
+    // 7 modes, 7 chords, 3 notes
     
+    
+    let parallelModes = computeParalelModes(userTonic)
+
+    for (let i=0; i<7;i++){
+        console.log('parallelModes[i]: '+ parallelModes[i]) 
+    } 
+
+    // confirmed working up to here
+    return renderMultiChordsTable(parallelModes)
 }
 
-function computeParalelModes(userMode,userTonic){
-    
-    
-    let modeNotes = generateDiatonicNotes(userMode, userTonic);
-    let modeChords = generateDiatonicChords(modeNotes);
+function renderMultiChordsTable(chordsOfAllModes){
+    // TODO: This
+    let tableHtml = '<table border="1" cellspacing="0" cellpadding="5">';
 
+    // First row: 'Mode' and numbers 1–7
+    tableHtml += "<tr>";
+    tableHtml += '<th>Mode</th>'; 
+    for (let i = 1; i <= 7; i++) {
+        tableHtml += `<th>${i}</th>`;
+    }
+    tableHtml += "</tr>";
+
+    const modeToNum = ['Ionian','Dorian','Phrygian','Lydian', 'Mixolydian','Aeolian','Locrian']
+    
+
+    let currentMode= 'Ionian'
+    for (let row = 0; row < 7; row++) {
+        tableHtml += "<tr>";
+        tableHtml += `<th>${modeToNum[row]}</th>`; // TODO: this should be the mode of the 
+        for (let col = 0; col < 7; col++) {
+            tableHtml += `<th> ${chordsOfAllModes[row][col][0].toUpperCase()} ${chordIdentifier(chordsOfAllModes[row][col])}</th>`
+        }
+        tableHtml += "</tr>";
+    }
+
+    // tableHtml += "<tr>";
+
+    // tableHtml += '<th>Notes in that chord</th>'; 
+    // for (let col = 0; col < 7; col++) {
+      
+    //   //console.log('[index]: ' + index)
+    //   //console.log('chordsOfAllModes[index]: ' + chordsOfAllModes[index])
+    //   tableHtml += `<td>${chordsOfAllModes[col]}</td>`;
+    // }
+
+
+  tableHtml += "</table>";
+  return tableHtml;
+}
+
+function computeParalelModes(userTonic){
+    
+    // we want to generate all modes of userTonic
+    //userMode is just a number
+
+    let allModeNotes = []
+    //console.log('here: ')
+    //console.log('userTonic: ' + userTonic)
+    for (let i=0; i<7;i++){
+        allModeNotes[i] = generateDiatonicNotes(i+1, userTonic); // returns 7x7 array
+    }
+    //console.log('allModeNotes: '+ allModeNotes)
+    
+    let modeChords = []
+
+    
+//    console.log('---test1---')
+    for (let i=0; i<7;i++){
+        modeChords[i] = generateDiatonicChords(allModeNotes[i]); 
+  //      console.log('---test2---')
+    } 
+    // console.log('---test3---')
+    // for (let i=0; i<7;i++){
+    //     console.log('modeChords[i]: '+ modeChords[i]) 
+    // } 
+    // confirmed working up to this line
+    return modeChords// must be 7x7x3 array
 }
 
 function renderChordsTable(modeChords) {
