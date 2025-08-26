@@ -344,39 +344,20 @@ function renderChordsTable(modeChords) {
 // Example usage:
 //document.getElementById("chordsArea").innerHTML = renderChordsTable(modeChords);
 
+
+
 const sounds = {
 
-  '1': new Audio('sounds/c4.wav'),
-
-  '3': new Audio('sounds/d4.wav'),
-
-  '5': new Audio('sounds/e4.wav'),
-  '6': new Audio('sounds/f4.wav'),
-
-  '8': new Audio('sounds/g4.wav'),
-
-  '10': new Audio('sounds/a4.wav'),
-
-  '12': new Audio('sounds/b4.wav'),
-  '13': new Audio('sounds/c5.wav'),
-  '14': new Audio(''),
-  '15': new Audio(''),
-  '16': new Audio(''),
-  '17': new Audio(''),
-  '18': new Audio(''),
-  '19': new Audio(''),
-  '20': new Audio(''),
-  '21': new Audio(''),
-  '22': new Audio(''),
-  '23': new Audio(''),
-  '24': new Audio(''),
-  '25': new Audio(''),
-  '26': new Audio(''),
-  '27': new Audio(''),
-  '28': new Audio(''),
-  '29': new Audio(''),
-  '30': new Audio(''),
-  '31': new Audio('')
+    '1': [new Audio('sounds/c4.wav'),new Audio('sounds/e4.wav'),new Audio('sounds/g4.wav'),],
+    '2': [new Audio('sounds/d4.wav'),new Audio('sounds/f4.wav'),new Audio('sounds/a4.wav'),],
+    '3': [new Audio('sounds/e4.wav'),new Audio('sounds/g4.wav'),new Audio('sounds/b4.wav'),],
+    '4': [new Audio('sounds/f4.wav'),new Audio('sounds/a4.wav'),new Audio('sounds/c5.wav'),], 
+    '5': [new Audio('sounds/g4.wav'),new Audio('sounds/b4.wav'),new Audio('sounds/d5.wav'),],
+    '6': [new Audio('sounds/a4.wav'),new Audio('sounds/c5.wav'),new Audio('sounds/e5.wav'),],
+    '7': [new Audio('sounds/b4.wav'),new Audio('sounds/d5.wav'),new Audio('sounds/f5.wav'),],
+    '8': [new Audio('sounds/c5.wav'),new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),],
+    '9': [new Audio('sounds/d5.wav'),new Audio('sounds/f5.wav'),new Audio('sounds/a5.wav'),],
+    '0': [new Audio('sounds/e5.wav')],
 };
 
 
@@ -396,15 +377,12 @@ const diatonicChords = {
 document.addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
 
-
-
-
-
-
-  if (sounds[key]) {
-    sounds[key].currentTime = 0; // reset if pressed quickly
-    sounds[key].play();
-    //console.log(`Played sound for key: ${key}`);
+if (sounds[key]) {
+    sounds[key].forEach(audio => {
+      // create a fresh Audio instance so it can overlap
+      const clone = audio.cloneNode();
+      clone.play();
+    });
   }
 });
 
