@@ -242,7 +242,19 @@ function renderMultiChordsTable(chordsOfAllModes){
 
     let currentMode= 'Ionian'
     for (let row = 0; row < 7; row++) {
-        tableHtml += "<tr>";
+        
+        tableHtml += "<tr"
+
+        console.log ("modeSelect.value - 1: " + modeSelect.value-1)
+        console.log ("row: " + row)
+
+        if (modeSelect.value -1 == row ){
+            tableHtml += " style=\"background-color: yellow;\""
+        } else {
+            tableHtml += " style=\"background-color: white;\""
+        }
+
+        tableHtml += ">";
         tableHtml += `<th>${modeToNum[row]}</th>`; // TODO: this should be the mode of the 
         for (let col = 0; col < 7; col++) {
             tableHtml += `<th> ${chordsOfAllModes[row][col][0].toUpperCase()} ${chordIdentifier(chordsOfAllModes[row][col])}</th>`
