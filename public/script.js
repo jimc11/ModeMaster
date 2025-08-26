@@ -148,7 +148,7 @@ function generate() {
     let modeChords = generateDiatonicChords(modeNotes);
 
     notesArea.innerHTML = "<br> The diatonic notes are: " + modeNotes.map(note => `<span style="margin-right: 10px">${note.toUpperCase()}</span>`).join('');    
-    chordArea.innerHTML = `<br> The diatonic chords are:  ${renderChordsTable(modeChords)}`;
+    //chordArea.innerHTML = `<br> The diatonic chords are:  ${renderChordsTable(modeChords)}`;
 
     parallelArea.innerHTML = `<br> The diatonic chords of the parallel modes are: ${renderParalellModes(key)}`;
 }
