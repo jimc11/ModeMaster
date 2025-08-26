@@ -106,54 +106,6 @@ function generateDiatonicChords(inputMode) {
     return chords;
 }
 
-function generate() {
-
-    // user input for the mode (returns a nubmer 1-7)
-    let mode = document.getElementById('modeSelect').value;
-
-    // user input for the root note (a, a#, b, c ...)
-    let key = document.getElementById('keyInput').value;
-
-    let wordMode = ''
-    switch (mode) {
-        case '1':
-            wordMode = 'Ionian'
-            break
-        case '2':
-            wordMode = 'Dorian'
-            break;
-        case '3':
-            wordMode = 'Phrygian'
-            break;
-        case '4':
-            wordMode = 'Lydian'
-            break;
-        case '5':
-            wordMode = 'Mixolydian'
-            break;
-        case '6':
-            wordMode = 'Aeolian'
-            break;
-        case '7':
-            wordMode = 'Locrian'
-            break;
-        default:
-            break;
-    }
-
-    let message = `<br> You selected: ${key.toUpperCase()} ${wordMode} 🎵 <br>`;
-    messageArea.innerHTML = message;
-    
-    let modeNotes = generateDiatonicNotes(modeSelect.value, keyInput.value);
-    let modeChords = generateDiatonicChords(modeNotes);
-
-    notesArea.innerHTML = "<br> The diatonic notes are: " + modeNotes.map(note => `<span style="margin-right: 10px">${note.toUpperCase()}</span>`).join('');    
-    //chordArea.innerHTML = `<br> The diatonic chords are:  ${renderChordsTable(modeChords)}`;
-
-    parallelArea.innerHTML = `<br> The diatonic chords of the parallel modes are: ${renderParalellModes(key)}`;
-}
-
-
 function areArraysEqual(arr1, arr2) {
   if (arr1.length !== arr2.length) {
     return false; // Arrays of different lengths cannot be equal
@@ -217,9 +169,9 @@ function renderParalellModes(userTonic){
     
     let parallelModes = computeParalelModes(userTonic)
 
-    for (let i=0; i<7;i++){
-        console.log('parallelModes[i]: '+ parallelModes[i]) 
-    } 
+    //for (let i=0; i<7;i++){
+    //    console.log('parallelModes[i]: '+ parallelModes[i]) 
+    //} 
 
     // confirmed working up to here
     return renderMultiChordsTable(parallelModes)
@@ -245,8 +197,8 @@ function renderMultiChordsTable(chordsOfAllModes){
         
         tableHtml += "<tr"
 
-        console.log ("modeSelect.value - 1: " + modeSelect.value-1)
-        console.log ("row: " + row)
+        //console.log ("modeSelect.value - 1: " + modeSelect.value-1)
+        //console.log ("row: " + row)
 
         if (modeSelect.value -1 == row ){
             tableHtml += " style=\"background-color: yellow;\""
@@ -344,10 +296,83 @@ function renderChordsTable(modeChords) {
 // Example usage:
 //document.getElementById("chordsArea").innerHTML = renderChordsTable(modeChords);
 
+function renderSounds (newChords){
+    console.log('newchords: ' + newChords)
+    sounds = {}
+
+    const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
+
+   
+    let currentModeSteps = modeSteps[modeSelect.value-1] // half steps from root for current user selected mode
+    let referenceNotesIndex = 0
+
+    console.log('newChords[0][0]: ' + newChords[0][0])
 
 
-const sounds = {
+    // finds the index of the root note of the scale
+    for (let i = 0; i< referenceNotes.length; i++){
+        console.log('referenceNotes[i].slice(0, -1): ' + referenceNotes[i].slice(0, -1))
 
+        if (referenceNotes[i].slice(0, -1) == newChords[0][0]){
+            referenceNotesIndex = i
+            break
+        }
+            
+    }
+    console.log('referenceNotesIndex: ' + referenceNotesIndex)
+
+    // scale we will build out
+    let currentEnumeratedModeNotes = []
+    for (let i = 0 ; i < 7; i++){
+        currentEnumeratedModeNotes[i] = referenceNotes[referenceNotesIndex + currentModeSteps[i]]
+        console.log('currentModeSteps[i]' + currentModeSteps[i])
+    }
+
+    // add currentEnumeratedModeNotes onto currentEnumeratedModeNotes, but make it an octave higher
+    currentEnumeratedModeNotes = currentEnumeratedModeNotes.concat(currentEnumeratedModeNotes)
+    console.log('currentEnumeratedModeNotes: ' + currentEnumeratedModeNotes)
+
+    for (i in currentEnumeratedModeNotes){
+        if (i>6){
+            //add 1 to the last digit...
+            currentEnumeratedModeNotes[i] = currentEnumeratedModeNotes[i].replace(/\d+$/,match => parseInt(match) + 1);
+        }
+    }
+
+    console.log('currentEnumeratedModeNotes: ' + currentEnumeratedModeNotes)
+
+    let enumeratedChords = []; // this is a 2d array
+    let enumeratedChord = [] // 1D array to be pushed to enumeratedEncodedChords when filled with 3 notes
+
+    // c,d,e,f,g,a,b, c,d,e,f,g,a,b
+    // now we must build the 7 triads from currentEnumeratedModeNotes
+    for (let i = 0 ; i < 7; i++){
+        enumeratedChord = [currentEnumeratedModeNotes[i], currentEnumeratedModeNotes[i+2], currentEnumeratedModeNotes[i+4]]
+        enumeratedChords.push(enumeratedChord)
+    }
+    console.log('enumeratedChords: ' + enumeratedChords)
+
+    let enumeratedEncodedChords = enumeratedChords.map(chord =>
+        chord.map(note => note.replace("#", "%23")) );
+
+    console.log('enumeratedEncodedChords: ' + enumeratedEncodedChords)
+
+    sounds = {
+        '1': [new Audio('sounds/'+enumeratedEncodedChords[0][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][2]+'.wav'),],
+        '2': [new Audio('sounds/'+enumeratedEncodedChords[1][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[1][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[1][2]+'.wav'),],
+        '3': [new Audio('sounds/'+enumeratedEncodedChords[2][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[2][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[2][2]+'.wav'),],
+        '4': [new Audio('sounds/'+enumeratedEncodedChords[3][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[3][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[3][2]+'.wav'),],
+        '5': [new Audio('sounds/'+enumeratedEncodedChords[4][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[4][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[4][2]+'.wav'),],
+        '6': [new Audio('sounds/'+enumeratedEncodedChords[5][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][2]+'.wav'),],
+        '7': [new Audio('sounds/'+enumeratedEncodedChords[6][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][2]+'.wav'),],
+        
+        //'8': [new Audio('sounds/c5.wav'),new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),],
+        //'9': [new Audio('sounds/d5.wav'),new Audio('sounds/f5.wav'),new Audio('sounds/a5.wav'),],
+        //'0': [new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),new Audio('sounds/b5.wav')],
+    };
+}
+
+let sounds = {
     '1': [new Audio('sounds/c4.wav'),new Audio('sounds/e4.wav'),new Audio('sounds/g4.wav'),],
     '2': [new Audio('sounds/d4.wav'),new Audio('sounds/f4.wav'),new Audio('sounds/a4.wav'),],
     '3': [new Audio('sounds/e4.wav'),new Audio('sounds/g4.wav'),new Audio('sounds/b4.wav'),],
@@ -355,35 +380,74 @@ const sounds = {
     '5': [new Audio('sounds/g4.wav'),new Audio('sounds/b4.wav'),new Audio('sounds/d5.wav'),],
     '6': [new Audio('sounds/a4.wav'),new Audio('sounds/c5.wav'),new Audio('sounds/e5.wav'),],
     '7': [new Audio('sounds/b4.wav'),new Audio('sounds/d5.wav'),new Audio('sounds/f5.wav'),],
-    '8': [new Audio('sounds/c5.wav'),new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),],
-    '9': [new Audio('sounds/d5.wav'),new Audio('sounds/f5.wav'),new Audio('sounds/a5.wav'),],
-    '0': [new Audio('sounds/e5.wav')],
-};
-
-
-
-const currentScale= {}
-
-
-const diatonicChords = {
-
-   // how to make a single button press activate multiple files? (hmm)
-   // how to make the file names dynamic? (easy)
-
-  '1': 'umm',
+   //'8': [new Audio('sounds/c5.wav'),new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),],
+    //'9': [new Audio('sounds/d5.wav'),new Audio('sounds/f5.wav'),new Audio('sounds/a5.wav'),],
+    //'0': [new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),new Audio('sounds/b5.wav')],
 };
 
 
 document.addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
+        console.log('--------')
 
 if (sounds[key]) {
     sounds[key].forEach(audio => {
-      // create a fresh Audio instance so it can overlap
-      const clone = audio.cloneNode();
-      clone.play();
+        //create a fresh Audio instance so it can overlap
+        //console.log("sounds[key].toString(): "+ sounds[key].toString())
+        const clone = audio.cloneNode();
+        //console.log("clone:  "+ clone)
+        console.log("Played file:", decodeURIComponent(clone.src.split("/").pop()));
+        clone.play();
     });
   }
 });
 
 
+// ----- MAIN FUNCTION -----
+function generate() {
+
+    // user input for the mode (returns a nubmer 1-7)
+    let mode = document.getElementById('modeSelect').value;
+
+    // user input for the root note (a, a#, b, c ...)
+    let key = document.getElementById('keyInput').value;
+
+    let wordMode = ''
+    switch (mode) {
+        case '1':
+            wordMode = 'Ionian'
+            break
+        case '2':
+            wordMode = 'Dorian'
+            break;
+        case '3':
+            wordMode = 'Phrygian'
+            break;
+        case '4':
+            wordMode = 'Lydian'
+            break;
+        case '5':
+            wordMode = 'Mixolydian'
+            break;
+        case '6':
+            wordMode = 'Aeolian'
+            break;
+        case '7':
+            wordMode = 'Locrian'
+            break;
+        default:
+            break;
+    }
+
+    let message = `<br> You selected: ${key.toUpperCase()} ${wordMode} 🎵 <br>`;
+    messageArea.innerHTML = message;
+    
+    let modeNotes = generateDiatonicNotes(modeSelect.value, keyInput.value);
+    let modeChords = generateDiatonicChords(modeNotes);
+
+    notesArea.innerHTML = "<br> The diatonic notes are: " + modeNotes.map(note => `<span style="margin-right: 10px">${note.toUpperCase()}</span>`).join('');    
+    //chordArea.innerHTML = `<br> The diatonic chords are:  ${renderChordsTable(modeChords)}`;
+
+    parallelArea.innerHTML = `<br> The diatonic chords of the parallel modes are: ${renderParalellModes(key)}`;
+    renderSounds(modeChords)
+}
