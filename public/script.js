@@ -237,7 +237,7 @@ function renderMultiChordsTable(chordsOfAllModes){
     }
     tableHtml += "</tr>";
 
-    const modeToNum = ['Ionian','Dorian','Phrygian','Lydian', 'Mixolydian','Aeolian','Locrian']
+    const modeToNum = ['Ionian (Major)','Dorian','Phrygian','Lydian', 'Mixolydian','Aeolian (Minor)','Locrian']
     
 
     let currentMode= 'Ionian'

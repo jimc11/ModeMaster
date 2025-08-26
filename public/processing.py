@@ -26,6 +26,18 @@ def split_list_at_value(input_list, split_value):
         result.append(current_sublist)
     return result
 
+
+
+
+
+
+
+
+
+
+
+
+
 def generate_parallel_mode(modeNumber, tonic):
     # Function body (indented code)
     recenteredNotes = [tonic]
