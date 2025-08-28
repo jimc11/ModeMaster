@@ -297,7 +297,7 @@ function renderChordsTable(modeChords) {
 //document.getElementById("chordsArea").innerHTML = renderChordsTable(modeChords);
 
 function renderSounds (newChords){
-    console.log('newchords: ' + newChords)
+    //console.log('newchords: ' + newChords)
     sounds = {}
 
     const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
@@ -306,7 +306,7 @@ function renderSounds (newChords){
     let currentModeSteps = modeSteps[modeSelect.value-1] // half steps from root for current user selected mode
     let referenceNotesIndex = 0
 
-    console.log('newChords[0][0]: ' + newChords[0][0])
+    //console.log('newChords[0][0]: ' + newChords[0][0])
 
 
     // finds the index of the root note of the scale
@@ -325,12 +325,12 @@ function renderSounds (newChords){
     let currentEnumeratedModeNotes = []
     for (let i = 0 ; i < 7; i++){
         currentEnumeratedModeNotes[i] = referenceNotes[referenceNotesIndex + currentModeSteps[i]]
-        console.log('currentModeSteps[i]' + currentModeSteps[i])
+        //console.log('currentModeSteps[i]' + currentModeSteps[i])
     }
 
     // add currentEnumeratedModeNotes onto currentEnumeratedModeNotes, but make it an octave higher
     currentEnumeratedModeNotes = currentEnumeratedModeNotes.concat(currentEnumeratedModeNotes)
-    console.log('currentEnumeratedModeNotes: ' + currentEnumeratedModeNotes)
+    //console.log('currentEnumeratedModeNotes: ' + currentEnumeratedModeNotes)
 
     for (i in currentEnumeratedModeNotes){
         if (i>6){
@@ -339,23 +339,23 @@ function renderSounds (newChords){
         }
     }
 
-    console.log('currentEnumeratedModeNotes: ' + currentEnumeratedModeNotes)
+    //console.log('currentEnumeratedModeNotes: ' + currentEnumeratedModeNotes)
 
     let enumeratedChords = []; // this is a 2d array
     let enumeratedChord = [] // 1D array to be pushed to enumeratedEncodedChords when filled with 3 notes
 
     // c,d,e,f,g,a,b, c,d,e,f,g,a,b
     // now we must build the 7 triads from currentEnumeratedModeNotes
-    for (let i = 0 ; i < 7; i++){
+    for (let i = 0 ; i < 8; i++){
         enumeratedChord = [currentEnumeratedModeNotes[i], currentEnumeratedModeNotes[i+2], currentEnumeratedModeNotes[i+4]]
         enumeratedChords.push(enumeratedChord)
     }
-    console.log('enumeratedChords: ' + enumeratedChords)
+    //console.log('enumeratedChords: ' + enumeratedChords)
 
     let enumeratedEncodedChords = enumeratedChords.map(chord =>
         chord.map(note => note.replace("#", "%23")) );
 
-    console.log('enumeratedEncodedChords: ' + enumeratedEncodedChords)
+    //console.log('enumeratedEncodedChords: ' + enumeratedEncodedChords)
 
     sounds = {
         '1': [new Audio('sounds/'+enumeratedEncodedChords[0][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][2]+'.wav'),],
@@ -365,6 +365,7 @@ function renderSounds (newChords){
         '5': [new Audio('sounds/'+enumeratedEncodedChords[4][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[4][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[4][2]+'.wav'),],
         '6': [new Audio('sounds/'+enumeratedEncodedChords[5][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][2]+'.wav'),],
         '7': [new Audio('sounds/'+enumeratedEncodedChords[6][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][2]+'.wav'),],
+        '8': [new Audio('sounds/'+enumeratedEncodedChords[7][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][2]+'.wav'),],
         
         //'8': [new Audio('sounds/c5.wav'),new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),],
         //'9': [new Audio('sounds/d5.wav'),new Audio('sounds/f5.wav'),new Audio('sounds/a5.wav'),],
