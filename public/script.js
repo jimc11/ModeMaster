@@ -15,9 +15,48 @@ const modeSteps = [
     [0, 1, 3, 5, 6, 8, 10]   // Locrian 6
 ];
 
+// there's base chords, and modifiers...
+
+// base chords?
 const major = [0, 4 ,7];
 const minor = [0, 3, 7];
-const diminished =   [0, 3, 6];
+const diminished = [0, 3, 6];
+const sus2 =   [0, 2, 7];
+const sus4 =   [0, 2, 5];
+const sus2sus4 =   [0, 2, 5, 7];
+
+// modifiers
+const add6 = [0, 4, 7, 9] // 1-3-5-6 (aka X6)
+const add9 = [0, 4, 7, 14]  // 1-3-5-6 
+const add11 = [0, 4, 7, 17] 
+const add13 = [0, 4, 7, 21] 
+
+// dominant family
+const X7 = [0, 4, 7, 10] // 1-3-5-b7
+const X9 = [0, 4, 7, 10, 14] // 1-3-5-b7
+const X11 = [0, 4, 7, 10, 14, 17] // 1-3-5-b7
+const X13 = [0, 4, 7, 10, 14, 17, 21] // 1-3-5-b7
+
+// majX
+const maj7 = [0, 4, 7, 11] // 1-3-5-7 aka  C△ aka C dominant 7
+const maj9 = [0, 4, 7, 11, 14] // 1-3-5-b7-9
+const maj11 = [0, 4, 7, 11, 14, 17] // 1-3-5-b7-9-11
+const maj13 = [0, 4, 7, 11, 14, 17, 21] // 1-3-5-b7-9-11-13
+
+// mX
+const m7 = [0, 3, 7, 10] // 1-♭3-5-♭7
+const m9 = [0, 3, 7, 10, 14] // 1-♭3-5-♭7-9
+const m11 = [0, 3, 7, 10, 14, 17] // 1-♭3-5-♭7-9-11
+const m13 = [0, 3, 7, 10, 14, 17, 21] // 1-♭3-5-♭7-9-13
+
+// minor major 7
+const minormajor7 = [0, 3, 7, 11] // 1-♭3-5-7
+
+// TODO: How are we going to implement inversions?
+// TODO: how to handle m13#11?  can we just modify the 11?  same with maj7b5 etc
+
+
+
 
 // takes the 'notes' array and splits it.  now, the first element of the array is 
 // splitValue and the rest of the array is the chromatic scale.
@@ -292,11 +331,21 @@ function renderChordsTable(modeChords) {
   return tableHtml;
 }
 
+
+
 // Example usage:
 //document.getElementById("chordsArea").innerHTML = renderChordsTable(modeChords);
 
 function renderSounds (newChords){
-    console.log('newchords: ' + newChords)
+    //console.log('newchords: ' + newChords)
+    
+    // should we get newChords (and newChordsRow2 and newChordsRow3) from the html? YES
+    // does the enumeration make that more complicated? no matter what we will have to enumerate it.  
+    
+    // are we going to have methods that ID extended structures? (fuck no, modify existing)
+    // so we should generate the next 2 default rows based on the first one.
+
+    //  how are we going to do this with extended structuresS? catalog of half steps in each type of chord, modify some others
 
     const chordEls = document.querySelectorAll('#keyboard .chord'); // returns nodeArray of all text in the chord class 
     // chordEls[i].textContent: C
@@ -307,10 +356,8 @@ function renderSounds (newChords){
     //     console.log('chordEls[i].textContent: ' + chordEls[i].textContent)
     // }
     
-
     sounds = {}
 
-    // should we get newChords (and newChordsRow2 and newChordsRow3) from the html?
 
     const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
 
@@ -318,12 +365,9 @@ function renderSounds (newChords){
     let currentModeSteps = modeSteps[modeSelect.value-1] // half steps from root for current user selected mode
     let referenceNotesIndex = 0
 
-    //console.log('newChords[0][0]: ' + newChords[0][0])
-
-
     // finds the index of the root note of the scale
     for (let i = 0; i< referenceNotes.length; i++){
-        console.log('referenceNotes[i].slice(0, -1): ' + referenceNotes[i].slice(0, -1))
+        //console.log('referenceNotes[i].slice(0, -1): ' + referenceNotes[i].slice(0, -1))
 
         if (referenceNotes[i].slice(0, -1) == newChords[0][0]){
             referenceNotesIndex = i
@@ -331,10 +375,11 @@ function renderSounds (newChords){
         }
             
     }
-    console.log('referenceNotesIndex: ' + referenceNotesIndex)
+    
 
     // scale we will build out
     let currentEnumeratedModeNotes = []
+    //let enumeratedChromaticNotes = []
     for (let i = 0 ; i < 7; i++){
         currentEnumeratedModeNotes[i] = referenceNotes[referenceNotesIndex + currentModeSteps[i]]
         //console.log('currentModeSteps[i]' + currentModeSteps[i])
@@ -342,7 +387,7 @@ function renderSounds (newChords){
 
     // add currentEnumeratedModeNotes onto currentEnumeratedModeNotes, but make it an octave higher
     currentEnumeratedModeNotes = currentEnumeratedModeNotes.concat(currentEnumeratedModeNotes)
-    //console.log('currentEnumeratedModeNotes: ' + currentEnumeratedModeNotes)
+    //console.log('1currentEnumeratedModeNotes: ' + currentEnumeratedModeNotes)
 
     for (i in currentEnumeratedModeNotes){
         if (i>6){
@@ -353,22 +398,88 @@ function renderSounds (newChords){
 
     //console.log('currentEnumeratedModeNotes: ' + currentEnumeratedModeNotes)
 
-    let enumeratedChords = []; // this is a 2d array
+    let enumeratedChords = []; // this is a 2d array 7x3
     let enumeratedChord = [] // 1D array to be pushed to enumeratedEncodedChords when filled with 3 notes
 
-    // c,d,e,f,g,a,b, c,d,e,f,g,a,b
+    // currentEnumeratedModeNotes=  c,d,e,f,g,a,b, c,d,e,f,g,a,b
     // now we must build the 7 triads from currentEnumeratedModeNotes
+    // this builds row 1
     for (let i = 0 ; i < 8; i++){
         enumeratedChord = [currentEnumeratedModeNotes[i], currentEnumeratedModeNotes[i+2], currentEnumeratedModeNotes[i+4]]
         enumeratedChords.push(enumeratedChord)
     }
+
+    //console.log('2currentEnumeratedModeNotes: ' + currentEnumeratedModeNotes)
+    
+    // now we build row 2 (and 3?)
+
+    modeSelect = Number(document.getElementById('modeSelect').value)-1
+
+    for (let i = 7 ; i < 21; i++){
+
+        console.log('--------------')
+        console.log('i: ' + i)
+        console.log("chordEls[i].textContent:  " + chordEls[i].textContent)
+        console.log("chordEls[i].textContent.slice(2,5)  " + chordEls[i].textContent.slice(2,5))
+        console.log("chordEls[i].textContent.slice(2,5)  == 'dim': ")
+        console.log( chordEls[i].textContent.slice(2,5)  == 'dim')
+
+
+        //const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
+        // const major = [0, 4 ,7];
+        // const minor = [0, 3, 7];
+        // const diminished = [0, 3, 6];
+
+        // how can we take C m and make that c3 d#3 g3 and so on...?
+        // we start at the reference notes
+        // we find the root note
+        // we add the half steps of the chord
+
+
+        // finds the index of the root note of the scale
+        for (let j = 0; j< referenceNotes.length; j++){
+            // console.log('*****')
+            // console.log('referenceNotes[i].slice(0, -1): ' + referenceNotes[i].slice(0, -1))
+            // console.log('chordEls[i].textContent.slice(0,1).toLowerCase(): ' + chordEls[i].textContent.slice(0,1).toLowerCase())
+
+            if (referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,1).toLowerCase()){
+                referenceNotesIndex = j
+                break
+            }
+                
+        }
+
+        console.log("referenceNotesIndex: " + referenceNotesIndex)
+
+        if (chordEls[i].textContent.slice(2,5)  == 'dim'){
+            enumeratedChord = [referenceNotes[referenceNotesIndex] ,                     //  USER SHOULD HAVE ABILITY TO + OR - AN OCTAVE 
+                               referenceNotes[referenceNotesIndex + diminished[1]], 
+                               referenceNotes[referenceNotesIndex + diminished[2]]]
+        } else {
+            if (chordEls[i].textContent.slice(2,4) == 'm') {
+                enumeratedChord = [referenceNotes[referenceNotesIndex], 
+                                   referenceNotes[referenceNotesIndex + +minor[1]], 
+                                   referenceNotes[referenceNotesIndex + +minor[2]]]
+            } else { // it must be a major
+                enumeratedChord = [referenceNotes[referenceNotesIndex], 
+                                   referenceNotes[referenceNotesIndex + major[1]], 
+                                   referenceNotes[referenceNotesIndex + major[2]]]
+            }
+        }
+        enumeratedChords.push(enumeratedChord)
+        console.log('enumeratedChord: ' + enumeratedChord)
+        // for(chord in enumeratedChords){
+        //     console.log(chord[0]) //[0]+', ' +chord[1] + ', ' + chord[2])
+        // }
+    }
+
+    
     //console.log('enumeratedChords: ' + enumeratedChords)
-
-
     let enumeratedEncodedChords = enumeratedChords.map(chord =>
         chord.map(note => note.replace("#", "%23")) );
 
     //console.log('enumeratedEncodedChords: ' + enumeratedEncodedChords)
+    
 
     sounds = {
         '1': [new Audio('sounds/'+enumeratedEncodedChords[0][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][2]+'.wav'),],
