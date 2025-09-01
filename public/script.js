@@ -661,6 +661,12 @@ function updateKeyboard(buttonsNewChords) {
     
 }
 
+// things to fix:
+
+// Doesn't work perfect for other keys/modes
+
+// Doesn't allow you to dynamically update site
+
 function onModeChange(newChords) {
     updateKeyboard(newChords);
 }
