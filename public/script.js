@@ -451,4 +451,97 @@ function generate() {
 
     parallelArea.innerHTML = `<br> The diatonic chords of the parallel modes are: ${renderParalellModes(key)}`;
     renderSounds(modeChords)
+
+    console.log('modeChords: ' + modeChords)
+    onModeChange(modeChords)
+}
+
+function updateKeyboard(buttonsNewChords) {
+    const chordEls = document.querySelectorAll('#keyboard .chord'); // returns nodeArray of all text in the chord class 
+    let chordsChords= []    
+
+    let types= []
+    // buttonsNewChords is 7x3 array
+    buttonsNewChords.forEach((chordNotes, i) => {
+
+        if (chordEls[i]) {
+        
+            for (let i = 0 ; i < chordNotes.length-3; i++){
+                chordsChords.push(chordIdentifier(chordNotes[i],chordNotes[i+1],chordNotes[i+2]))
+            }
+            let chordType = chordIdentifier(chordNotes);
+            // display root note + chord type
+            if(chordType == 'diminished') {
+                chordType = 'dim'
+            } else if(chordType == 'major') {
+                chordType = ' '
+            } else if(chordType == 'minor') {
+                chordType = 'm'
+            }
+            types.push(chordType)
+            //console.log('types[i]===: ' + types)
+
+            chordEls[i].textContent = chordNotes[0].toUpperCase() + " " + chordType;
+        }
+
+    });
+
+    // here is where I want to update the remaining 14 buttons
+
+    for (let i = 0; i<14; i++){
+
+        // if 1 is major
+        // then 2 is minor
+        // and 3 is diminished
+
+        // if 1 is minor
+        // then 2 is diminished
+        // and 3 is major
+
+        // if 1 is diminished
+        // then 2 is major
+        // 3 is minor
+
+        if (types[i] == ' '){
+            chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + "m"
+            chordEls[i+14].textContent = buttonsNewChords[i][0].toUpperCase() + "dim"
+        } else if (types[i] == 'm'){
+            chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + "dim"
+            chordEls[i+14].textContent = buttonsNewChords[i][0].toUpperCase() + " "
+        } else {
+            chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + " "
+            chordEls[i+14].textContent = buttonsNewChords[i][0].toUpperCase() + "m"
+        }
+        console.log('i : ' + i)
+        console.log('types[i]: ' + types[i])
+        console.log('chordEls[i+7].textContent : ' + chordEls[i+7].textContent)
+        console.log('chordEls[i+14].textContent : ' + chordEls[i+14].textContent)
+
+        // if (chordEls[i].textContent.includes('dim')){
+        //     if (chordEls[i+7].textContent.includes('m')){
+        //         chordEls[i].textContent = chordNotes[0].toUpperCase() + " " 
+        //     } else {
+        //         chordEls[i].textContent = chordNotes[0].toUpperCase() + " " +minor 
+        //     }
+        // } else {
+        //     if (chordEls[i+7].textContent.includes('m')){
+        //         chordEls[i].textContent = this element should be a major
+        //     } else {
+        //         chordEls[i].textContent = this element should be a diminished 
+        //     }
+        // }
+        
+    }
+    
+    
+    // for (let i = 14; i<21; i++){
+    //     chordEls[i].textContent =buttonsNewChords[i-14]
+    //     //console.log('chordEls[i]2: ' + chordEls[i].textContent)
+    // }
+}
+
+// Call this whenever the user selects a new root/mode
+function onModeChange(newChords) {
+    //modeChords = newChords;
+    updateKeyboard(newChords);
 }

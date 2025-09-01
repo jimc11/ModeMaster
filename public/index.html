@@ -1,74 +1,307 @@
 <!DOCTYPE html>
+
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Mode Master</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Mode Master</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
     <style>
-    .center-div {
+      .key {
+        display: flex;
+        flex-direction: column; /* stack text vertically */
+        justify-content: center;
+        align-items: center;
+        height: 60px;
+        width: 60px;
+        border: 2px solid #333;
+        border-radius: 8px;
+        background: #e0e0e0;
+        font-family: sans-serif;
+        font-size: 14px;
+        cursor: pointer;
+        box-shadow: 1px 2px 4px rgba(0,0,0,0.2);
+        transition: background 0.2s;
+      }
+      .key:hover {
+        background: #d0d0d0;
+      }
+      .key:active {
+        background: #b0b0b0;
+        transform: translateY(2px);
+      }
+      .label {
+        font-weight: bold;
+        font-size: 16px;
+      }
+      .chord {
+        font-size: 13px;
+        color: darkred; /* make chords stand out */
+      }
+      .center-div {
         width: 50%; /* Example width, adjust as needed */
         margin: auto;
         /*border: 1px solid black; /* For visualization */
         padding: 20px;
         text-align: center; /* To center text within the div */
+      }
+      .dawArea {
+      display: flex;
+      justify-content: center; /* center horizontally */
+      align-items: center;     /* center vertically */
+      height: 100vh;           /* full viewport height */
+      margin: 0;
+      background: #fafafa;
     }
-</style>
-  <h1>🎹 Mode Master 🎹</h1>
-  <p>Select a root note and a mode you wish to play around with!</p>
+    .keyboard {
+      display: flex;
+      flex-direction: column;
+      gap: 8px; /* space between rows */
+      width: max-content;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: repeat(7, 60px); /* 7 columns, each 60px wide */
+      gap: 6px; /* spacing between keys */
+    }
+    .row:nth-child(2) {
+      margin-left: 30px; /* stagger second row */
+    }
+    .row:nth-child(3) {
+      margin-left: 60px; /* stagger third row */
+    }
+    .key {
+      height: 60px;
+      border: 2px solid #333;
+      border-radius: 8px;
+      background: #e0e0e0;
+      font-family: sans-serif;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 1px 2px 4px rgba(0,0,0,0.2);
+      transition: background 0.2s;
+    }
+    .key:hover {
+      background: #d0d0d0;
+    }
+    .key:active {
+      background: #b0b0b0;
+      transform: translateY(2px);
+    }
+  </style>
 
-  <div class="mapper">
-    <label>
-      Choose Root Note: 
+    <h1> Mode Master </h1>
+    <p>Select a root note and a mode you wish to play around with!</p>
+
+    <div class="mapper">
+      <label>
+        Choose Root Note: 
+        <select id="keyInput">
+          <option value="a" > A </option>
+          <option value="a#"> A# </option>
+          <option value="b"> B </option>
+          <option value="c" > C </option>
+          <option value="c#"> C# </option>
+          <option value="d"> D </option>
+          <option value="d#" > D# </option>
+          <option value="e" > E </option>
+          <option value="f"> F </option>
+          <option value="f#"> F# </option>
+          <option value="g" > G </option>
+          <option value="g#"> G# </option>
+        </select>
+
+      </label>
+
+      <label>
+        Choose Mode: 
+        <select id="modeSelect">
+          <option value="1" >  Ionian  (Major)  </option>
+          <option value="2">  Dorian    </option>
+          <option value="3">  Phrygian  </option>
+          <option value="4" >  Lydian    </option>
+          <option value="5">  Mixolydian    </option>
+          <option value="6">  Aeolian  (Minor) </option>
+          <option value="7" >  Locrian   </option>
+        </select>
+      </label>
+
+      <button onclick="generate()" id="enter"> ↲ Enter</button>
+
+    </div>
+
+    <!-- This is where we will display the message -->
+    <div  id="messageArea"> </div>
+
+    <div  id="notesArea"> </div>
+
+    <div class="center-div" id="chordArea"> </div>
+    <div class="center-div" id="parallelArea"> </div>
+
+    <!-- I don't think a DAW is the best, maybe an area where they can remap  1-7 to other chords, including extended structures -->
+    <div id="dawArea"> 
+      
+      <p>Click on a button to modify the bound chord.</p> 
+
+      <div id="keyboard" class="keyboard center-div">
+
+        <div class="row">
+          <button class="key">
+            <span class="label">1</span>
+            <span class="chord">C</span>
+          </button>
+          <button class="key">
+            <span class="label">2</span>
+            <span class="chord">Dm</span>
+          </button>
+          <button class="key">
+            <span class="label">3</span>
+            <span class="chord">Em</span>
+          </button>
+          <button class="key">
+            <span class="label">4</span>
+            <span class="chord">F</span>
+          </button>
+          <button class="key">
+            <span class="label">5</span>
+            <span class="chord">G</span>
+          </button>
+          <button class="key">
+            <span class="label">6</span>
+            <span class="chord">Am</span>
+          </button>
+          <button class="key">
+            <span class="label">7</span>
+            <span class="chord">Bdim</span>
+          </button>
+          <!-- <button class="key">
+            <span class="label">8</span>
+            <span class="chord">G</span>
+          </button> -->
+        </div>
+
+        <div class="row">
+          <button class="key">
+            <span class="label">Q</span>
+            <span class="chord">A</span>
+          </button>
+          <button class="key">
+            <span class="label">W</span>
+            <span class="chord">Bm</span>
+          </button>
+          <button class="key">
+            <span class="label">E</span>
+            <span class="chord">C#m</span>
+          </button>
+          <button class="key">
+            <span class="label">R</span>
+            <span class="chord">D</span>
+          </button>
+          <button class="key">
+            <span class="label">T</span>
+            <span class="chord">E</span>
+          </button>
+          <button class="key">
+            <span class="label">Y</span>
+            <span class="chord">F#m</span>
+          </button>
+          <button class="key">
+            <span class="label">U</span>
+            <span class="chord">G</span>
+          </button>
+          <!-- <button class="key">
+            <span class="label">I</span>
+            <span class="chord">G</span>
+          </button> -->
+        </div>
+
+        <div class="row">
+          <button class="key">
+            <span class="label">A</span>
+            <span class="chord">A</span>
+          </button>
+          <button class="key">
+            <span class="label">S</span>
+            <span class="chord">Bm</span>
+          </button>
+          <button class="key">
+            <span class="label">D</span>
+            <span class="chord">C#m</span>
+          </button>
+          <button class="key">
+            <span class="label">F</span>
+            <span class="chord">D</span>
+          </button>
+          <button class="key">
+            <span class="label">G</span>
+            <span class="chord">E</span>
+          </button>
+          <button class="key">
+            <span class="label">H</span>
+            <span class="chord">F#m</span>
+          </button>
+          <button class="key">
+            <span class="label">J</span>
+            <span class="chord">G</span>
+          </button>
+          <!-- <button class="key">
+            <span class="label">K</span>
+            <span class="chord">G</span>
+          </button> -->
+        </div>
 
 
-      <select id="keyInput">
-        <option value="a" > A </option>
-        <option value="a#"> A# </option>
-        <option value="b"> B </option>
-        <option value="c" > C </option>
-        <option value="c#"> C# </option>
-        <option value="d"> D </option>
-        <option value="d#" > D# </option>
-        <option value="e" > E </option>
-        <option value="f"> F </option>
-        <option value="f#"> F# </option>
-        <option value="g" > G </option>
-        <option value="g#"> G# </option>
-      </select>
 
-    </label>
+        <!-- <div class="row">
+          <div class="key">1</div>
+          <div class="key">2</div>
+          <div class="key">3</div>
+          <div class="key">4</div>
+          <div class="key">5</div>
+          <div class="key">6</div>
+          <div class="key">7</div>
+        </div>
 
-    <label>
-      Choose Mode: 
-      <select id="modeSelect">
-        <option value="1" >  Ionian  (Major)  </option>
-        <option value="2">  Dorian    </option>
-        <option value="3">  Phrygian  </option>
-        <option value="4" >  Lydian    </option>
-        <option value="5">  Mixolydian    </option>
-        <option value="6">  Aeolian  (Minor) </option>
-        <option value="7" >  Locrian   </option>
-      </select>
-    </label>
+        <div class="row">
+          <div class="key">Q</div>
+          <div class="key">W</div>
+          <div class="key">E</div>
+          <div class="key">R</div>
+          <div class="key">T</div>
+          <div class="key">Y</div>
+          <div class="key">U</div>
+        </div>
 
-    <button onclick="generate()" id="enter"> ↲ Enter</button>
+        <div class="row">
+          <div class="key">A</div>
+          <div class="key">S</div>
+          <div class="key">D</div>
+          <div class="key">F</div>
+          <div class="key">G</div>
+          <div class="key">H</div>
+          <div class="key">J</div>
+        </div> -->
+      </div>
 
-  </div>
+    </div>
 
-  <!-- This is where we will display the message -->
-  <div  id="messageArea"> </div>
-
-  <div  id="notesArea"> </div>
-
-  <div class="center-div" id="chordArea"> </div>
-  <div class="center-div" id="parallelArea"> </div>
-
-  <!-- I don't think a DAW is the best, maybe an area where they can remap  1-7 to other chords, including extended structures -->
-  <div id="dawArea"> <p> Make sure your sound is up!  Press the buttons 1-7 on your computer and the corresponding diatonic chords of your selected mode should play.</p> </div>
-
-
-  <script src="script.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>
+
+
+<!-- //// ----- new code below ----- -->
+
+<!-- <script>
+  // Example: dynamically update chords
+  const chords = ["A", "Bm", "C#m", "D", "E", "F#m", "G"];
+  const chordEls = document.querySelectorAll('.chord');
+
+  chords.forEach((chord, i) => {
+    chordEls[i].textContent = chord; // set chord label
+  });
+</script> -->
