@@ -178,8 +178,7 @@ function renderParalellModes(userTonic){
 }
 
 function renderMultiChordsTable(chordsOfAllModes){
-    // TODO: This
-    let tableHtml = '<table border="1" cellspacing="0" cellpadding="5">';
+        let tableHtml = '<table border="1" cellspacing="0" cellpadding="5">';
 
     // First row: 'Mode' and numbers 1–7
     tableHtml += "<tr>";
@@ -207,7 +206,7 @@ function renderMultiChordsTable(chordsOfAllModes){
         }
 
         tableHtml += ">";
-        tableHtml += `<th>${modeToNum[row]}</th>`; // TODO: this should be the mode of the 
+        tableHtml += `<th>${modeToNum[row]}</th>`;
         for (let col = 0; col < 7; col++) {
             tableHtml += `<th> ${chordsOfAllModes[row][col][0].toUpperCase()} ${chordIdentifier(chordsOfAllModes[row][col])}</th>`
         }
@@ -297,8 +296,21 @@ function renderChordsTable(modeChords) {
 //document.getElementById("chordsArea").innerHTML = renderChordsTable(modeChords);
 
 function renderSounds (newChords){
-    //console.log('newchords: ' + newChords)
+    console.log('newchords: ' + newChords)
+
+    const chordEls = document.querySelectorAll('#keyboard .chord'); // returns nodeArray of all text in the chord class 
+    // chordEls[i].textContent: C
+    // chordEls[i].textContent: Dm
+    // ...
+
+    // for (let i = 0; i<chordEls.length; i++){
+    //     console.log('chordEls[i].textContent: ' + chordEls[i].textContent)
+    // }
+    
+
     sounds = {}
+
+    // should we get newChords (and newChordsRow2 and newChordsRow3) from the html?
 
     const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
 
@@ -352,6 +364,7 @@ function renderSounds (newChords){
     }
     //console.log('enumeratedChords: ' + enumeratedChords)
 
+
     let enumeratedEncodedChords = enumeratedChords.map(chord =>
         chord.map(note => note.replace("#", "%23")) );
 
@@ -366,6 +379,22 @@ function renderSounds (newChords){
         '6': [new Audio('sounds/'+enumeratedEncodedChords[5][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][2]+'.wav'),],
         '7': [new Audio('sounds/'+enumeratedEncodedChords[6][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][2]+'.wav'),],
         '8': [new Audio('sounds/'+enumeratedEncodedChords[7][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][2]+'.wav'),],
+
+        'q': [new Audio('sounds/'+enumeratedEncodedChords[8][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[8][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[8][2]+'.wav'),],
+        'w': [new Audio('sounds/'+enumeratedEncodedChords[9][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[9][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[9][2]+'.wav'),],
+        'e': [new Audio('sounds/'+enumeratedEncodedChords[10][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[10][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[10][2]+'.wav'),],
+        'r': [new Audio('sounds/'+enumeratedEncodedChords[11][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[11][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[11][2]+'.wav'),],
+        't': [new Audio('sounds/'+enumeratedEncodedChords[12][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[12][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[12][2]+'.wav'),],
+        'y': [new Audio('sounds/'+enumeratedEncodedChords[13][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[13][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[13][2]+'.wav'),],
+        'u': [new Audio('sounds/'+enumeratedEncodedChords[14][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[14][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[14][2]+'.wav'),],
+
+        'a': [new Audio('sounds/'+enumeratedEncodedChords[15][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[15][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[15][2]+'.wav'),],
+        's': [new Audio('sounds/'+enumeratedEncodedChords[16][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[16][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[16][2]+'.wav'),],
+        'd': [new Audio('sounds/'+enumeratedEncodedChords[17][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[17][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[17][2]+'.wav'),],
+        'f': [new Audio('sounds/'+enumeratedEncodedChords[18][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[18][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[18][2]+'.wav'),],
+        'g': [new Audio('sounds/'+enumeratedEncodedChords[19][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][2]+'.wav'),],
+        'h': [new Audio('sounds/'+enumeratedEncodedChords[20][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][2]+'.wav'),],
+        'j': [new Audio('sounds/'+enumeratedEncodedChords[21][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[21][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[21][2]+'.wav'),]
         
         //'8': [new Audio('sounds/c5.wav'),new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),],
         //'9': [new Audio('sounds/d5.wav'),new Audio('sounds/f5.wav'),new Audio('sounds/a5.wav'),],
@@ -512,36 +541,23 @@ function updateKeyboard(buttonsNewChords) {
             chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + " "
             chordEls[i+14].textContent = buttonsNewChords[i][0].toUpperCase() + "m"
         }
-        console.log('i : ' + i)
-        console.log('types[i]: ' + types[i])
-        console.log('chordEls[i+7].textContent : ' + chordEls[i+7].textContent)
-        console.log('chordEls[i+14].textContent : ' + chordEls[i+14].textContent)
-
-        // if (chordEls[i].textContent.includes('dim')){
-        //     if (chordEls[i+7].textContent.includes('m')){
-        //         chordEls[i].textContent = chordNotes[0].toUpperCase() + " " 
-        //     } else {
-        //         chordEls[i].textContent = chordNotes[0].toUpperCase() + " " +minor 
-        //     }
-        // } else {
-        //     if (chordEls[i+7].textContent.includes('m')){
-        //         chordEls[i].textContent = this element should be a major
-        //     } else {
-        //         chordEls[i].textContent = this element should be a diminished 
-        //     }
-        // }
+        // console.log('i : ' + i)
+        // console.log('types[i]: ' + types[i])
+        // console.log('chordEls[i+7].textContent : ' + chordEls[i+7].textContent)
+        // console.log('chordEls[i+14].textContent : ' + chordEls[i+14].textContent)
         
     }
     
-    
-    // for (let i = 14; i<21; i++){
-    //     chordEls[i].textContent =buttonsNewChords[i-14]
-    //     //console.log('chordEls[i]2: ' + chordEls[i].textContent)
-    // }
 }
 
-// Call this whenever the user selects a new root/mode
 function onModeChange(newChords) {
-    //modeChords = newChords;
     updateKeyboard(newChords);
 }
+
+
+// TODO:
+
+// 1. pressing Q-J plays the corresponding chord
+// 2a. be able to modify the chords on screen and chords played
+// 2b. switch to having the chords on screen dictate what is being played 
+// 3.when keyboard button is pressed, the button on the screen highlights
