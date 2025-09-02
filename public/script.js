@@ -18,24 +18,24 @@ const modeSteps = [
 // there's base chords, and modifiers...
 
 // base chords?
-const major = [0, 4 ,7];
-const minor = [0, 3, 7];
-const diminished = [0, 3, 6];
-const sus2 =   [0, 2, 7];
-const sus4 =   [0, 2, 5];
-const sus2sus4 =   [0, 2, 5, 7];
+const major = [0, 4 ,7]; // 1-3-5
+const minor = [0, 3, 7]; // 1-♭3-5
+const diminished = [0, 3, 6]; // 1-♭3-♭5
+const sus2 =   [0, 2, 7]; // 1-2-5
+const sus4 =   [0, 2, 5]; // 1-4-5
+const sus2sus4 =   [0, 2, 5, 7]; // 1-2-4-5
 
 // modifiers
 const add6 = [0, 4, 7, 9] // 1-3-5-6 (aka X6)
-const add9 = [0, 4, 7, 14]  // 1-3-5-6 
-const add11 = [0, 4, 7, 17] 
-const add13 = [0, 4, 7, 21] 
+const add9 = [0, 4, 7, 14]  // 1-3-5-9
+const add11 = [0, 4, 7, 17] // 1-3-5-11
+const add13 = [0, 4, 7, 21] // 1-3-5-13
 
 // dominant family
-const X7 = [0, 4, 7, 10] // 1-3-5-b7
-const X9 = [0, 4, 7, 10, 14] // 1-3-5-b7
-const X11 = [0, 4, 7, 10, 14, 17] // 1-3-5-b7
-const X13 = [0, 4, 7, 10, 14, 17, 21] // 1-3-5-b7
+const X7 = [0, 4, 7, 10] // 1-3-5-♭7
+const X9 = [0, 4, 7, 10, 14] // 1-3-5-♭7
+const X11 = [0, 4, 7, 10, 14, 17] // 1-3-5-♭7
+const X13 = [0, 4, 7, 10, 14, 17, 21] // 1-3-5-♭7
 
 // majX
 const maj7 = [0, 4, 7, 11] // 1-3-5-7 aka  C△ aka C dominant 7
@@ -111,14 +111,17 @@ function generateDiatonicNotes(modeNumber, tonic) {
         recenteredNotes.push(...split[0]);
     }
     //console.log('---split: ' + split)
-    //console.log("modeNumber: " + modeNumber)
-    //console.log("modeSteps: " + modeSteps[modeNumber-1])
+    console.log("modeNumber: " + modeNumber) // modeNumber jsut fails now
+    console.log("modeSteps: " + modeSteps[modeNumber-1])
     let stepPattern = modeSteps[modeNumber - 1];
     let modeReturned = [];
+    console.log("modeNumber: " + modeNumber) // fails when changing mode
+    console.log("modeSteps[modeNumber - 1]: " + modeSteps[modeNumber - 1]) // fails when changing mode
 
     for (let i = 0; i < 7; i++) {
-        //console.log("stepPattern: " + stepPattern[i])
-        modeReturned.push(recenteredNotes[stepPattern[i]]);
+        console.log("i: " + i)
+        console.log("stepPattern: " + stepPattern[i])
+        modeReturned.push(recenteredNotes[stepPattern[i]]); 
     }
     //console.log('---modeReturned: ' +modeReturned)
     return modeReturned;
@@ -238,7 +241,7 @@ function renderMultiChordsTable(chordsOfAllModes){
         //console.log ("modeSelect.value - 1: " + modeSelect.value-1)
         //console.log ("row: " + row)
 
-        if (modeSelect.value -1 == row ){
+        if (document.getElementById('modeSelect').value -1 == row ){
             tableHtml += " style=\"background-color: yellow;\""
         } else {
             tableHtml += " style=\"background-color: white;\""
@@ -336,7 +339,7 @@ function renderChordsTable(modeChords) {
 // Example usage:
 //document.getElementById("chordsArea").innerHTML = renderChordsTable(modeChords);
 
-function renderSounds (newChords){
+function renderSounds (mode, newChords){
     //console.log('newchords: ' + newChords)
     
     // should we get newChords (and newChordsRow2 and newChordsRow3) from the html? YES
@@ -362,7 +365,7 @@ function renderSounds (newChords){
     const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
 
    
-    let currentModeSteps = modeSteps[modeSelect.value-1] // half steps from root for current user selected mode
+    let currentModeSteps = modeSteps[mode-1] // half steps from root for current user selected mode
     let referenceNotesIndex = 0
 
     // finds the index of the root note of the scale
@@ -414,15 +417,16 @@ function renderSounds (newChords){
     // now we build row 2 (and 3?)
 
     modeSelect = Number(document.getElementById('modeSelect').value)-1
-
+    //modeSelect -= 1
+    
     for (let i = 7 ; i < 21; i++){
 
-        console.log('--------------')
-        console.log('i: ' + i)
-        console.log("chordEls[i].textContent:  " + chordEls[i].textContent)
-        console.log("chordEls[i].textContent.slice(2,5)  " + chordEls[i].textContent.slice(2,5))
-        console.log("chordEls[i].textContent.slice(2,5)  == 'dim': ")
-        console.log( chordEls[i].textContent.slice(2,5)  == 'dim')
+        // console.log('--------------')
+        // console.log('i: ' + i)
+        // console.log("chordEls[i].textContent:  " + chordEls[i].textContent)
+        // console.log("chordEls[i].textContent.slice(2,5)  " + chordEls[i].textContent.slice(2,5))
+        // console.log("chordEls[i].textContent.slice(2,5)  == 'dim': ")
+        // console.log( chordEls[i].textContent.slice(2,5)  == 'dim')
 
 
         //const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
@@ -449,7 +453,7 @@ function renderSounds (newChords){
                 
         }
 
-        console.log("referenceNotesIndex: " + referenceNotesIndex)
+        //console.log("referenceNotesIndex: " + referenceNotesIndex)
 
         if (chordEls[i].textContent.slice(2,5)  == 'dim'){
             enumeratedChord = [referenceNotes[referenceNotesIndex] ,                     //  USER SHOULD HAVE ABILITY TO + OR - AN OCTAVE 
@@ -467,7 +471,7 @@ function renderSounds (newChords){
             }
         }
         enumeratedChords.push(enumeratedChord)
-        console.log('enumeratedChord: ' + enumeratedChord)
+        //console.log('enumeratedChord: ' + enumeratedChord)
         // for(chord in enumeratedChords){
         //     console.log(chord[0]) //[0]+', ' +chord[1] + ', ' + chord[2])
         // }
@@ -546,10 +550,10 @@ if (sounds[key]) {
 
 // ----- MAIN FUNCTION -----
 function generate() {
-
+    console.log("------generate()------")
     // user input for the mode (returns a nubmer 1-7)
     let mode = document.getElementById('modeSelect').value;
-
+    console.log("mode: " + mode)
     // user input for the root note (a, a#, b, c ...)
     let key = document.getElementById('keyInput').value;
 
@@ -583,16 +587,19 @@ function generate() {
     let message = `<br> You selected: ${key.toUpperCase()} ${wordMode} 🎵 <br>`;
     messageArea.innerHTML = message;
     
-    let modeNotes = generateDiatonicNotes(modeSelect.value, keyInput.value);
+
+    //console.log("modeSelect.value1: " + modeSelect.value) // fails on round 2
+
+    let modeNotes = generateDiatonicNotes(mode, keyInput.value);
     let modeChords = generateDiatonicChords(modeNotes);
 
     notesArea.innerHTML = "<br> The diatonic notes are: " + modeNotes.map(note => `<span style="margin-right: 10px">${note.toUpperCase()}</span>`).join('');    
     //chordArea.innerHTML = `<br> The diatonic chords are:  ${renderChordsTable(modeChords)}`;
 
     parallelArea.innerHTML = `<br> The diatonic chords of the parallel modes are: ${renderParalellModes(key)}`;
-    renderSounds(modeChords)
+    renderSounds(mode, modeChords)
 
-    console.log('modeChords: ' + modeChords)
+    //console.log('modeChords: ' + modeChords)
     onModeChange(modeChords)
 }
 
@@ -627,8 +634,8 @@ function updateKeyboard(buttonsNewChords) {
     });
 
     // here is where I want to update the remaining 14 buttons
-
-    for (let i = 0; i<14; i++){
+    //console.log("buttonsNewChords: " + buttonsNewChords)
+    for (let i = 0; i<7; i++){ // this used to be i<14.  not sure why I had it like that.  seems okay now that its i<7
 
         // if 1 is major
         // then 2 is minor
@@ -642,6 +649,8 @@ function updateKeyboard(buttonsNewChords) {
         // then 2 is major
         // 3 is minor
 
+        // console.log('i: ' + i) // fails when i=7...
+        // console.log('buttonsNewChords[i][0]: ' + buttonsNewChords[i][0])
         if (types[i] == ' '){
             chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + "m"
             chordEls[i+14].textContent = buttonsNewChords[i][0].toUpperCase() + "dim"
@@ -649,7 +658,10 @@ function updateKeyboard(buttonsNewChords) {
             chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + "dim"
             chordEls[i+14].textContent = buttonsNewChords[i][0].toUpperCase() + " "
         } else {
+            // console.log('Here: ')
+            // console.log('buttonsNewChords[i][0]: ' + buttonsNewChords[i][0]) // 
             chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + " "
+
             chordEls[i+14].textContent = buttonsNewChords[i][0].toUpperCase() + "m"
         }
         // console.log('i : ' + i)
@@ -661,11 +673,6 @@ function updateKeyboard(buttonsNewChords) {
     
 }
 
-// things to fix:
-
-// Doesn't work perfect for other keys/modes
-
-// Doesn't allow you to dynamically update site
 
 function onModeChange(newChords) {
     updateKeyboard(newChords);
@@ -674,7 +681,9 @@ function onModeChange(newChords) {
 
 // TODO:
 
-// 1. pressing Q-J plays the corresponding chord
-// 2a. be able to modify the chords on screen and chords played
-// 2b. switch to having the chords on screen dictate what is being played 
-// 3.when keyboard button is pressed, the button on the screen highlights
+// 1. Fix issue where program crashes when mode is changed
+// ^ seems fixed.  document.getElementById('modeSelect').value was causing issues?  I probably implemented it incorrectly
+// 2. Fix issue where kbrd rows 2 and 3 always play Ionian pattern, even if other mode is selected?
+// ^ is that actually what is going on?
+// 3. be able to modify the chords on screen and chords played
+// 4.when keyboard button is pressed, the button on the screen highlights
