@@ -111,16 +111,16 @@ function generateDiatonicNotes(modeNumber, tonic) {
         recenteredNotes.push(...split[0]);
     }
     //console.log('---split: ' + split)
-    console.log("modeNumber: " + modeNumber) // modeNumber jsut fails now
-    console.log("modeSteps: " + modeSteps[modeNumber-1])
+   // console.log("modeNumber: " + modeNumber) // modeNumber jsut fails now
+   // console.log("modeSteps: " + modeSteps[modeNumber-1])
     let stepPattern = modeSteps[modeNumber - 1];
     let modeReturned = [];
-    console.log("modeNumber: " + modeNumber) // fails when changing mode
-    console.log("modeSteps[modeNumber - 1]: " + modeSteps[modeNumber - 1]) // fails when changing mode
+   // console.log("modeNumber: " + modeNumber) // fails when changing mode
+   // console.log("modeSteps[modeNumber - 1]: " + modeSteps[modeNumber - 1]) // fails when changing mode
 
     for (let i = 0; i < 7; i++) {
-        console.log("i: " + i)
-        console.log("stepPattern: " + stepPattern[i])
+        //console.log("i: " + i)
+       // console.log("stepPattern: " + stepPattern[i])
         modeReturned.push(recenteredNotes[stepPattern[i]]); 
     }
     //console.log('---modeReturned: ' +modeReturned)
@@ -242,7 +242,7 @@ function renderMultiChordsTable(chordsOfAllModes){
         //console.log ("row: " + row)
 
         if (document.getElementById('modeSelect').value -1 == row ){
-            tableHtml += " style=\"background-color: yellow;\""
+            tableHtml += " style=\"background-color: #ffeaa6;\""
         } else {
             tableHtml += " style=\"background-color: white;\""
         }
@@ -340,46 +340,30 @@ function renderChordsTable(modeChords) {
 //document.getElementById("chordsArea").innerHTML = renderChordsTable(modeChords);
 
 function renderSounds (mode, newChords){
-    //console.log('newchords: ' + newChords)
-    
-    // should we get newChords (and newChordsRow2 and newChordsRow3) from the html? YES
-    // does the enumeration make that more complicated? no matter what we will have to enumerate it.  
-    
-    // are we going to have methods that ID extended structures? (fuck no, modify existing)
-    // so we should generate the next 2 default rows based on the first one.
 
-    //  how are we going to do this with extended structuresS? catalog of half steps in each type of chord, modify some others
-
+    // this grabs before update.. CONFIRMED.
+    // How to grab after update?
     const chordEls = document.querySelectorAll('#keyboard .chord'); // returns nodeArray of all text in the chord class 
-    // chordEls[i].textContent: C
-    // chordEls[i].textContent: Dm
-    // ...
 
-    // for (let i = 0; i<chordEls.length; i++){
-    //     console.log('chordEls[i].textContent: ' + chordEls[i].textContent)
-    // }
+    for (let i = 0; i<chordEls.length; i++)
+        console.log('chordEls['+i+']: ' + chordEls[i].textContent)
     
     sounds = {}
 
-
     const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
 
-   
     let currentModeSteps = modeSteps[mode-1] // half steps from root for current user selected mode
     let referenceNotesIndex = 0
 
     // finds the index of the root note of the scale
     for (let i = 0; i< referenceNotes.length; i++){
-        //console.log('referenceNotes[i].slice(0, -1): ' + referenceNotes[i].slice(0, -1))
 
         if (referenceNotes[i].slice(0, -1) == newChords[0][0]){
             referenceNotesIndex = i
             break
         }
-            
     }
     
-
     // scale we will build out
     let currentEnumeratedModeNotes = []
     //let enumeratedChromaticNotes = []
@@ -419,71 +403,74 @@ function renderSounds (mode, newChords){
     modeSelect = Number(document.getElementById('modeSelect').value)-1
     //modeSelect -= 1
     
-    for (let i = 7 ; i < 21; i++){
+    // !@#$@%$^$%^* I think this needs to be 8, but it was halfway working at 7...
+    for (let i = 7 ; i < 21; i++){ // 
 
-        // console.log('--------------')
-        // console.log('i: ' + i)
-        // console.log("chordEls[i].textContent:  " + chordEls[i].textContent)
-        // console.log("chordEls[i].textContent.slice(2,5)  " + chordEls[i].textContent.slice(2,5))
-        // console.log("chordEls[i].textContent.slice(2,5)  == 'dim': ")
-        // console.log( chordEls[i].textContent.slice(2,5)  == 'dim')
+        for (let j = 0; j< referenceNotes.length; j++){
+            
+            if (referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,1).toLowerCase()){
+                //  console.log('*****')
+                //  console.log(
+                //      "left:", referenceNotes[j].slice(0, -1),
+                //      "right:", chordEls[i].textContent.slice(0,1).toLowerCase(),
+                //      "equal?:", referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,1).toLowerCase()
+                //      ); 
 
+                referenceNotesIndex = j
+                console.log('i: ' + i)
+
+                console.log('referenceNotesIndex: ' + referenceNotesIndex)
+
+                break
+            }
+                
+        }
 
         //const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
         // const major = [0, 4 ,7];
         // const minor = [0, 3, 7];
         // const diminished = [0, 3, 6];
 
-        // how can we take C m and make that c3 d#3 g3 and so on...?
-        // we start at the reference notes
-        // we find the root note
-        // we add the half steps of the chord
-
-
-        // finds the index of the root note of the scale
-        for (let j = 0; j< referenceNotes.length; j++){
-            // console.log('*****')
-            // console.log('referenceNotes[i].slice(0, -1): ' + referenceNotes[i].slice(0, -1))
-            // console.log('chordEls[i].textContent.slice(0,1).toLowerCase(): ' + chordEls[i].textContent.slice(0,1).toLowerCase())
-
-            if (referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,1).toLowerCase()){
-                referenceNotesIndex = j
-                break
-            }
-                
-        }
-
         //console.log("referenceNotesIndex: " + referenceNotesIndex)
-
+        // I believe this is the heart of the issue
+        //    CHORDELS doesn't seem to be grabbing the correct data...
+        
+        console.log('*****')
+        console.log('chordEls['+i+']: ' + chordEls[i].textContent)
+        // is the sound rendered before chordels is updated?
         if (chordEls[i].textContent.slice(2,5)  == 'dim'){
+            console.log('i: '+i)
+            console.log('x')
             enumeratedChord = [referenceNotes[referenceNotesIndex] ,                     //  USER SHOULD HAVE ABILITY TO + OR - AN OCTAVE 
                                referenceNotes[referenceNotesIndex + diminished[1]], 
-                               referenceNotes[referenceNotesIndex + diminished[2]]]
+                               referenceNotes[referenceNotesIndex + diminished[2]]]                        
         } else {
             if (chordEls[i].textContent.slice(2,4) == 'm') {
+                console.log('i: '+i)
+                console.log('y')
                 enumeratedChord = [referenceNotes[referenceNotesIndex], 
-                                   referenceNotes[referenceNotesIndex + +minor[1]], 
-                                   referenceNotes[referenceNotesIndex + +minor[2]]]
+                                   referenceNotes[referenceNotesIndex +minor[1]], 
+                                   referenceNotes[referenceNotesIndex +minor[2]]]
             } else { // it must be a major
+                console.log('i: '+i)
+                console.log('y:')
                 enumeratedChord = [referenceNotes[referenceNotesIndex], 
                                    referenceNotes[referenceNotesIndex + major[1]], 
                                    referenceNotes[referenceNotesIndex + major[2]]]
             }
         }
+        console.log("enumeratedChord: " + enumeratedChord)       
         enumeratedChords.push(enumeratedChord)
-        //console.log('enumeratedChord: ' + enumeratedChord)
-        // for(chord in enumeratedChords){
-        //     console.log(chord[0]) //[0]+', ' +chord[1] + ', ' + chord[2])
-        // }
     }
 
-    
-    //console.log('enumeratedChords: ' + enumeratedChords)
     let enumeratedEncodedChords = enumeratedChords.map(chord =>
         chord.map(note => note.replace("#", "%23")) );
-
-    //console.log('enumeratedEncodedChords: ' + enumeratedEncodedChords)
     
+    for (let k=0;k<enumeratedEncodedChords.length; k++){
+       console.log("---" + k)
+       console.log(enumeratedEncodedChords[k])
+       // console.log(")")
+    }
 
     sounds = {
         '1': [new Audio('sounds/'+enumeratedEncodedChords[0][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][2]+'.wav'),],
@@ -493,27 +480,22 @@ function renderSounds (mode, newChords){
         '5': [new Audio('sounds/'+enumeratedEncodedChords[4][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[4][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[4][2]+'.wav'),],
         '6': [new Audio('sounds/'+enumeratedEncodedChords[5][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][2]+'.wav'),],
         '7': [new Audio('sounds/'+enumeratedEncodedChords[6][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][2]+'.wav'),],
-        '8': [new Audio('sounds/'+enumeratedEncodedChords[7][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][2]+'.wav'),],
-
-        'q': [new Audio('sounds/'+enumeratedEncodedChords[8][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[8][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[8][2]+'.wav'),],
-        'w': [new Audio('sounds/'+enumeratedEncodedChords[9][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[9][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[9][2]+'.wav'),],
-        'e': [new Audio('sounds/'+enumeratedEncodedChords[10][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[10][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[10][2]+'.wav'),],
-        'r': [new Audio('sounds/'+enumeratedEncodedChords[11][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[11][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[11][2]+'.wav'),],
-        't': [new Audio('sounds/'+enumeratedEncodedChords[12][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[12][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[12][2]+'.wav'),],
-        'y': [new Audio('sounds/'+enumeratedEncodedChords[13][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[13][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[13][2]+'.wav'),],
-        'u': [new Audio('sounds/'+enumeratedEncodedChords[14][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[14][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[14][2]+'.wav'),],
-
-        'a': [new Audio('sounds/'+enumeratedEncodedChords[15][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[15][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[15][2]+'.wav'),],
-        's': [new Audio('sounds/'+enumeratedEncodedChords[16][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[16][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[16][2]+'.wav'),],
-        'd': [new Audio('sounds/'+enumeratedEncodedChords[17][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[17][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[17][2]+'.wav'),],
-        'f': [new Audio('sounds/'+enumeratedEncodedChords[18][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[18][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[18][2]+'.wav'),],
-        'g': [new Audio('sounds/'+enumeratedEncodedChords[19][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][2]+'.wav'),],
-        'h': [new Audio('sounds/'+enumeratedEncodedChords[20][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][2]+'.wav'),],
-        'j': [new Audio('sounds/'+enumeratedEncodedChords[21][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[21][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[21][2]+'.wav'),]
         
-        //'8': [new Audio('sounds/c5.wav'),new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),],
-        //'9': [new Audio('sounds/d5.wav'),new Audio('sounds/f5.wav'),new Audio('sounds/a5.wav'),],
-        //'0': [new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),new Audio('sounds/b5.wav')],
+        'q': [new Audio('sounds/'+enumeratedEncodedChords[7][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][2]+'.wav'),],
+        'w': [new Audio('sounds/'+enumeratedEncodedChords[8][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[8][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[8][2]+'.wav'),],
+        'e': [new Audio('sounds/'+enumeratedEncodedChords[9][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[9][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[9][2]+'.wav'),],
+        'r': [new Audio('sounds/'+enumeratedEncodedChords[10][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[10][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[10][2]+'.wav'),],
+        't': [new Audio('sounds/'+enumeratedEncodedChords[11][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[11][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[11][2]+'.wav'),],
+        'y': [new Audio('sounds/'+enumeratedEncodedChords[12][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[12][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[12][2]+'.wav'),],
+        'u': [new Audio('sounds/'+enumeratedEncodedChords[13][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[13][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[13][2]+'.wav'),],
+        
+        'a': [new Audio('sounds/'+enumeratedEncodedChords[14][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[14][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[14][2]+'.wav'),],
+        's': [new Audio('sounds/'+enumeratedEncodedChords[15][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[15][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[15][2]+'.wav'),],
+        'd': [new Audio('sounds/'+enumeratedEncodedChords[16][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[16][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[16][2]+'.wav'),],
+        'f': [new Audio('sounds/'+enumeratedEncodedChords[17][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[17][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[17][2]+'.wav'),],
+        'g': [new Audio('sounds/'+enumeratedEncodedChords[18][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[18][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[18][2]+'.wav'),],
+        'h': [new Audio('sounds/'+enumeratedEncodedChords[19][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][2]+'.wav'),],
+        'j': [new Audio('sounds/'+enumeratedEncodedChords[20][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][2]+'.wav'),],
     };
 }
 
@@ -525,9 +507,6 @@ let sounds = {
     '5': [new Audio('sounds/g4.wav'),new Audio('sounds/b4.wav'),new Audio('sounds/d5.wav'),],
     '6': [new Audio('sounds/a4.wav'),new Audio('sounds/c5.wav'),new Audio('sounds/e5.wav'),],
     '7': [new Audio('sounds/b4.wav'),new Audio('sounds/d5.wav'),new Audio('sounds/f5.wav'),],
-   //'8': [new Audio('sounds/c5.wav'),new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),],
-    //'9': [new Audio('sounds/d5.wav'),new Audio('sounds/f5.wav'),new Audio('sounds/a5.wav'),],
-    //'0': [new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),new Audio('sounds/b5.wav')],
 };
 
 
@@ -553,7 +532,7 @@ function generate() {
     console.log("------generate()------")
     // user input for the mode (returns a nubmer 1-7)
     let mode = document.getElementById('modeSelect').value;
-    console.log("mode: " + mode)
+   // console.log("mode: " + mode)
     // user input for the root note (a, a#, b, c ...)
     let key = document.getElementById('keyInput').value;
 
@@ -597,10 +576,11 @@ function generate() {
     //chordArea.innerHTML = `<br> The diatonic chords are:  ${renderChordsTable(modeChords)}`;
 
     parallelArea.innerHTML = `<br> The diatonic chords of the parallel modes are: ${renderParalellModes(key)}`;
-    renderSounds(mode, modeChords)
+   
 
     //console.log('modeChords: ' + modeChords)
     onModeChange(modeChords)
+    renderSounds(mode, modeChords)
 }
 
 function updateKeyboard(buttonsNewChords) {
@@ -655,6 +635,8 @@ function updateKeyboard(buttonsNewChords) {
             chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + "m"
             chordEls[i+14].textContent = buttonsNewChords[i][0].toUpperCase() + "dim"
         } else if (types[i] == 'm'){
+            // console.log('658: ')
+            // console.log('i: '+i)
             chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + "dim"
             chordEls[i+14].textContent = buttonsNewChords[i][0].toUpperCase() + " "
         } else {
@@ -683,7 +665,7 @@ function onModeChange(newChords) {
 
 // 1. Fix issue where program crashes when mode is changed
 // ^ seems fixed.  document.getElementById('modeSelect').value was causing issues?  I probably implemented it incorrectly
-// 2. Fix issue where kbrd rows 2 and 3 always play Ionian pattern, even if other mode is selected?
+// 2. Fix issue where kbrd rows 2 and 3 are not playing the correct chord(outside of Ionian modes)
 // ^ is that actually what is going on?
 // 3. be able to modify the chords on screen and chords played
 // 4.when keyboard button is pressed, the button on the screen highlights
