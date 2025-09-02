@@ -401,38 +401,46 @@ function renderSounds (mode, newChords){
     // now we build row 2 (and 3?)
 
     modeSelect = Number(document.getElementById('modeSelect').value)-1
-    //modeSelect -= 1
     
-    // !@#$@%$^$%^* I think this needs to be 8, but it was halfway working at 7...
     for (let i = 7 ; i < 21; i++){ // 
 
         for (let j = 0; j< referenceNotes.length; j++){
             
-            if (referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,1).toLowerCase()){
-                //  console.log('*****')
-                //  console.log(
-                //      "left:", referenceNotes[j].slice(0, -1),
-                //      "right:", chordEls[i].textContent.slice(0,1).toLowerCase(),
-                //      "equal?:", referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,1).toLowerCase()
-                //      ); 
+            // THIS DOESN'T WORK FOR SHARPS
 
-                referenceNotesIndex = j
-                // console.log('i: ' + i)
-                // console.log('referenceNotesIndex: ' + referenceNotesIndex)
+            if (chordEls[i].textContent.includes('#')){
+                if (referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,2).toLowerCase()){
+                    referenceNotesIndex = j
+                }
+            }else {
+                if (referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,1).toLowerCase()){
+                    console.log('*****')
+                    console.log(
+                     "left:", referenceNotes[j].slice(0, -1),
+                     "right:", chordEls[i].textContent.slice(0,1).toLowerCase(),
+                     "equal?:", referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,1).toLowerCase()
+                     ); 
 
-                break
+                    referenceNotesIndex = j
+                    // console.log('i: ' + i)
+                    // console.log('referenceNotesIndex: ' + referenceNotesIndex)
+
+                    break
+                }
             }
                 
         }
+
+        // chordEls[0]: B 
+        // chordEls[1]: C# 
+        // chordEls[2]: D#m 
+        // chordEls[3]: Fdim
+        // chordEls[4]: F# 
 
         //const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
         // const major = [0, 4 ,7];
         // const minor = [0, 3, 7];
         // const diminished = [0, 3, 6];
-
-        //console.log("referenceNotesIndex: " + referenceNotesIndex)
-        // I believe this is the heart of the issue
-        //    CHORDELS doesn't seem to be grabbing the correct data...
         
         console.log('*****')
         console.log('chordEls['+i+']: ' + chordEls[i].textContent)
