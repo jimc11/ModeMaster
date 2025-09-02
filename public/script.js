@@ -391,7 +391,7 @@ function renderSounds (mode, newChords){
     // currentEnumeratedModeNotes=  c,d,e,f,g,a,b, c,d,e,f,g,a,b
     // now we must build the 7 triads from currentEnumeratedModeNotes
     // this builds row 1
-    for (let i = 0 ; i < 8; i++){
+    for (let i = 0 ; i < 7; i++){
         enumeratedChord = [currentEnumeratedModeNotes[i], currentEnumeratedModeNotes[i+2], currentEnumeratedModeNotes[i+4]]
         enumeratedChords.push(enumeratedChord)
     }
@@ -404,13 +404,15 @@ function renderSounds (mode, newChords){
     
     for (let i = 7 ; i < 21; i++){ // 
 
+
         for (let j = 0; j< referenceNotes.length; j++){
             
             // THIS DOESN'T WORK FOR SHARPS
-
             if (chordEls[i].textContent.includes('#')){
                 if (referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,2).toLowerCase()){
-                    referenceNotesIndex = j
+                    referenceNotesIndex = j // should only be 6 on f#
+                    console.log('referenceNotesIndex: ' + referenceNotesIndex)
+                    break
                 }
             }else {
                 if (referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,1).toLowerCase()){
@@ -478,8 +480,7 @@ function renderSounds (mode, newChords){
         chord.map(note => note.replace("#", "%23")) );
     
     for (let k=0;k<enumeratedEncodedChords.length; k++){
-       console.log("---" + k)
-       console.log(enumeratedEncodedChords[k])
+       console.log("---" + k + ': '+ enumeratedEncodedChords[k])
        // console.log(")")
     }
 
