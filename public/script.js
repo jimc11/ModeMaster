@@ -417,9 +417,8 @@ function renderSounds (mode, newChords){
                 //      ); 
 
                 referenceNotesIndex = j
-                console.log('i: ' + i)
-
-                console.log('referenceNotesIndex: ' + referenceNotesIndex)
+                // console.log('i: ' + i)
+                // console.log('referenceNotesIndex: ' + referenceNotesIndex)
 
                 break
             }
@@ -437,15 +436,19 @@ function renderSounds (mode, newChords){
         
         console.log('*****')
         console.log('chordEls['+i+']: ' + chordEls[i].textContent)
+        console.log('chordEls['+i+'].textContent.includes(dim): ' 
+            + (chordEls[i].textContent.includes('dim'))) // for sharps, this yields #m... we need a buffer or smth
+        console.log('chordEls['+i+'].textContent.includes(m): ' 
+            + (chordEls[i].textContent.includes('m')))
         // is the sound rendered before chordels is updated?
-        if (chordEls[i].textContent.slice(2,5)  == 'dim'){
+        if (chordEls[i].textContent.includes('dim')){
             console.log('i: '+i)
             console.log('x')
             enumeratedChord = [referenceNotes[referenceNotesIndex] ,                     //  USER SHOULD HAVE ABILITY TO + OR - AN OCTAVE 
                                referenceNotes[referenceNotesIndex + diminished[1]], 
                                referenceNotes[referenceNotesIndex + diminished[2]]]                        
         } else {
-            if (chordEls[i].textContent.slice(2,4) == 'm') {
+            if (chordEls[i].textContent.includes('m')) {
                 console.log('i: '+i)
                 console.log('y')
                 enumeratedChord = [referenceNotes[referenceNotesIndex], 
@@ -453,7 +456,7 @@ function renderSounds (mode, newChords){
                                    referenceNotes[referenceNotesIndex +minor[2]]]
             } else { // it must be a major
                 console.log('i: '+i)
-                console.log('y:')
+                console.log('z:')
                 enumeratedChord = [referenceNotes[referenceNotesIndex], 
                                    referenceNotes[referenceNotesIndex + major[1]], 
                                    referenceNotes[referenceNotesIndex + major[2]]]
@@ -608,7 +611,7 @@ function updateKeyboard(buttonsNewChords) {
             types.push(chordType)
             //console.log('types[i]===: ' + types)
 
-            chordEls[i].textContent = chordNotes[0].toUpperCase() + " " + chordType;
+            chordEls[i].textContent = chordNotes[0].toUpperCase() + chordType;
         }
 
     });
