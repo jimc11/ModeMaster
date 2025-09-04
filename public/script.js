@@ -1,3 +1,5 @@
+//import { Chord } from './Chord.js';
+//window.generate = generate
 
 let keyMap={};
 
@@ -15,9 +17,111 @@ const modeSteps = [
     [0, 1, 3, 5, 6, 8, 10]   // Locrian 6
 ];
 
+<<<<<<< Updated upstream
 const major = [0, 4 ,7];
 const minor = [0, 3, 7];
 const diminished =   [0, 3, 6];
+=======
+// there's base chords, and modifiers...
+
+// base chords
+const major = [0, 4 ,7]; // 1-3-5
+const minor = [0, 3, 7]; // 1-♭3-5
+const diminished = [0, 3, 6]; // 1-♭3-♭5
+const sus2 =   [0, 2, 7]; // 1-2-5
+const sus4 =   [0, 2, 5]; // 1-4-5
+const sus2sus4 =   [0, 2, 5, 7]; // 1-2-4-5
+
+// modifiers
+const add6 = [0, 4, 7, 9] // 1-3-5-6 (aka X6)
+const add9 = [0, 4, 7, 14]  // 1-3-5-9
+const add11 = [0, 4, 7, 17] // 1-3-5-11
+const add13 = [0, 4, 7, 21] // 1-3-5-13
+
+// dominant family
+const X7 = [0, 4, 7, 10] // 1-3-5-♭7
+const X9 = [0, 4, 7, 10, 14] // 1-3-5-♭7
+const X11 = [0, 4, 7, 10, 14, 17] // 1-3-5-♭7
+const X13 = [0, 4, 7, 10, 14, 17, 21] // 1-3-5-♭7
+
+// majX
+const maj7 = [0, 4, 7, 11] // 1-3-5-7 aka  C△ aka C dominant 7
+const maj9 = [0, 4, 7, 11, 14] // 1-3-5-b7-9
+const maj11 = [0, 4, 7, 11, 14, 17] // 1-3-5-b7-9-11
+const maj13 = [0, 4, 7, 11, 14, 17, 21] // 1-3-5-b7-9-11-13
+
+// mX
+const m7 = [0, 3, 7, 10] // 1-♭3-5-♭7
+const m9 = [0, 3, 7, 10, 14] // 1-♭3-5-♭7-9
+const m11 = [0, 3, 7, 10, 14, 17] // 1-♭3-5-♭7-9-11
+const m13 = [0, 3, 7, 10, 14, 17, 21] // 1-♭3-5-♭7-9-13
+
+// minor major 7
+const minormajor7 = [0, 3, 7, 11] // 1-♭3-5-7
+
+// sounds before initialization.  Can/should this be removed?
+let sounds = {
+    '1': [new Audio('sounds/c4.wav'),new Audio('sounds/e4.wav'),new Audio('sounds/g4.wav'),],
+    '2': [new Audio('sounds/d4.wav'),new Audio('sounds/f4.wav'),new Audio('sounds/a4.wav'),],
+    '3': [new Audio('sounds/e4.wav'),new Audio('sounds/g4.wav'),new Audio('sounds/b4.wav'),],
+    '4': [new Audio('sounds/f4.wav'),new Audio('sounds/a4.wav'),new Audio('sounds/c5.wav'),], 
+    '5': [new Audio('sounds/g4.wav'),new Audio('sounds/b4.wav'),new Audio('sounds/d5.wav'),],
+    '6': [new Audio('sounds/a4.wav'),new Audio('sounds/c5.wav'),new Audio('sounds/e5.wav'),],
+    '7': [new Audio('sounds/b4.wav'),new Audio('sounds/d5.wav'),new Audio('sounds/f5.wav'),],
+};
+
+// ----- MAIN FUNCTION -----
+function generate() {
+    console.log("------generate()------")
+
+    // user input for the mode (returns a nubmer 1-7)
+    let mode = document.getElementById('modeSelect').value;
+
+    // user input for the root note (a, a#, b, c ...)
+    let key = document.getElementById('keyInput').value;
+
+    let wordMode = ''
+    switch (mode) {
+        case '1':
+            wordMode = 'Ionian'
+            break
+        case '2':
+            wordMode = 'Dorian'
+            break;
+        case '3':
+            wordMode = 'Phrygian'
+            break;
+        case '4':
+            wordMode = 'Lydian'
+            break;
+        case '5':
+            wordMode = 'Mixolydian'
+            break;
+        case '6':
+            wordMode = 'Aeolian'
+            break;
+        case '7':
+            wordMode = 'Locrian'
+            break;
+        default:
+            break;
+    }
+
+    let message = `<br> You selected: ${key.toUpperCase()} ${wordMode} 🎵 <br>`;
+    messageArea.innerHTML = message;
+    
+    let modeNotes = generateDiatonicNotes(mode, keyInput.value);
+    let modeChords = generateDiatonicChords(modeNotes);
+
+    notesArea.innerHTML = "<br> The diatonic notes are: " + modeNotes.map(note => `<span style="margin-right: 10px">${note.toUpperCase()}</span>`).join('');    
+    //chordArea.innerHTML = `<br> The diatonic chords are:  ${renderChordsTable(modeChords)}`;
+
+    parallelArea.innerHTML = `<br> The diatonic chords of the parallel modes are: ${renderParalellModes(key)}`;
+   
+    onModeChange(modeChords)
+    renderSounds(mode, modeChords)
+}
+>>>>>>> Stashed changes
 
 // takes the 'notes' array and splits it.  now, the first element of the array is 
 // splitValue and the rest of the array is the chromatic scale.
@@ -64,13 +168,13 @@ function generateDiatonicNotes(modeNumber, tonic) {
     let recenteredNotes = [tonic];
 
     let split = splitListAtValue(notes, tonic);
-    //console.log('---split: ' + split)
     if (split.length > 1) {
         recenteredNotes.push(...split[1]);
     }
     if (split.length > 0) {
         recenteredNotes.push(...split[0]);
     }
+<<<<<<< Updated upstream
     //console.log('---split: ' + split)
     //console.log("modeNumber: " + modeNumber)
     //console.log("modeSteps: " + modeSteps[modeNumber-1])
@@ -80,8 +184,17 @@ function generateDiatonicNotes(modeNumber, tonic) {
     for (let i = 0; i < 7; i++) {
         //console.log("stepPattern: " + stepPattern[i])
         modeReturned.push(recenteredNotes[stepPattern[i]]);
+=======
+
+    let stepPattern = modeSteps[modeNumber - 1];
+    let modeReturned = [];
+
+
+    for (let i = 0; i < 7; i++) {
+
+        modeReturned.push(recenteredNotes[stepPattern[i]]); 
+>>>>>>> Stashed changes
     }
-    //console.log('---modeReturned: ' +modeReturned)
     return modeReturned;
 }
 
@@ -94,7 +207,6 @@ function generateDiatonicChords(inputMode) {
    
     let chords = [];
 
-    //console.log("inputMode: " + inputMode)
     for (let i = 0; i < 7; i++) {
         let chord = [];
         for (let j = 0; j < 3; j++) {
@@ -126,26 +238,16 @@ function chordIdentifier(chordToBeDetermined) {
     // splitListAtValue doesn't appear to be working here.  is it actually working at other places?
     let notesRecentered = splitListAtValue2(notess, chordToBeDetermined[0])
 
-    //console.log('splitListAtValue[1,2,3,4,5,6], 4 : ' + splitListAtValue(['1','2','3','4','5','6'], '4' ))
-
-    //console.log('chordToBeDetermined[0] : ' + chordToBeDetermined[0])
-    //console.log('notesRecentered : ' + notesRecentered)
-
     let indexroot = notesRecentered.indexOf(chordToBeDetermined[0]); // should always be zero
     let indexMiddle = notesRecentered.indexOf(chordToBeDetermined[1]); 
     let indexLast = notesRecentered.indexOf(chordToBeDetermined[2]); 
 
     let halfsteps = [indexroot, indexMiddle, indexLast]
 
-   // console.log('halfsteps : ' + halfsteps)
 
     let IsMinor = areArraysEqual(halfsteps, minor )
     let IsMajor = areArraysEqual(halfsteps, major )
     let IsDiminished = areArraysEqual(halfsteps, diminished )
-
-    //console.log('IsMinor : ' + IsMinor)
-    //console.log('IsMajor : ' + IsMajor)
-    //console.log('IsDiminished : ' + IsDiminished)
 
     let returnMe
 
@@ -160,20 +262,11 @@ function chordIdentifier(chordToBeDetermined) {
     return returnMe
 }
 
-
 function renderParalellModes(userTonic){
 
-    // computeParalelModes() should return an 7x7x3 array
     // 7 modes, 7 chords, 3 notes
-    
-    
-    let parallelModes = computeParalelModes(userTonic)
+    let parallelModes = computeParalelModes(userTonic) // computeParalelModes() should return an 7x7x3 array
 
-    //for (let i=0; i<7;i++){
-    //    console.log('parallelModes[i]: '+ parallelModes[i]) 
-    //} 
-
-    // confirmed working up to here
     return renderMultiChordsTable(parallelModes)
 }
 
@@ -197,11 +290,16 @@ function renderMultiChordsTable(chordsOfAllModes){
         
         tableHtml += "<tr"
 
+<<<<<<< Updated upstream
         //console.log ("modeSelect.value - 1: " + modeSelect.value-1)
         //console.log ("row: " + row)
 
         if (modeSelect.value -1 == row ){
             tableHtml += " style=\"background-color: yellow;\""
+=======
+        if (document.getElementById('modeSelect').value -1 == row ){
+            tableHtml += " style=\"background-color: #ffeaa6;\""
+>>>>>>> Stashed changes
         } else {
             tableHtml += " style=\"background-color: white;\""
         }
@@ -214,17 +312,6 @@ function renderMultiChordsTable(chordsOfAllModes){
         tableHtml += "</tr>";
     }
 
-    // tableHtml += "<tr>";
-
-    // tableHtml += '<th>Notes in that chord</th>'; 
-    // for (let col = 0; col < 7; col++) {
-      
-    //   //console.log('[index]: ' + index)
-    //   //console.log('chordsOfAllModes[index]: ' + chordsOfAllModes[index])
-    //   tableHtml += `<td>${chordsOfAllModes[col]}</td>`;
-    // }
-
-
   tableHtml += "</table>";
   return tableHtml;
 }
@@ -235,26 +322,16 @@ function computeParalelModes(userTonic){
     //userMode is just a number
 
     let allModeNotes = []
-    //console.log('here: ')
-    //console.log('userTonic: ' + userTonic)
     for (let i=0; i<7;i++){
         allModeNotes[i] = generateDiatonicNotes(i+1, userTonic); // returns 7x7 array
     }
-    //console.log('allModeNotes: '+ allModeNotes)
     
     let modeChords = []
 
-    
-//    console.log('---test1---')
     for (let i=0; i<7;i++){
         modeChords[i] = generateDiatonicChords(allModeNotes[i]); 
-  //      console.log('---test2---')
     } 
-    // console.log('---test3---')
-    // for (let i=0; i<7;i++){
-    //     console.log('modeChords[i]: '+ modeChords[i]) 
-    // } 
-    // confirmed working up to this line
+
     return modeChords// must be 7x7x3 array
 }
 
@@ -273,18 +350,10 @@ function renderChordsTable(modeChords) {
     for (let col = 0; col < 7; col++) {
         tableHtml += `<th> ${modeChords[col][0].toUpperCase()} ${chordIdentifier(modeChords[col])}</th>`
     }
-
-
-
-  // Next rows: chords (7 total, 3 notes per column)
-
+    // Next rows: chords (7 total, 3 notes per column)
     tableHtml += "<tr>";
-
     tableHtml += '<th>Notes in that chord</th>'; 
     for (let col = 0; col < 7; col++) {
-      
-      //console.log('[index]: ' + index)
-      //console.log('modeChords[index]: ' + modeChords[index])
       tableHtml += `<td>${modeChords[col]}</td>`;
     }
 
@@ -295,9 +364,20 @@ function renderChordsTable(modeChords) {
 
 // Example usage:
 //document.getElementById("chordsArea").innerHTML = renderChordsTable(modeChords);
+<<<<<<< Updated upstream
 
 function renderSounds (newChords){
     //console.log('newchords: ' + newChords)
+=======
+function renderSounds (mode, newChords){
+
+    console.log('----renderSounds()----')
+
+    // this grabs before update.. CONFIRMED.
+    // How to grab after update?
+    const chordEls = document.querySelectorAll('#keyboard .chord'); // returns nodeArray of all text in the chord class 
+    
+>>>>>>> Stashed changes
     sounds = {}
 
     const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
@@ -323,14 +403,20 @@ function renderSounds (newChords){
 
     // scale we will build out
     let currentEnumeratedModeNotes = []
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     for (let i = 0 ; i < 7; i++){
         currentEnumeratedModeNotes[i] = referenceNotes[referenceNotesIndex + currentModeSteps[i]]
-        //console.log('currentModeSteps[i]' + currentModeSteps[i])
     }
 
     // add currentEnumeratedModeNotes onto currentEnumeratedModeNotes, but make it an octave higher
     currentEnumeratedModeNotes = currentEnumeratedModeNotes.concat(currentEnumeratedModeNotes)
+<<<<<<< Updated upstream
     //console.log('currentEnumeratedModeNotes: ' + currentEnumeratedModeNotes)
+=======
+>>>>>>> Stashed changes
 
     for (i in currentEnumeratedModeNotes){
         if (i>6){
@@ -339,7 +425,6 @@ function renderSounds (newChords){
         }
     }
 
-    //console.log('currentEnumeratedModeNotes: ' + currentEnumeratedModeNotes)
 
     let enumeratedChords = []; // this is a 2d array
     let enumeratedChord = [] // 1D array to be pushed to enumeratedEncodedChords when filled with 3 notes
@@ -350,13 +435,87 @@ function renderSounds (newChords){
         enumeratedChord = [currentEnumeratedModeNotes[i], currentEnumeratedModeNotes[i+2], currentEnumeratedModeNotes[i+4]]
         enumeratedChords.push(enumeratedChord)
     }
+<<<<<<< Updated upstream
     //console.log('enumeratedChords: ' + enumeratedChords)
 
     let enumeratedEncodedChords = enumeratedChords.map(chord =>
         chord.map(note => note.replace("#", "%23")) );
 
     //console.log('enumeratedEncodedChords: ' + enumeratedEncodedChords)
+=======
 
+    for (let i = 0 ; i < 7; i++)
+        console.log('enumeratedChords['+i+']: ' + enumeratedChords[i])
+    
+    // this may be vestigial but I'm too scared to remove it
+    modeSelect = Number(document.getElementById('modeSelect').value)-1
+    
+    // now we build row 2 (and 3?)
+    for (let i = 7 ; i < 21; i++){
+        for (let j = 0; j< referenceNotes.length; j++){
+            
+            if (chordEls[i].textContent.includes('#')){
+                if (referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,2).toLowerCase()){
+                    referenceNotesIndex = j 
+                    break
+                }
+            }else {
+                if (referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,1).toLowerCase()){
+                    referenceNotesIndex = j
+                    break
+                }
+            }    
+        }
+
+        // chordEls[0]: B 
+        // chordEls[1]: C# 
+        // chordEls[2]: D#m 
+        // chordEls[3]: Fdim
+        // chordEls[4]: F# 
+
+        //const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
+        // const major = [0, 4 ,7];
+        // const minor = [0, 3, 7];
+        // const diminished = [0, 3, 6];
+        
+        // is the sound rendered before chordels is updated?
+        if (chordEls[i].textContent.includes('dim')){
+            enumeratedChord = [referenceNotes[referenceNotesIndex] ,                     //  USER SHOULD HAVE ABILITY TO + OR - AN OCTAVE 
+                               referenceNotes[referenceNotesIndex + diminished[1]], 
+                               referenceNotes[referenceNotesIndex + diminished[2]]]                        
+        } else {
+            if (chordEls[i].textContent.includes('m')) {
+                enumeratedChord = [referenceNotes[referenceNotesIndex], 
+                                   referenceNotes[referenceNotesIndex +minor[1]], 
+                                   referenceNotes[referenceNotesIndex +minor[2]]]
+            } else { // it must be a major
+                enumeratedChord = [referenceNotes[referenceNotesIndex], 
+                                   referenceNotes[referenceNotesIndex + major[1]], 
+                                   referenceNotes[referenceNotesIndex + major[2]]]
+            }
+        }
+        enumeratedChords.push(enumeratedChord)
+    }
+
+    let enumeratedEncodedChords = enumeratedChords.map(chord =>
+        chord.map(note => note.replace("#", "%23")) );
+    
+    for (let k=0;k<enumeratedEncodedChords.length; k++){
+       console.log("---" + k + ': '+ enumeratedEncodedChords[k])
+    }
+>>>>>>> Stashed changes
+
+
+
+    // IDEA: 
+    // To solve octave issue...
+    // function that reads the first 7 objects stored in 'sounds', and spits out a 7x3 list of their octaves
+    // then anohter function encodes those same numbers in 1-j
+    // OR
+    // Just add the octave numbers to an array as you assign the first row
+    // Would there be issues with this?
+
+    // should I make a 'Chord' class?  That way I can dynamically add/remove notes without hardcoding?
     sounds = {
         '1': [new Audio('sounds/'+enumeratedEncodedChords[0][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][2]+'.wav'),],
         '2': [new Audio('sounds/'+enumeratedEncodedChords[1][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[1][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[1][2]+'.wav'),],
@@ -373,6 +532,7 @@ function renderSounds (newChords){
     };
 }
 
+<<<<<<< Updated upstream
 let sounds = {
     '1': [new Audio('sounds/c4.wav'),new Audio('sounds/e4.wav'),new Audio('sounds/g4.wav'),],
     '2': [new Audio('sounds/d4.wav'),new Audio('sounds/f4.wav'),new Audio('sounds/a4.wav'),],
@@ -386,23 +546,24 @@ let sounds = {
     //'0': [new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),new Audio('sounds/b5.wav')],
 };
 
+=======
+>>>>>>> Stashed changes
 
 document.addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
-        console.log('--------')
+        console.log('---- eventListener(keydown) ----')
 
 if (sounds[key]) {
     sounds[key].forEach(audio => {
         //create a fresh Audio instance so it can overlap
-        //console.log("sounds[key].toString(): "+ sounds[key].toString())
         const clone = audio.cloneNode();
-        //console.log("clone:  "+ clone)
         console.log("Played file:", decodeURIComponent(clone.src.split("/").pop()));
         clone.play();
     });
   }
 });
 
+<<<<<<< Updated upstream
 
 // ----- MAIN FUNCTION -----
 function generate() {
@@ -456,6 +617,8 @@ function generate() {
     onModeChange(modeChords)
 }
 
+=======
+>>>>>>> Stashed changes
 function updateKeyboard(buttonsNewChords) {
     const chordEls = document.querySelectorAll('#keyboard .chord'); // returns nodeArray of all text in the chord class 
     let chordsChords= []    
@@ -479,7 +642,6 @@ function updateKeyboard(buttonsNewChords) {
                 chordType = 'm'
             }
             types.push(chordType)
-            //console.log('types[i]===: ' + types)
 
             chordEls[i].textContent = chordNotes[0].toUpperCase() + " " + chordType;
         }
@@ -487,6 +649,7 @@ function updateKeyboard(buttonsNewChords) {
     });
 
     // here is where I want to update the remaining 14 buttons
+<<<<<<< Updated upstream
 
     for (let i = 0; i<14; i++){
 
@@ -502,6 +665,9 @@ function updateKeyboard(buttonsNewChords) {
         // then 2 is major
         // 3 is minor
 
+=======
+    for (let i = 0; i<7; i++){ // this used to be i<14.  
+>>>>>>> Stashed changes
         if (types[i] == ' '){
             chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + "m"
             chordEls[i+14].textContent = buttonsNewChords[i][0].toUpperCase() + "dim"
@@ -512,6 +678,7 @@ function updateKeyboard(buttonsNewChords) {
             chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + " "
             chordEls[i+14].textContent = buttonsNewChords[i][0].toUpperCase() + "m"
         }
+<<<<<<< Updated upstream
         console.log('i : ' + i)
         console.log('types[i]: ' + types[i])
         console.log('chordEls[i+7].textContent : ' + chordEls[i+7].textContent)
@@ -538,6 +705,9 @@ function updateKeyboard(buttonsNewChords) {
     //     chordEls[i].textContent =buttonsNewChords[i-14]
     //     //console.log('chordEls[i]2: ' + chordEls[i].textContent)
     // }
+=======
+    }
+>>>>>>> Stashed changes
 }
 
 // Call this whenever the user selects a new root/mode
@@ -545,3 +715,25 @@ function onModeChange(newChords) {
     //modeChords = newChords;
     updateKeyboard(newChords);
 }
+<<<<<<< Updated upstream
+=======
+
+
+// TODO:
+
+// 1. Fix octave issues with rows 2-3
+// 2.should I make a 'Chord' class?  That way I can dynamically add/remove notes without hardcoding?
+// ^ this may come in handy with octave issue and extended structs issue
+// 3. be able to modify the chords on screen and chords played
+// 4.when keyboard button is pressed, the button on the screen highlights
+// 5. It would be cool to have it that when you click on a note, a keyboard pops up and highlights the notes being played
+// then the user can click/unclick notes to bind that chord to that keypress
+// 
+
+// What would it take for this to actually make money?  How would I advertise?  Would people actually use it?
+// we either need to make this a desktop app or a DAW or something.  the performance on laptops is likely bad
+
+
+
+// how about mobile?
+>>>>>>> Stashed changes
