@@ -17,11 +17,6 @@ const modeSteps = [
     [0, 1, 3, 5, 6, 8, 10]   // Locrian 6
 ];
 
-<<<<<<< Updated upstream
-const major = [0, 4 ,7];
-const minor = [0, 3, 7];
-const diminished =   [0, 3, 6];
-=======
 // there's base chords, and modifiers...
 
 // base chords
@@ -69,6 +64,8 @@ let sounds = {
     '6': [new Audio('sounds/a4.wav'),new Audio('sounds/c5.wav'),new Audio('sounds/e5.wav'),],
     '7': [new Audio('sounds/b4.wav'),new Audio('sounds/d5.wav'),new Audio('sounds/f5.wav'),],
 };
+
+
 
 // ----- MAIN FUNCTION -----
 function generate() {
@@ -121,7 +118,6 @@ function generate() {
     onModeChange(modeChords)
     renderSounds(mode, modeChords)
 }
->>>>>>> Stashed changes
 
 // takes the 'notes' array and splits it.  now, the first element of the array is 
 // splitValue and the rest of the array is the chromatic scale.
@@ -174,17 +170,6 @@ function generateDiatonicNotes(modeNumber, tonic) {
     if (split.length > 0) {
         recenteredNotes.push(...split[0]);
     }
-<<<<<<< Updated upstream
-    //console.log('---split: ' + split)
-    //console.log("modeNumber: " + modeNumber)
-    //console.log("modeSteps: " + modeSteps[modeNumber-1])
-    let stepPattern = modeSteps[modeNumber - 1];
-    let modeReturned = [];
-
-    for (let i = 0; i < 7; i++) {
-        //console.log("stepPattern: " + stepPattern[i])
-        modeReturned.push(recenteredNotes[stepPattern[i]]);
-=======
 
     let stepPattern = modeSteps[modeNumber - 1];
     let modeReturned = [];
@@ -193,7 +178,6 @@ function generateDiatonicNotes(modeNumber, tonic) {
     for (let i = 0; i < 7; i++) {
 
         modeReturned.push(recenteredNotes[stepPattern[i]]); 
->>>>>>> Stashed changes
     }
     return modeReturned;
 }
@@ -290,16 +274,8 @@ function renderMultiChordsTable(chordsOfAllModes){
         
         tableHtml += "<tr"
 
-<<<<<<< Updated upstream
-        //console.log ("modeSelect.value - 1: " + modeSelect.value-1)
-        //console.log ("row: " + row)
-
-        if (modeSelect.value -1 == row ){
-            tableHtml += " style=\"background-color: yellow;\""
-=======
         if (document.getElementById('modeSelect').value -1 == row ){
             tableHtml += " style=\"background-color: #ffeaa6;\""
->>>>>>> Stashed changes
         } else {
             tableHtml += " style=\"background-color: white;\""
         }
@@ -364,11 +340,6 @@ function renderChordsTable(modeChords) {
 
 // Example usage:
 //document.getElementById("chordsArea").innerHTML = renderChordsTable(modeChords);
-<<<<<<< Updated upstream
-
-function renderSounds (newChords){
-    //console.log('newchords: ' + newChords)
-=======
 function renderSounds (mode, newChords){
 
     console.log('----renderSounds()----')
@@ -377,13 +348,24 @@ function renderSounds (mode, newChords){
     // How to grab after update?
     const chordEls = document.querySelectorAll('#keyboard .chord'); // returns nodeArray of all text in the chord class 
     
->>>>>>> Stashed changes
     sounds = {}
 
     const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
 
+    // this may be vestigial but I'm too scared to remove it
+    modeSelect = Number(document.getElementById('modeSelect').value)-1
+
+    console.log('modeSelect')
+    console.log(modeSelect)
+
+    console.log('modeSteps')
+    console.log(modeSteps)
+
+    let currentModeSteps = modeSteps[modeSelect] // half steps from root for current user selected mode
    
-    let currentModeSteps = modeSteps[modeSelect.value-1] // half steps from root for current user selected mode
+    console.log('currentModeSteps')
+    console.log(currentModeSteps)
+
     let referenceNotesIndex = 0
 
     //console.log('newChords[0][0]: ' + newChords[0][0])
@@ -403,20 +385,12 @@ function renderSounds (mode, newChords){
 
     // scale we will build out
     let currentEnumeratedModeNotes = []
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
     for (let i = 0 ; i < 7; i++){
         currentEnumeratedModeNotes[i] = referenceNotes[referenceNotesIndex + currentModeSteps[i]]
     }
 
     // add currentEnumeratedModeNotes onto currentEnumeratedModeNotes, but make it an octave higher
     currentEnumeratedModeNotes = currentEnumeratedModeNotes.concat(currentEnumeratedModeNotes)
-<<<<<<< Updated upstream
-    //console.log('currentEnumeratedModeNotes: ' + currentEnumeratedModeNotes)
-=======
->>>>>>> Stashed changes
 
     for (i in currentEnumeratedModeNotes){
         if (i>6){
@@ -435,20 +409,11 @@ function renderSounds (mode, newChords){
         enumeratedChord = [currentEnumeratedModeNotes[i], currentEnumeratedModeNotes[i+2], currentEnumeratedModeNotes[i+4]]
         enumeratedChords.push(enumeratedChord)
     }
-<<<<<<< Updated upstream
-    //console.log('enumeratedChords: ' + enumeratedChords)
-
-    let enumeratedEncodedChords = enumeratedChords.map(chord =>
-        chord.map(note => note.replace("#", "%23")) );
-
-    //console.log('enumeratedEncodedChords: ' + enumeratedEncodedChords)
-=======
 
     for (let i = 0 ; i < 7; i++)
         console.log('enumeratedChords['+i+']: ' + enumeratedChords[i])
     
-    // this may be vestigial but I'm too scared to remove it
-    modeSelect = Number(document.getElementById('modeSelect').value)-1
+    
     
     // now we build row 2 (and 3?)
     for (let i = 7 ; i < 21; i++){
@@ -503,7 +468,6 @@ function renderSounds (mode, newChords){
     for (let k=0;k<enumeratedEncodedChords.length; k++){
        console.log("---" + k + ': '+ enumeratedEncodedChords[k])
     }
->>>>>>> Stashed changes
 
 
 
@@ -524,30 +488,26 @@ function renderSounds (mode, newChords){
         '5': [new Audio('sounds/'+enumeratedEncodedChords[4][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[4][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[4][2]+'.wav'),],
         '6': [new Audio('sounds/'+enumeratedEncodedChords[5][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][2]+'.wav'),],
         '7': [new Audio('sounds/'+enumeratedEncodedChords[6][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][2]+'.wav'),],
-        '8': [new Audio('sounds/'+enumeratedEncodedChords[7][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][2]+'.wav'),],
         
-        //'8': [new Audio('sounds/c5.wav'),new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),],
-        //'9': [new Audio('sounds/d5.wav'),new Audio('sounds/f5.wav'),new Audio('sounds/a5.wav'),],
-        //'0': [new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),new Audio('sounds/b5.wav')],
+        'q': [new Audio('sounds/'+enumeratedEncodedChords[7][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][2]+'.wav'),],
+        'w': [new Audio('sounds/'+enumeratedEncodedChords[8][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[8][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[8][2]+'.wav'),],
+        'e': [new Audio('sounds/'+enumeratedEncodedChords[9][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[9][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[9][2]+'.wav'),],
+        'r': [new Audio('sounds/'+enumeratedEncodedChords[10][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[10][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[10][2]+'.wav'),],
+        't': [new Audio('sounds/'+enumeratedEncodedChords[11][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[11][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[11][2]+'.wav'),],
+        'y': [new Audio('sounds/'+enumeratedEncodedChords[12][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[12][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[12][2]+'.wav'),],
+        'u': [new Audio('sounds/'+enumeratedEncodedChords[13][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[13][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[13][2]+'.wav'),],
+        
+        'a': [new Audio('sounds/'+enumeratedEncodedChords[14][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[14][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[14][2]+'.wav'),],
+        's': [new Audio('sounds/'+enumeratedEncodedChords[15][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[15][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[15][2]+'.wav'),],
+        'd': [new Audio('sounds/'+enumeratedEncodedChords[16][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[16][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[16][2]+'.wav'),],
+        'f': [new Audio('sounds/'+enumeratedEncodedChords[17][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[17][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[17][2]+'.wav'),],
+        'g': [new Audio('sounds/'+enumeratedEncodedChords[18][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[18][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[18][2]+'.wav'),],
+        'h': [new Audio('sounds/'+enumeratedEncodedChords[19][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][2]+'.wav'),],
+        'j': [new Audio('sounds/'+enumeratedEncodedChords[20][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][2]+'.wav'),],
     };
+
 }
 
-<<<<<<< Updated upstream
-let sounds = {
-    '1': [new Audio('sounds/c4.wav'),new Audio('sounds/e4.wav'),new Audio('sounds/g4.wav'),],
-    '2': [new Audio('sounds/d4.wav'),new Audio('sounds/f4.wav'),new Audio('sounds/a4.wav'),],
-    '3': [new Audio('sounds/e4.wav'),new Audio('sounds/g4.wav'),new Audio('sounds/b4.wav'),],
-    '4': [new Audio('sounds/f4.wav'),new Audio('sounds/a4.wav'),new Audio('sounds/c5.wav'),], 
-    '5': [new Audio('sounds/g4.wav'),new Audio('sounds/b4.wav'),new Audio('sounds/d5.wav'),],
-    '6': [new Audio('sounds/a4.wav'),new Audio('sounds/c5.wav'),new Audio('sounds/e5.wav'),],
-    '7': [new Audio('sounds/b4.wav'),new Audio('sounds/d5.wav'),new Audio('sounds/f5.wav'),],
-   //'8': [new Audio('sounds/c5.wav'),new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),],
-    //'9': [new Audio('sounds/d5.wav'),new Audio('sounds/f5.wav'),new Audio('sounds/a5.wav'),],
-    //'0': [new Audio('sounds/e5.wav'),new Audio('sounds/g5.wav'),new Audio('sounds/b5.wav')],
-};
-
-=======
->>>>>>> Stashed changes
 
 document.addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
@@ -563,62 +523,6 @@ if (sounds[key]) {
   }
 });
 
-<<<<<<< Updated upstream
-
-// ----- MAIN FUNCTION -----
-function generate() {
-
-    // user input for the mode (returns a nubmer 1-7)
-    let mode = document.getElementById('modeSelect').value;
-
-    // user input for the root note (a, a#, b, c ...)
-    let key = document.getElementById('keyInput').value;
-
-    let wordMode = ''
-    switch (mode) {
-        case '1':
-            wordMode = 'Ionian'
-            break
-        case '2':
-            wordMode = 'Dorian'
-            break;
-        case '3':
-            wordMode = 'Phrygian'
-            break;
-        case '4':
-            wordMode = 'Lydian'
-            break;
-        case '5':
-            wordMode = 'Mixolydian'
-            break;
-        case '6':
-            wordMode = 'Aeolian'
-            break;
-        case '7':
-            wordMode = 'Locrian'
-            break;
-        default:
-            break;
-    }
-
-    let message = `<br> You selected: ${key.toUpperCase()} ${wordMode} 🎵 <br>`;
-    messageArea.innerHTML = message;
-    
-    let modeNotes = generateDiatonicNotes(modeSelect.value, keyInput.value);
-    let modeChords = generateDiatonicChords(modeNotes);
-
-    notesArea.innerHTML = "<br> The diatonic notes are: " + modeNotes.map(note => `<span style="margin-right: 10px">${note.toUpperCase()}</span>`).join('');    
-    //chordArea.innerHTML = `<br> The diatonic chords are:  ${renderChordsTable(modeChords)}`;
-
-    parallelArea.innerHTML = `<br> The diatonic chords of the parallel modes are: ${renderParalellModes(key)}`;
-    renderSounds(modeChords)
-
-    console.log('modeChords: ' + modeChords)
-    onModeChange(modeChords)
-}
-
-=======
->>>>>>> Stashed changes
 function updateKeyboard(buttonsNewChords) {
     const chordEls = document.querySelectorAll('#keyboard .chord'); // returns nodeArray of all text in the chord class 
     let chordsChords= []    
@@ -649,25 +553,7 @@ function updateKeyboard(buttonsNewChords) {
     });
 
     // here is where I want to update the remaining 14 buttons
-<<<<<<< Updated upstream
-
-    for (let i = 0; i<14; i++){
-
-        // if 1 is major
-        // then 2 is minor
-        // and 3 is diminished
-
-        // if 1 is minor
-        // then 2 is diminished
-        // and 3 is major
-
-        // if 1 is diminished
-        // then 2 is major
-        // 3 is minor
-
-=======
     for (let i = 0; i<7; i++){ // this used to be i<14.  
->>>>>>> Stashed changes
         if (types[i] == ' '){
             chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + "m"
             chordEls[i+14].textContent = buttonsNewChords[i][0].toUpperCase() + "dim"
@@ -678,36 +564,7 @@ function updateKeyboard(buttonsNewChords) {
             chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + " "
             chordEls[i+14].textContent = buttonsNewChords[i][0].toUpperCase() + "m"
         }
-<<<<<<< Updated upstream
-        console.log('i : ' + i)
-        console.log('types[i]: ' + types[i])
-        console.log('chordEls[i+7].textContent : ' + chordEls[i+7].textContent)
-        console.log('chordEls[i+14].textContent : ' + chordEls[i+14].textContent)
-
-        // if (chordEls[i].textContent.includes('dim')){
-        //     if (chordEls[i+7].textContent.includes('m')){
-        //         chordEls[i].textContent = chordNotes[0].toUpperCase() + " " 
-        //     } else {
-        //         chordEls[i].textContent = chordNotes[0].toUpperCase() + " " +minor 
-        //     }
-        // } else {
-        //     if (chordEls[i+7].textContent.includes('m')){
-        //         chordEls[i].textContent = this element should be a major
-        //     } else {
-        //         chordEls[i].textContent = this element should be a diminished 
-        //     }
-        // }
-        
     }
-    
-    
-    // for (let i = 14; i<21; i++){
-    //     chordEls[i].textContent =buttonsNewChords[i-14]
-    //     //console.log('chordEls[i]2: ' + chordEls[i].textContent)
-    // }
-=======
-    }
->>>>>>> Stashed changes
 }
 
 // Call this whenever the user selects a new root/mode
@@ -715,8 +572,6 @@ function onModeChange(newChords) {
     //modeChords = newChords;
     updateKeyboard(newChords);
 }
-<<<<<<< Updated upstream
-=======
 
 
 // TODO:
@@ -736,4 +591,3 @@ function onModeChange(newChords) {
 
 
 // how about mobile?
->>>>>>> Stashed changes
