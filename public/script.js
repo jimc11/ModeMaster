@@ -411,6 +411,49 @@ function renderSounds (mode, newChords){
        console.log("---" + k + ': '+ enumeratedEncodedChords[k])
     }
 
+
+
+    // ---- test zone ----
+    // right now, I need to create an array of chord objects 'chords' and use my existing logic to fill out each object
+    // then I need to add html and scripts that can add/modify those chord objects
+    // what am I going to display in the keyboard section when a user makes a crazy ass chord?
+    // am I going to have a chord identifier function?
+    // that would be nuts
+    // maybe instead, I only allow users to select chords from a list
+    // use that reddit screenshot as a guide
+    // then just use similar logic to what I have now...
+    start another time with a fresh brain. But maybe implement the chord objects first
+    // read the user's selection and store as a variable-> put it on the html -> use the formula to add the notes... 
+    
+    // should I just hardcode the diatonic chords of each mode?  Make a section of 7 patterns in common formulas?
+    // this would only be useful for the first time the user hits enter.  If they want to bind chords to keys it'll be pointless(?)
+    sounds = {
+        '1': chords[0].getArrayOfAudioObjects(),
+        '2': chords[1].getArrayOfAudioObjects(),
+        '3': chords[2].getArrayOfAudioObjects(),
+        '4': chords[3].getArrayOfAudioObjects(),
+        '5': chords[4].getArrayOfAudioObjects(),
+        '6': chords[5].getArrayOfAudioObjects(),
+        '7': chords[6].getArrayOfAudioObjects(),
+
+        'q': chords[7].getArrayOfAudioObjects(),
+        'w': chords[8].getArrayOfAudioObjects(),
+        'e': chords[9].getArrayOfAudioObjects(),
+        'r': chords[10].getArrayOfAudioObjects(),
+        't': chords[11].getArrayOfAudioObjects(),
+        'y': chords[12].getArrayOfAudioObjects(),
+        'u': chords[13].getArrayOfAudioObjects(),
+
+        'a': chords[14].getArrayOfAudioObjects(),
+        's': chords[15].getArrayOfAudioObjects(),
+        'd': chords[16].getArrayOfAudioObjects(),
+        'f': chords[17].getArrayOfAudioObjects(),
+        'g': chords[18].getArrayOfAudioObjects(),
+        'h': chords[19].getArrayOfAudioObjects(),
+        'j': chords[20].getArrayOfAudioObjects()
+    }
+    // ---- end test zone ----
+
     sounds = {
         '1': [new Audio('sounds/'+enumeratedEncodedChords[0][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][2]+'.wav'),],
         '2': [new Audio('sounds/'+enumeratedEncodedChords[1][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[1][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[1][2]+'.wav'),],
