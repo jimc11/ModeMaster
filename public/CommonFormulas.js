@@ -1,5 +1,18 @@
 //     // base chords?
-const commonFormulas = {
+export const commonFormulas = {
+
+    'allNumberedEncodedNotes' : [ 'c3','c%233','d3','d%233','e3','f3','f%233','g3','g%233','a3','a%233','b3', 'c4','c%234','d4','d%234','e4','f4','f%234','g4','g%234','a4','a%234','b4', 'c5','c%235','d5','d%235','e5','f5','f%235','g5','g%235','a5','a%235','b5', ],
+
+    'modeSteps' : [
+        [0, 2, 4, 5, 7, 9, 11],  // Ionian 0
+        [0, 2, 3, 5, 7, 9, 10],  // Dorian 1
+        [0, 1, 3, 5, 7, 8, 10],  // Phrygian 2 
+        [0, 2, 4, 6, 7, 9, 11],  // Lydian 3
+        [0, 2, 4, 5, 7, 9, 10],  // Mixolydian 4
+        [0, 2, 3, 5, 7, 8, 10],  // Aeolian 5
+        [0, 1, 3, 5, 6, 8, 10]   // Locrian 6
+    ],
+
     'major' : [0, 4 ,7],// 1-3-5
     'minor' : [0, 3, 7], // 1-♭3-5
     'diminished' : [0, 3, 6], // 1-♭3-♭5

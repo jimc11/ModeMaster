@@ -1,94 +1,173 @@
-// let sounds = {
-//         '1': [new Audio('sounds/'+enumeratedEncodedChords[0][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][2]+'.wav'),],
-//         '2': [new Audio('sounds/'+enumeratedEncodedChords[1][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[1][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[1][2]+'.wav'),],
-//         '3': [new Audio('sounds/'+enumeratedEncodedChords[2][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[2][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[2][2]+'.wav'),],
-//         '4': [new Audio('sounds/'+enumeratedEncodedChords[3][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[3][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[3][2]+'.wav'),],
-//         '5': [new Audio('sounds/'+enumeratedEncodedChords[4][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[4][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[4][2]+'.wav'),],
-//         '6': [new Audio('sounds/'+enumeratedEncodedChords[5][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][2]+'.wav'),],
-//         '7': [new Audio('sounds/'+enumeratedEncodedChords[6][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][2]+'.wav'),],
-        
-//         'q': [new Audio('sounds/'+enumeratedEncodedChords[7][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][2]+'.wav'),],
-//         'w': [new Audio('sounds/'+enumeratedEncodedChords[8][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[8][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[8][2]+'.wav'),],
-//         'e': [new Audio('sounds/'+enumeratedEncodedChords[9][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[9][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[9][2]+'.wav'),],
-//         'r': [new Audio('sounds/'+enumeratedEncodedChords[10][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[10][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[10][2]+'.wav'),],
-//         't': [new Audio('sounds/'+enumeratedEncodedChords[11][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[11][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[11][2]+'.wav'),],
-//         'y': [new Audio('sounds/'+enumeratedEncodedChords[12][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[12][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[12][2]+'.wav'),],
-//         'u': [new Audio('sounds/'+enumeratedEncodedChords[13][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[13][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[13][2]+'.wav'),],
-        
-//         'a': [new Audio('sounds/'+enumeratedEncodedChords[14][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[14][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[14][2]+'.wav'),],
-//         's': [new Audio('sounds/'+enumeratedEncodedChords[15][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[15][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[15][2]+'.wav'),],
-//         'd': [new Audio('sounds/'+enumeratedEncodedChords[16][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[16][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[16][2]+'.wav'),],
-//         'f': [new Audio('sounds/'+enumeratedEncodedChords[17][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[17][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[17][2]+'.wav'),],
-//         'g': [new Audio('sounds/'+enumeratedEncodedChords[18][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[18][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[18][2]+'.wav'),],
-//         'h': [new Audio('sounds/'+enumeratedEncodedChords[19][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][2]+'.wav'),],
-//         'j': [new Audio('sounds/'+enumeratedEncodedChords[20][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][2]+'.wav'),],
-//     };
-
-const enumeratedEncodedNotes = [ 'c3','c%233','d3','d%233','e3','f3','f%233','g3','g%233','a3','a%233','b3', 'c4','c%234','d4','d%234','e4','f4','f%234','g4','g%234','a4','a%234','b4', 'c5','c%235','d5','d%235','e5','f5','f%235','g5','g%235','a5','a%235','b5', ];
-
-import { Formula } from './Formula.js';
-import { SoundFiles } from './SoundFiles.js';
+import {commonFormulas} from './CommonFormulas.js'
 
 
 export class Chord {
 
-    // notes should be an array of 2+ strings ('C','E','G')
-    // name is the actual name of the chord (F#m, C7, Bm9, ...)
-    // halfSteps is an array of integers (major = 1-3-5 = [0,4,7] )
+    // formula is an array of integers (major = 1-3-5 = [0,4,7] )
+    // rootnote is just the first non-numbered, non-encoded note that is lowercase only
+    // startingOctave is just 3, 4, or 5 AS A STRING
+    constructor(formula, rootNote, startingOctave) {
 
-    constructor(chordName, formula, rootNote, startingOctave, enumeratedEncodedNotes) {
-
+        this.formula = formula;
         this.rootNote = rootNote;
         this.startingOctave = startingOctave;
-        this.chordName = chordName;
-        this.formula = new Formula(formula);
-        this.enumeratedEncodedNotes = enumeratedEncodedNotes;
 
+        this.numberedEncodedNotes = computeNumberedEncodedNotes(formula, rootNote, startingOctave)
 
-        this.SoundFiles = new SoundFiles(); // how the hell is this gonna work?
-
-        //alternate
         this.arrayOfAudioObjects = []
-
-        function computeAudioObjects(){
-            this.arrayOfAudioObjects.push(new Audio('sounds/'+enumeratedEncoded ??? [?]+'.wav'))
-        }
-
-        // how to compute the sound files for this chord?
-
-        // take the first 1-2 chars of name
-        // find the first instance of it appearing in notes
-        // add hlafsteps to it
-        // enumerate it,
-        // enocde it,
-        // thats it?   
+        //this.arrayOfAudioObjects = ['sounds/'+rootNote.replace("#", "%23") + startingOctave +'.wav'] //we will then push more audio objects here //        this.arrayOfAudioObjects = [new Audio('sounds/'+rootNote.replace("#", "%23") + startingOctave +'.wav')] //we will then push more audio objects here
+        this.arrayOfAudioObjects = this.setArrayOfAudioObjects()
+    
     }
 
+    // how are we gonna do inversions?  negative index? -> problem if people want to do Cmaj/E on octave 3...
     addNotes(note) {
-        this.formula.addNotes(note)
+        console.log('--addNotes--')
+        this.formula.push(note)
+        //console.log('this.formula: ' + this.formula)
+        this.numberedEncodedNotes = computeNumberedEncodedNotes(this.formula, this.rootNote, this.startingOctave)
+        this.setArrayOfAudioObjects()
     }
     subtractNotes(note){
-        this.formula.subtractNotes(note)
+        console.log('--subtractNotes--')
+
+        this.formula.pop(note)
+        this.numberedEncodedNotes = computeNumberedEncodedNotes(this.formula, this.rootNote, this.startingOctave)
+        this.setArrayOfAudioObjects()
     }
 
     modifyNotes(notes){
-        this.formula.modifyNotes(notes)
+        console.log('--modifyNotes--')
+
+        for (let i = 0; i < this.formula.length; i++)
+            this.formula[i] += (notes[i])
+
+        //console.log('this.formula: ' + this.formula)
+
+        this.numberedEncodedNotes = computeNumberedEncodedNotes(this.formula, this.rootNote, this.startingOctave)
+        this.setArrayOfAudioObjects()
     }
 
     getFormula(){
         return this.formula.getHalfSteps()
     }
 
-    // enumerate(){
+    setArrayOfAudioObjects(){
+        console.log('--setArrayOfAudioObjects--')
+        this.arrayOfAudioObjects = []
+        // console.log('arrayOfAudioObjects: ' + this.arrayOfAudioObjects)
+        // console.log('this.numberedEncodedNotes: ' + this.numberedEncodedNotes)
+        let tempString = ''
+        for(let i = 0; i < this.numberedEncodedNotes.length; i++){
+            tempString = String('sounds/'+this.numberedEncodedNotes[i]+'.wav')
+            //console.log('tempString: ' + tempString)
+            this.arrayOfAudioObjects.push(tempString) //            this.arrayOfAudioObjects.push(new Audio('sounds/'+numberedEncodedNote+'.wav'))
+        }
+        return this.arrayOfAudioObjects
+    }
 
-    // }
-    // encode(){
-
-    // }
-
-    getEnumeratedEncodedNotes(){
-        return this.enumeratedEncodedNotes       
+    // finished product that populates eventlistener
+    getArrayOfAudioObjects(){
+        return this.arrayOfAudioObjects       
     }
 
 }
 
+
+function computeNumberedEncodedNotes(formula, rootNote, startingOctave){
+    console.log('--computeNumberedEncodedNotes--')
+
+    let rootNoteIndex = (commonFormulas['allNumberedEncodedNotes'].indexOf((rootNote.replace("#", "%23")+startingOctave).toString()))
+    //console.log('rootNoteIndex: ' + rootNoteIndex) 
+
+    let numberedNotes = enumerate(formula, rootNoteIndex)
+    //console.log('numberedNotes2: ' + numberedNotes) 
+
+    let numberedEncodedNotes = encode(numberedNotes)
+
+    return numberedEncodedNotes;
+}
+
+function enumerate(formula, rootNoteIndex){
+    console.log('--enumerate--')
+    let numberedNotes = []
+    // console.log('rootNoteIndex2 : ' + rootNoteIndex) // 
+
+    // console.log('commonFormulas[\'allNumberedEncodedNotes\'][rootNoteIndex+formula[i]]: ')
+    // console.log( commonFormulas['allNumberedEncodedNotes'][Number(rootNoteIndex)]) // huh?
+
+    for (let i=0; i<formula.length; i++){
+        numberedNotes.push(commonFormulas['allNumberedEncodedNotes'][rootNoteIndex+formula[i]]) 
+        // console.log('rootNoteIndex: ' + rootNoteIndex) 
+        // console.log('formula[i]: ' + formula[i]) 
+        // console.log('numberedNotes[i]: ' + numberedNotes[i]) 
+    }
+        
+    //console.log('numberedNotes1: ' + numberedNotes) 
+    return numberedNotes;
+}
+
+function encode(numberedNotes){
+    console.log('--encode--')
+    //console.log('numberedNotes3: ' + numberedNotes) 
+
+    for (let i = 0 ; i<numberedNotes.length; i++){
+        numberedNotes[i]
+        if (numberedNotes[i].includes('#')){
+            numberedNotes[i].replace("#", "%23")
+        }
+    }
+    return numberedNotes
+}
+
+function main(){
+
+    console.log('-----Test0-----')
+
+    let formula = [0,4,7]
+    let rootNote= 'c#'
+    let startingOctave= '4' 
+    let myChord = new Chord(formula, rootNote, startingOctave )
+    
+    console.log('-----Test1-----')
+
+    myChord.addNotes(11)
+
+    console.log('numberedEncodedNotes: ' + myChord.numberedEncodedNotes)
+    console.log('arrayOfAudioObjects: ' + myChord.getArrayOfAudioObjects())
+
+    console.log('-----Test2-----')
+
+    myChord.subtractNotes(11)
+    myChord.subtractNotes(4)
+
+    console.log('numberedEncodedNotes: ' + myChord.numberedEncodedNotes)
+    console.log('arrayOfAudioObjects: ' + myChord.getArrayOfAudioObjects())
+
+    console.log('-----Test3-----')
+    
+    myChord.modifyNotes([1,-1])
+
+    console.log('numberedEncodedNotes: ' + myChord.numberedEncodedNotes)
+    console.log('arrayOfAudioObjects: ' + myChord.getArrayOfAudioObjects())
+
+    console.log('-----Test4-----')
+
+    myChord.modifyNotes([2,-3,])
+
+    console.log('numberedEncodedNotes: ' + myChord.numberedEncodedNotes)
+    console.log('arrayOfAudioObjects: ' + myChord.getArrayOfAudioObjects())
+
+
+    console.log('-----Test5-----')
+    
+    myChord.modifyNotes([2,-3,1]) // this should crash unless I implement something for it.
+
+    console.log('numberedEncodedNotes: ' + myChord.numberedEncodedNotes)
+    console.log('arrayOfAudioObjects: ' + myChord.getArrayOfAudioObjects())
+}
+//main()
+
+// TODO: 
+// 1. do we need extended structures past octave 5?  EG we don't need to worry about chords with root note >5 right?  that just wont happen...?
+// 2. how are we gonna do inversions?  do we need to download more sounds for the under octave 3 range?
