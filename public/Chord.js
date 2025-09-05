@@ -1,89 +1,3 @@
-//     // base chords?
-// const major = [0, 4 ,7]; // 1-3-5
-// const minor = [0, 3, 7]; // 1-♭3-5
-// const diminished = [0, 3, 6]; // 1-♭3-♭5
-// const sus2 =   [0, 2, 7]; // 1-2-5
-// const sus4 =   [0, 2, 5]; // 1-4-5
-// const sus2sus4 =   [0, 2, 5, 7]; // 1-2-4-5
-
-// // modifiers
-// const add6 = [0, 4, 7, 9] // 1-3-5-6 (aka X6)
-// const add9 = [0, 4, 7, 14]  // 1-3-5-9
-// const add11 = [0, 4, 7, 17] // 1-3-5-11
-// const add13 = [0, 4, 7, 21] // 1-3-5-13
-
-// const madd6 = [0, 3, 7, 9] // 1-3-5-6 (aka X6)
-// const madd9 = [0, 3, 7, 14]  // 1-3-5-9
-// const madd11 = [0, 3, 7, 17] // 1-3-5-11
-// const madd13 = [0, 3, 7, 21] // 1-3-5-13
-
-// // dominant family
-// const X7 = [0, 4, 7, 10] // 1-3-5-♭7
-// const X9 = [0, 4, 7, 10, 14] // 1-3-5-♭7
-// const X11 = [0, 4, 7, 10, 14, 17] // 1-3-5-♭7
-// const X13 = [0, 4, 7, 10, 14, 17, 21] // 1-3-5-♭7
-
-// // majX
-// const maj7 = [0, 4, 7, 11] // 1-3-5-7 aka  C△ aka C dominant 7
-// const maj9 = [0, 4, 7, 11, 14] // 1-3-5-b7-9
-// const maj11 = [0, 4, 7, 11, 14, 17] // 1-3-5-b7-9-11
-// const maj13 = [0, 4, 7, 11, 14, 17, 21] // 1-3-5-b7-9-11-13
-
-// // mX
-// const m7 = [0, 3, 7, 10] // 1-♭3-5-♭7
-// const m9 = [0, 3, 7, 10, 14] // 1-♭3-5-♭7-9
-// const m11 = [0, 3, 7, 10, 14, 17] // 1-♭3-5-♭7-9-11
-// const m13 = [0, 3, 7, 10, 14, 17, 21] // 1-♭3-5-♭7-9-13
-
-// // minor major 7
-// const minormajor7 = [0, 3, 7, 11] // 1-♭3-5-7
-    
-
-// const notes = ['a','a#','b','c','c#','d','d#','e','f','f#','g','g#'];
-
-    
-export class Chord {
-
-    // notes should be an array of 2+ strings ('C','E','G')
-    // name is the actual name of the chord (F#m, C7, Bm9, ...)
-    // halfSteps is an array of integers (major = 1-3-5 = [0,4,7] )
-
-    constructor(notes, name, halfSteps,enumeratedEncodedNotes) {
-        this.notes = notes;
-        this.name = name;
-        this.halfSteps = halfSteps;
-        this.enumeratedEncodedNotes = enumeratedEncodedNotes;
-
-        // take the first 1-2 chars of name
-        // find the first instance of it appearing in notes
-        // add hlafsteps to it
-        // enumerate it,
-        // enocde it,
-        // thats it?
-
-        
-    }
-
-    addNotes(note) {
-        this.notes.push(note)
-    }
-    // subtractNotes(){
-
-    // }
-
-    // enumerate(){
-
-    // }
-    // encode(){
-
-    // }
-
-    getEnumeratedEncodedNotes(){
-        return this.enumeratedEncodedNotes       
-    }
-
-}
-
 // let sounds = {
 //         '1': [new Audio('sounds/'+enumeratedEncodedChords[0][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][2]+'.wav'),],
 //         '2': [new Audio('sounds/'+enumeratedEncodedChords[1][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[1][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[1][2]+'.wav'),],
@@ -109,3 +23,72 @@ export class Chord {
 //         'h': [new Audio('sounds/'+enumeratedEncodedChords[19][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][2]+'.wav'),],
 //         'j': [new Audio('sounds/'+enumeratedEncodedChords[20][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][2]+'.wav'),],
 //     };
+
+const enumeratedEncodedNotes = [ 'c3','c%233','d3','d%233','e3','f3','f%233','g3','g%233','a3','a%233','b3', 'c4','c%234','d4','d%234','e4','f4','f%234','g4','g%234','a4','a%234','b4', 'c5','c%235','d5','d%235','e5','f5','f%235','g5','g%235','a5','a%235','b5', ];
+
+import { Formula } from './Formula.js';
+import { SoundFiles } from './SoundFiles.js';
+
+
+export class Chord {
+
+    // notes should be an array of 2+ strings ('C','E','G')
+    // name is the actual name of the chord (F#m, C7, Bm9, ...)
+    // halfSteps is an array of integers (major = 1-3-5 = [0,4,7] )
+
+    constructor(chordName, formula, rootNote, startingOctave, enumeratedEncodedNotes) {
+
+        this.rootNote = rootNote;
+        this.startingOctave = startingOctave;
+        this.chordName = chordName;
+        this.formula = new Formula(formula);
+        this.enumeratedEncodedNotes = enumeratedEncodedNotes;
+
+
+        this.SoundFiles = new SoundFiles(); // how the hell is this gonna work?
+
+        //alternate
+        this.arrayOfAudioObjects = []
+
+        function computeAudioObjects(){
+            this.arrayOfAudioObjects.push(new Audio('sounds/'+enumeratedEncoded ??? [?]+'.wav'))
+        }
+
+        // how to compute the sound files for this chord?
+
+        // take the first 1-2 chars of name
+        // find the first instance of it appearing in notes
+        // add hlafsteps to it
+        // enumerate it,
+        // enocde it,
+        // thats it?   
+    }
+
+    addNotes(note) {
+        this.formula.addNotes(note)
+    }
+    subtractNotes(note){
+        this.formula.subtractNotes(note)
+    }
+
+    modifyNotes(notes){
+        this.formula.modifyNotes(notes)
+    }
+
+    getFormula(){
+        return this.formula.getHalfSteps()
+    }
+
+    // enumerate(){
+
+    // }
+    // encode(){
+
+    // }
+
+    getEnumeratedEncodedNotes(){
+        return this.enumeratedEncodedNotes       
+    }
+
+}
+

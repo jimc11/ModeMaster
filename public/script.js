@@ -389,24 +389,6 @@ function renderSounds (mode, newChords){
             }    
         }
 
-        
-        //console.log('referenceNotesIndex: ' + referenceNotesIndex)
-
-        // chordEls[0]: B 
-        // chordEls[1]: C# 
-        // chordEls[2]: D#m 
-        // chordEls[3]: Fdim
-        // chordEls[4]: F# 
-
-        //const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
-        // const major = [0, 4 ,7];
-        // const minor = [0, 3, 7];
-        // const diminished = [0, 3, 6];
-        
-        // is the sound rendered before chordels is updated?
-
-        
-
         let diminishedTemp = getDiminishedFormula()
         let minorTemp = getMinorFormula()
         let majorTemp = getMajorFormula()
