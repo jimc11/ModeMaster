@@ -1,45 +1,32 @@
 import { Chord } from './Chord.js';
-//import { Formula } from './Formula.js';
-//import { SoundFiles } from './SoundFiles.js';
-
-//window.generate = generate
-
-// number of half steps away each diatonic note is from the root node of each mode
+import {commonFormulas} from './CommonFormulas.js'
 
 document.getElementById("generateButton").addEventListener("click", generate);
 
-
+// I should replace these with CommonFormulas
 function getModeSteps(){
-    const modeSteps = [
-        [0, 2, 4, 5, 7, 9, 11],  // Ionian 0
-        [0, 2, 3, 5, 7, 9, 10],  // Dorian 1
-        [0, 1, 3, 5, 7, 8, 10],  // Phrygian 2 
-        [0, 2, 4, 6, 7, 9, 11],  // Lydian 3
-        [0, 2, 4, 5, 7, 9, 10],  // Mixolydian 4
-        [0, 2, 3, 5, 7, 8, 10],  // Aeolian 5
-        [0, 1, 3, 5, 6, 8, 10]   // Locrian 6
-    ];
-
+    const modeSteps =commonFormulas['modeSteps']
     return modeSteps;
 }
 
 function getMajorFormula(){
-    const major = [0, 4 ,7]; // 1-3-5
+    const major = commonFormulas['major']
     return major    
 }
+
 function getMinorFormula(){
-const minor = [0, 3, 7]; // 1-♭3-5
+    const minor = commonFormulas['minor']
     return minor    
 }
+
 function getDiminishedFormula(){
-const diminished = [0, 3, 6]; // 1-♭3-♭5
+    const diminished = commonFormulas['diminished']
     return diminished    
 }
 
 let sounds = {}
 
-
-// ----- MAIN FUNCTION -----
+// ----- 'Main' Function -----
 function generate() {
     console.log("------generate()------")
 

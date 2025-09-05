@@ -61,9 +61,14 @@ export class Chord {
         for(let i = 0; i < this.numberedEncodedNotes.length; i++){
             tempString = String('sounds/'+this.numberedEncodedNotes[i]+'.wav')
             //console.log('tempString: ' + tempString)
-            this.arrayOfAudioObjects.push(tempString) //            this.arrayOfAudioObjects.push(new Audio('sounds/'+numberedEncodedNote+'.wav'))
+
+            this.arrayOfAudioObjects.push(new Audio(tempString))
+            //this.arrayOfAudioObjects.push(tempString) //            this.arrayOfAudioObjects.push(new Audio('sounds/'+numberedEncodedNote+'.wav'))
         }
+        
+        
         return this.arrayOfAudioObjects
+
     }
 
     // finished product that populates eventlistener
@@ -171,3 +176,4 @@ function main(){
 // TODO: 
 // 1. do we need extended structures past octave 5?  EG we don't need to worry about chords with root note >5 right?  that just wont happen...?
 // 2. how are we gonna do inversions?  do we need to download more sounds for the under octave 3 range?
+// 3. it would be way better for the Chord objects to contain an array of Audio objects...  is that possible?
