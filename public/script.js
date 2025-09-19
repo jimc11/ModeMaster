@@ -323,30 +323,43 @@ function renderSounds (mode, newChords){
     
     console.log('currentModeChordPattern: ' + currentModeChordPattern)
     
-     KEYINPUT AND STARTING OCTAVE ARE MESSED UP
-     
+    let notesOfCurrentMode = commonFormulas.modeSteps[modeSelect]    
+    let startingPosition = commonFormulas.notes.indexOf(keyInput.value)
+
+    console.log("notesOfCurrentMode: " + notesOfCurrentMode)
+
     // populate row 1 of keyboard
+
+    // we just want the root note to ascend
+    // take allNumberedNotes, just iterate up that, split the note to one side and the number to the other?
+
     for(let i = 0; i< 7; i++){
+        console.log('commonFormulas.notes[startingPosition + notesOfCurrentMode[i]].slice(0,-1): ' + commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(0,-1))
+
         switch (currentModeChordPattern[i]) {
             case 'major':
-                chords.push(new Chord (majorTemp,keyInput.value,3)) //keyInput.value may cause issues
+                chords.push(new Chord (majorTemp,commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(0,-1),commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(-1))) //keyInput.value may cause issues
                 break
             case 'minor':
-                chords.push(new Chord (minorTemp,keyInput.value,3)) //keyInput.value may cause issues
+                chords.push(new Chord (minorTemp,commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(0,-1),commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(-1))) //keyInput.value may cause issues
                 break
             case 'diminished':
-                chords.push(new Chord(diminishedTemp,keyInput.value,3)) //keyInput.value may cause issues
+                chords.push(new Chord(diminishedTemp,commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(0,-1),commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(-1))) //keyInput.value may cause issues
                 break
         }
+    
     }
 
 
     for (let k=0;k<chords.length; k++){
        console.log("--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
     }
-       console.log("--------")
+    console.log("--------")
 
     // populate row 2-3 of keyboard
+    // I believe that for both the root note and starting octave, we can just loook at the first row and use 
+    // those values.  we don't need to worry about the octave of each note, either, since the chord object has functions for that
+
     for(let i = 7; i< 21; i++){
         switch (currentModeChordPattern[i%7]) {
             case 'major':
@@ -631,3 +644,5 @@ function onModeChange(newChords) {
 
 
 // how about mobile?
+
+// users with accounts can save chord presets!
