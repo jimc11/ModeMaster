@@ -323,8 +323,8 @@ function renderSounds (mode, newChords){
     
     console.log('currentModeChordPattern: ' + currentModeChordPattern)
     
-    // WAIT! KEYINPUT AND STARTING OCTAVE ARE MESSED UP
-    // LOOK AT THIS WITH FRESH EYES
+     KEYINPUT AND STARTING OCTAVE ARE MESSED UP
+     
     // populate row 1 of keyboard
     for(let i = 0; i< 7; i++){
         switch (currentModeChordPattern[i]) {
@@ -342,7 +342,7 @@ function renderSounds (mode, newChords){
 
 
     for (let k=0;k<chords.length; k++){
-       console.log("--------chords" + k + ': '+ chords[k].getArrayOfAudioObjects())
+       console.log("--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
     }
        console.log("--------")
 
@@ -362,7 +362,7 @@ function renderSounds (mode, newChords){
     }
 
     for (let k=0;k<chords.length; k++){
-       console.log("--------chords" + k + ': '+ chords[k].getArrayOfAudioObjects())
+       console.log("--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
     }
 
         
@@ -370,109 +370,109 @@ function renderSounds (mode, newChords){
     // row 1 
 
     // ---- All this is probably pointless lol ----
-    const chordEls = document.querySelectorAll('#keyboard .chord'); // returns nodeArray of all text in the chord class 
-    sounds = {}
-    const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
+    // const chordEls = document.querySelectorAll('#keyboard .chord'); // returns nodeArray of all text in the chord class 
+    // sounds = {}
+    // const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
 
-    modeSelect = Number(document.getElementById('modeSelect').value)-1
+    // modeSelect = Number(document.getElementById('modeSelect').value)-1
 
-    let ms = getModeSteps()
-    let currentModeSteps = ms[modeSelect] // half steps from root for current user selected mode
-    let referenceNotesIndex = 0
+    // let ms = getModeSteps()
+    // let currentModeSteps = ms[modeSelect] // half steps from root for current user selected mode
+    // let referenceNotesIndex = 0
 
 
-    // finds the index of the root note of the scale
-    for (let i = 0; i< referenceNotes.length; i++){
-        if (referenceNotes[i].slice(0, -1) == newChords[0][0]){
-            referenceNotesIndex = i
-            break
-        }
+    // // finds the index of the root note of the scale
+    // for (let i = 0; i< referenceNotes.length; i++){
+    //     if (referenceNotes[i].slice(0, -1) == newChords[0][0]){
+    //         referenceNotesIndex = i
+    //         break
+    //     }
             
-    }
-    //console.log('referenceNotesIndex: ' + referenceNotesIndex)
-
-    // scale we will build out
-    let currentEnumeratedModeNotes = []
-    for (let i = 0 ; i < 7; i++){
-        currentEnumeratedModeNotes[i] = referenceNotes[referenceNotesIndex + currentModeSteps[i]]
-    }
-
-    // add currentEnumeratedModeNotes onto currentEnumeratedModeNotes, but make it an octave higher
-    currentEnumeratedModeNotes = currentEnumeratedModeNotes.concat(currentEnumeratedModeNotes)
-
-    for (let i in currentEnumeratedModeNotes){
-        if (i>6){
-            //add 1 to the last digit...
-            currentEnumeratedModeNotes[i] = currentEnumeratedModeNotes[i].replace(/\d+$/,match => parseInt(match) + 1);
-        }
-    }
-
-    let enumeratedChords = []; // this is a 2d array
-    let enumeratedChord = [] // 1D array to be pushed to enumeratedEncodedChords when filled with 3 notes
-
-    // c,d,e,f,g,a,b, c,d,e,f,g,a,b
-    // now we must build the 7 triads from currentEnumeratedModeNotes
-    for (let i = 0 ; i < 7; i++){
-        enumeratedChord = [currentEnumeratedModeNotes[i], currentEnumeratedModeNotes[i+2], currentEnumeratedModeNotes[i+4]]
-        enumeratedChords.push(enumeratedChord)
-    }
-    // --- row 1 complete ---
-
-    // enumeratedChords[i] = [c3,e3,g3] ...
-
-    // for (let i = 0 ; i < 7; i++){
-    //     console.log('enumeratedChords['+i+']: ' + enumeratedChords[i])
     // }
+    // //console.log('referenceNotesIndex: ' + referenceNotesIndex)
+
+    // // scale we will build out
+    // let currentEnumeratedModeNotes = []
+    // for (let i = 0 ; i < 7; i++){
+    //     currentEnumeratedModeNotes[i] = referenceNotes[referenceNotesIndex + currentModeSteps[i]]
+    // }
+
+    // // add currentEnumeratedModeNotes onto currentEnumeratedModeNotes, but make it an octave higher
+    // currentEnumeratedModeNotes = currentEnumeratedModeNotes.concat(currentEnumeratedModeNotes)
+
+    // for (let i in currentEnumeratedModeNotes){
+    //     if (i>6){
+    //         //add 1 to the last digit...
+    //         currentEnumeratedModeNotes[i] = currentEnumeratedModeNotes[i].replace(/\d+$/,match => parseInt(match) + 1);
+    //     }
+    // }
+
+    // let enumeratedChords = []; // this is a 2d array
+    // let enumeratedChord = [] // 1D array to be pushed to enumeratedEncodedChords when filled with 3 notes
+
+    // // c,d,e,f,g,a,b, c,d,e,f,g,a,b
+    // // now we must build the 7 triads from currentEnumeratedModeNotes
+    // for (let i = 0 ; i < 7; i++){
+    //     enumeratedChord = [currentEnumeratedModeNotes[i], currentEnumeratedModeNotes[i+2], currentEnumeratedModeNotes[i+4]]
+    //     enumeratedChords.push(enumeratedChord)
+    // }
+    // // --- row 1 complete ---
+
+    // // enumeratedChords[i] = [c3,e3,g3] ...
+
+    // // for (let i = 0 ; i < 7; i++){
+    // //     console.log('enumeratedChords['+i+']: ' + enumeratedChords[i])
+    // // }
     
-    // now we build row 2 (and 3?)
-    for (let i = 7; i < 21; i++){
-        for (let j = 0; j< referenceNotes.length; j++){
+    // // now we build row 2 (and 3?)
+    // for (let i = 7; i < 21; i++){
+    //     for (let j = 0; j< referenceNotes.length; j++){
             
-            if (chordEls[i].textContent.includes('#')){
-                if (referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,2).toLowerCase()){
-                    referenceNotesIndex = j 
-                    break
-                }
-            }else {
-                if (referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,1).toLowerCase()){
-                    referenceNotesIndex = j
-                    break
-                }
-            }    
-        }
+    //         if (chordEls[i].textContent.includes('#')){
+    //             if (referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,2).toLowerCase()){
+    //                 referenceNotesIndex = j 
+    //                 break
+    //             }
+    //         }else {
+    //             if (referenceNotes[j].slice(0, -1) == chordEls[i].textContent.slice(0,1).toLowerCase()){
+    //                 referenceNotesIndex = j
+    //                 break
+    //             }
+    //         }    
+    //     }
 
         
 
-        if (chordEls[i].textContent.includes('dim')){
-            enumeratedChord = [referenceNotes[referenceNotesIndex] ,                     //  USER SHOULD HAVE ABILITY TO + OR - AN OCTAVE 
-                               referenceNotes[referenceNotesIndex + diminishedTemp[1]], 
-                               referenceNotes[referenceNotesIndex + diminishedTemp[2]]]                        
-        } else {
-            if (chordEls[i].textContent.includes('m')) {
-                console.log('chordEls['+i+'].textContent:'  + chordEls[i].textContent)
-                enumeratedChord = [referenceNotes[referenceNotesIndex], 
-                                   referenceNotes[referenceNotesIndex +minorTemp[1]], 
-                                   referenceNotes[referenceNotesIndex +minorTemp[2]]]
-                console.log('enumeratedChord:'  + enumeratedChord)
+    //     if (chordEls[i].textContent.includes('dim')){
+    //         enumeratedChord = [referenceNotes[referenceNotesIndex] ,                     //  USER SHOULD HAVE ABILITY TO + OR - AN OCTAVE 
+    //                            referenceNotes[referenceNotesIndex + diminishedTemp[1]], 
+    //                            referenceNotes[referenceNotesIndex + diminishedTemp[2]]]                        
+    //     } else {
+    //         if (chordEls[i].textContent.includes('m')) {
+    //             console.log('chordEls['+i+'].textContent:'  + chordEls[i].textContent)
+    //             enumeratedChord = [referenceNotes[referenceNotesIndex], 
+    //                                referenceNotes[referenceNotesIndex +minorTemp[1]], 
+    //                                referenceNotes[referenceNotesIndex +minorTemp[2]]]
+    //             console.log('enumeratedChord:'  + enumeratedChord)
 
-            } else { // it must be a major
-                enumeratedChord = [referenceNotes[referenceNotesIndex], 
-                                   referenceNotes[referenceNotesIndex + majorTemp[1]], 
-                                   referenceNotes[referenceNotesIndex + majorTemp[2]]]
-            }
-        }
-        enumeratedChords.push(enumeratedChord)
-    }
+    //         } else { // it must be a major
+    //             enumeratedChord = [referenceNotes[referenceNotesIndex], 
+    //                                referenceNotes[referenceNotesIndex + majorTemp[1]], 
+    //                                referenceNotes[referenceNotesIndex + majorTemp[2]]]
+    //         }
+    //     }
+    //     enumeratedChords.push(enumeratedChord)
+    // }
 
-    for (let k=0;k<enumeratedChords.length; k++){
-       console.log("{{{" + k + ': '+ enumeratedChords[k])
-    }
-    let enumeratedEncodedChords = enumeratedChords.map(chord =>
-        chord.map(note => note.replace("#", "%23")) );
+    // for (let k=0;k<enumeratedChords.length; k++){
+    //    console.log("{{{" + k + ': '+ enumeratedChords[k])
+    // }
+    // let enumeratedEncodedChords = enumeratedChords.map(chord =>
+    //     chord.map(note => note.replace("#", "%23")) );
     
-    for (let k=0;k<enumeratedEncodedChords.length; k++){
-       console.log("---" + k + ': '+ enumeratedEncodedChords[k])
-    }
+    // for (let k=0;k<enumeratedEncodedChords.length; k++){
+    //    console.log("---" + k + ': '+ enumeratedEncodedChords[k])
+    // }
 
 
 
@@ -517,31 +517,31 @@ function renderSounds (mode, newChords){
     }
     // ---- end test zone ----
 
-    sounds = {
-        '1': [new Audio('sounds/'+enumeratedEncodedChords[0][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][2]+'.wav'),],
-        '2': [new Audio('sounds/'+enumeratedEncodedChords[1][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[1][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[1][2]+'.wav'),],
-        '3': [new Audio('sounds/'+enumeratedEncodedChords[2][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[2][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[2][2]+'.wav'),],
-        '4': [new Audio('sounds/'+enumeratedEncodedChords[3][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[3][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[3][2]+'.wav'),],
-        '5': [new Audio('sounds/'+enumeratedEncodedChords[4][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[4][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[4][2]+'.wav'),],
-        '6': [new Audio('sounds/'+enumeratedEncodedChords[5][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][2]+'.wav'),],
-        '7': [new Audio('sounds/'+enumeratedEncodedChords[6][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][2]+'.wav'),],
+    // sounds = {
+    //     '1': [new Audio('sounds/'+enumeratedEncodedChords[0][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][2]+'.wav'),],
+    //     '2': [new Audio('sounds/'+enumeratedEncodedChords[1][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[1][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[1][2]+'.wav'),],
+    //     '3': [new Audio('sounds/'+enumeratedEncodedChords[2][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[2][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[2][2]+'.wav'),],
+    //     '4': [new Audio('sounds/'+enumeratedEncodedChords[3][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[3][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[3][2]+'.wav'),],
+    //     '5': [new Audio('sounds/'+enumeratedEncodedChords[4][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[4][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[4][2]+'.wav'),],
+    //     '6': [new Audio('sounds/'+enumeratedEncodedChords[5][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][2]+'.wav'),],
+    //     '7': [new Audio('sounds/'+enumeratedEncodedChords[6][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][2]+'.wav'),],
         
-        'q': [new Audio('sounds/'+enumeratedEncodedChords[7][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][2]+'.wav'),],
-        'w': [new Audio('sounds/'+enumeratedEncodedChords[8][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[8][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[8][2]+'.wav'),],
-        'e': [new Audio('sounds/'+enumeratedEncodedChords[9][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[9][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[9][2]+'.wav'),],
-        'r': [new Audio('sounds/'+enumeratedEncodedChords[10][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[10][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[10][2]+'.wav'),],
-        't': [new Audio('sounds/'+enumeratedEncodedChords[11][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[11][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[11][2]+'.wav'),],
-        'y': [new Audio('sounds/'+enumeratedEncodedChords[12][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[12][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[12][2]+'.wav'),],
-        'u': [new Audio('sounds/'+enumeratedEncodedChords[13][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[13][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[13][2]+'.wav'),],
+    //     'q': [new Audio('sounds/'+enumeratedEncodedChords[7][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][2]+'.wav'),],
+    //     'w': [new Audio('sounds/'+enumeratedEncodedChords[8][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[8][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[8][2]+'.wav'),],
+    //     'e': [new Audio('sounds/'+enumeratedEncodedChords[9][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[9][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[9][2]+'.wav'),],
+    //     'r': [new Audio('sounds/'+enumeratedEncodedChords[10][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[10][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[10][2]+'.wav'),],
+    //     't': [new Audio('sounds/'+enumeratedEncodedChords[11][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[11][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[11][2]+'.wav'),],
+    //     'y': [new Audio('sounds/'+enumeratedEncodedChords[12][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[12][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[12][2]+'.wav'),],
+    //     'u': [new Audio('sounds/'+enumeratedEncodedChords[13][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[13][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[13][2]+'.wav'),],
         
-        'a': [new Audio('sounds/'+enumeratedEncodedChords[14][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[14][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[14][2]+'.wav'),],
-        's': [new Audio('sounds/'+enumeratedEncodedChords[15][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[15][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[15][2]+'.wav'),],
-        'd': [new Audio('sounds/'+enumeratedEncodedChords[16][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[16][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[16][2]+'.wav'),],
-        'f': [new Audio('sounds/'+enumeratedEncodedChords[17][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[17][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[17][2]+'.wav'),],
-        'g': [new Audio('sounds/'+enumeratedEncodedChords[18][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[18][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[18][2]+'.wav'),],
-        'h': [new Audio('sounds/'+enumeratedEncodedChords[19][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][2]+'.wav'),],
-        'j': [new Audio('sounds/'+enumeratedEncodedChords[20][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][2]+'.wav'),],
-    }
+    //     'a': [new Audio('sounds/'+enumeratedEncodedChords[14][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[14][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[14][2]+'.wav'),],
+    //     's': [new Audio('sounds/'+enumeratedEncodedChords[15][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[15][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[15][2]+'.wav'),],
+    //     'd': [new Audio('sounds/'+enumeratedEncodedChords[16][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[16][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[16][2]+'.wav'),],
+    //     'f': [new Audio('sounds/'+enumeratedEncodedChords[17][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[17][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[17][2]+'.wav'),],
+    //     'g': [new Audio('sounds/'+enumeratedEncodedChords[18][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[18][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[18][2]+'.wav'),],
+    //     'h': [new Audio('sounds/'+enumeratedEncodedChords[19][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][2]+'.wav'),],
+    //     'j': [new Audio('sounds/'+enumeratedEncodedChords[20][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][2]+'.wav'),],
+    // }
 
 }
 
