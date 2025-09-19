@@ -22,14 +22,14 @@ export class Chord {
 
     // how are we gonna do inversions?  negative index? -> problem if people want to do Cmaj/E on octave 3...
     addNotes(note) {
-        console.log('--addNotes--')
+    //    console.log('--addNotes--')
         this.formula.push(note)
         //console.log('this.formula: ' + this.formula)
         this.numberedEncodedNotes = computeNumberedEncodedNotes(this.formula, this.rootNote, this.startingOctave)
         this.setArrayOfAudioObjects()
     }
     subtractNotes(note){
-        console.log('--subtractNotes--')
+    //    console.log('--subtractNotes--')
 
         this.formula.pop(note)
         this.numberedEncodedNotes = computeNumberedEncodedNotes(this.formula, this.rootNote, this.startingOctave)
@@ -37,7 +37,7 @@ export class Chord {
     }
 
     modifyNotes(notes){
-        console.log('--modifyNotes--')
+    //    console.log('--modifyNotes--')
 
         for (let i = 0; i < this.formula.length; i++)
             this.formula[i] += (notes[i])
@@ -53,7 +53,7 @@ export class Chord {
     }
 
     setArrayOfAudioObjects(){
-        console.log('--setArrayOfAudioObjects--')
+    //    console.log('--setArrayOfAudioObjects--')
         this.arrayOfAudioObjects = []
         // console.log('arrayOfAudioObjects: ' + this.arrayOfAudioObjects)
         // console.log('this.numberedEncodedNotes: ' + this.numberedEncodedNotes)
@@ -80,7 +80,7 @@ export class Chord {
 
 
 function computeNumberedEncodedNotes(formula, rootNote, startingOctave){
-    console.log('--computeNumberedEncodedNotes--')
+//    console.log('--computeNumberedEncodedNotes--')
 
     let rootNoteIndex = (commonFormulas['allNumberedEncodedNotes'].indexOf((rootNote.replace("#", "%23")+startingOctave).toString()))
     //console.log('rootNoteIndex: ' + rootNoteIndex) 
@@ -94,7 +94,7 @@ function computeNumberedEncodedNotes(formula, rootNote, startingOctave){
 }
 
 function enumerate(formula, rootNoteIndex){
-    console.log('--enumerate--')
+//    console.log('--enumerate--')
     let numberedNotes = []
     // console.log('rootNoteIndex2 : ' + rootNoteIndex) // 
 
@@ -113,7 +113,7 @@ function enumerate(formula, rootNoteIndex){
 }
 
 function encode(numberedNotes){
-    console.log('--encode--')
+//    console.log('--encode--')
     //console.log('numberedNotes3: ' + numberedNotes) 
 
     for (let i = 0 ; i<numberedNotes.length; i++){

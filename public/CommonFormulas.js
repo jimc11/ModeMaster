@@ -13,6 +13,17 @@ export const commonFormulas = {
         [0, 1, 3, 5, 6, 8, 10]   // Locrian 6
     ],
 
+    'modeChords' : [
+        ['major','minor','minor','major','major','minor','diminished',], // Ionian 0
+        ['minor','minor','major','major','minor','diminished','major',], // Dorian 1
+        ['minor','major','major','minor','diminished','major','minor',], // Phrygian 2
+        ['major','major','minor','diminished','major','minor','minor',], // Lydian 3
+        ['major','minor','diminished','major','minor','minor','major',], // Mixolydian 4
+        ['minor','diminished','major','minor','minor','major','major',], // Aoelian 5
+        ['diminished','major','minor','minor','major','major','minor',], // Locrian 6
+    ],
+
+
     'major' : [0, 4 ,7],// 1-3-5
     'minor' : [0, 3, 7], // 1-♭3-5
     'diminished' : [0, 3, 6], // 1-♭3-♭5

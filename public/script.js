@@ -307,16 +307,79 @@ function renderChordsTable(modeChords) {
 function renderSounds (mode, newChords){
     console.log('----renderSounds()----')
 
+    modeSelect = Number(document.getElementById('modeSelect').value)-1
+
+    let diminishedTemp = getDiminishedFormula()
+    let minorTemp = getMinorFormula()
+    let majorTemp = getMajorFormula()
+
+    // let formula = [0,4,7]
+    // let rootNote= 'c#'
+    // let startingOctave= '4' 
+    // let myChord = new Chord(formula, rootNote, startingOctave )
+    
+    let chords = [] // NEW CODE: this will be an array of Chord objects
+    let currentModeChordPattern = commonFormulas['modeChords'][modeSelect] // ['major','minor','minor','major','major','minor','diminished']
+    
+    console.log('currentModeChordPattern: ' + currentModeChordPattern)
+    
+    // WAIT! KEYINPUT AND STARTING OCTAVE ARE MESSED UP
+    // LOOK AT THIS WITH FRESH EYES
+    // populate row 1 of keyboard
+    for(let i = 0; i< 7; i++){
+        switch (currentModeChordPattern[i]) {
+            case 'major':
+                chords.push(new Chord (majorTemp,keyInput.value,3)) //keyInput.value may cause issues
+                break
+            case 'minor':
+                chords.push(new Chord (minorTemp,keyInput.value,3)) //keyInput.value may cause issues
+                break
+            case 'diminished':
+                chords.push(new Chord(diminishedTemp,keyInput.value,3)) //keyInput.value may cause issues
+                break
+        }
+    }
+
+
+    for (let k=0;k<chords.length; k++){
+       console.log("--------chords" + k + ': '+ chords[k].getArrayOfAudioObjects())
+    }
+       console.log("--------")
+
+    // populate row 2-3 of keyboard
+    for(let i = 7; i< 21; i++){
+        switch (currentModeChordPattern[i%7]) {
+            case 'major':
+                chords.push(new Chord(minorTemp,keyInput.value,3)) //keyInput.value may cause issues
+                break
+            case 'minor':
+                chords.push(new Chord (diminishedTemp,keyInput.value,3)) //keyInput.value may cause issues
+                break
+            case 'diminished':
+                chords.push(new Chord (majorTemp,keyInput.value,3)) //keyInput.value may cause issues
+                break
+        }
+    }
+
+    for (let k=0;k<chords.length; k++){
+       console.log("--------chords" + k + ': '+ chords[k].getArrayOfAudioObjects())
+    }
+
+        
+    // row 2-3 are easy, even with this current way of doing things
+    // row 1 
+
+    // ---- All this is probably pointless lol ----
     const chordEls = document.querySelectorAll('#keyboard .chord'); // returns nodeArray of all text in the chord class 
     sounds = {}
     const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
 
-    // this may be vestigial but I'm too scared to remove it
     modeSelect = Number(document.getElementById('modeSelect').value)-1
 
     let ms = getModeSteps()
     let currentModeSteps = ms[modeSelect] // half steps from root for current user selected mode
     let referenceNotesIndex = 0
+
 
     // finds the index of the root note of the scale
     for (let i = 0; i< referenceNotes.length; i++){
@@ -344,7 +407,6 @@ function renderSounds (mode, newChords){
         }
     }
 
-
     let enumeratedChords = []; // this is a 2d array
     let enumeratedChord = [] // 1D array to be pushed to enumeratedEncodedChords when filled with 3 notes
 
@@ -354,6 +416,9 @@ function renderSounds (mode, newChords){
         enumeratedChord = [currentEnumeratedModeNotes[i], currentEnumeratedModeNotes[i+2], currentEnumeratedModeNotes[i+4]]
         enumeratedChords.push(enumeratedChord)
     }
+    // --- row 1 complete ---
+
+    // enumeratedChords[i] = [c3,e3,g3] ...
 
     // for (let i = 0 ; i < 7; i++){
     //     console.log('enumeratedChords['+i+']: ' + enumeratedChords[i])
@@ -376,9 +441,7 @@ function renderSounds (mode, newChords){
             }    
         }
 
-        let diminishedTemp = getDiminishedFormula()
-        let minorTemp = getMinorFormula()
-        let majorTemp = getMajorFormula()
+        
 
         if (chordEls[i].textContent.includes('dim')){
             enumeratedChord = [referenceNotes[referenceNotesIndex] ,                     //  USER SHOULD HAVE ABILITY TO + OR - AN OCTAVE 
@@ -422,7 +485,7 @@ function renderSounds (mode, newChords){
     // maybe instead, I only allow users to select chords from a list
     // use that reddit screenshot as a guide
     // then just use similar logic to what I have now...
-    start another time with a fresh brain. But maybe implement the chord objects first
+    //////////////////////start another time with a fresh brain. But maybe implement the chord objects first
     // read the user's selection and store as a variable-> put it on the html -> use the formula to add the notes... 
     
     // should I just hardcode the diatonic chords of each mode?  Make a section of 7 patterns in common formulas?
