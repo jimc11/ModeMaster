@@ -321,12 +321,12 @@ function renderSounds (mode, newChords){
     let chords = [] // NEW CODE: this will be an array of Chord objects
     let currentModeChordPattern = commonFormulas['modeChords'][modeSelect] // ['major','minor','minor','major','major','minor','diminished']
     
-    console.log('currentModeChordPattern: ' + currentModeChordPattern)
+    //console.log('currentModeChordPattern: ' + currentModeChordPattern)
     
     let notesOfCurrentMode = commonFormulas.modeSteps[modeSelect]    
     let startingPosition = commonFormulas.notes.indexOf(keyInput.value)
 
-    console.log("notesOfCurrentMode: " + notesOfCurrentMode)
+   //console.log("notesOfCurrentMode: " + notesOfCurrentMode)
 
     // populate row 1 of keyboard
 
@@ -334,7 +334,7 @@ function renderSounds (mode, newChords){
     // take allNumberedNotes, just iterate up that, split the note to one side and the number to the other?
 
     for(let i = 0; i< 7; i++){
-        console.log('commonFormulas.notes[startingPosition + notesOfCurrentMode[i]].slice(0,-1): ' + commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(0,-1))
+        //console.log('commonFormulas.notes[startingPosition + notesOfCurrentMode[i]].slice(0,-1): ' + commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(0,-1))
 
         switch (currentModeChordPattern[i]) {
             case 'major':
@@ -351,19 +351,12 @@ function renderSounds (mode, newChords){
     }
 
 
-    for (let k=0;k<chords.length; k++){
-       console.log("row1--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
-    }
-
-    // populate row 2-3 of keyboard
-    // I believe that for both the root note and starting octave, we can just loook at the first row and use 
-    // those values.  we don't need to worry about the octave of each note, either, since the chord object has functions for that
-
-
-   // row 3 equals row 2 right now...  
+    // for (let k=0;k<chords.length; k++){
+    //    console.log("row1--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
+    // }
 
     for(let i = 7; i< 14; i++){
-        console.log("chords["+i+"%7].rootNote: " + chords[i%7].rootNote)
+        //console.log("chords["+i+"%7].rootNote: " + chords[i%7].rootNote)
         switch (currentModeChordPattern[i%7]) {
             case 'major':
                 chords.push(new Chord(minorTemp,chords[i%7].rootNote, chords[i%7].startingOctave)) //keyInput.value may cause issues
@@ -377,9 +370,9 @@ function renderSounds (mode, newChords){
         }
     }
 
-    for (let k=0;k<chords.length; k++){
-       console.log("row2--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
-    }
+    // for (let k=0;k<chords.length; k++){
+    //    console.log("row2--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
+    // }
 
     for(let i = 14; i< 21; i++){
         // console.log('===x===')
@@ -397,9 +390,9 @@ function renderSounds (mode, newChords){
         }
     }
 
-    for (let k=0;k<chords.length; k++){
-       console.log("row3--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
-    }
+    // for (let k=0;k<chords.length; k++){
+    //    console.log("row3--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
+    // }
 
         
     // row 2-3 are easy, even with this current way of doing things
