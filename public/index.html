@@ -70,13 +70,16 @@
         list-style: none;
         margin: 0;
         padding: 6px 0;
+        
       }
 
       .context-menu li {
+
         padding: 6px 12px;
         cursor: pointer;
         position: relative;
         white-space: nowrap;
+        right: 3px
       }
 
       .context-menu li:hover {
@@ -386,10 +389,10 @@
       <label>
         Choose Root Note: 
         <select id="keyInput">
-          <option value="a" > A </option>
+          <option value="a"  > A </option>
           <option value="a#"> A# </option>
           <option value="b"> B </option>
-          <option value="c" > C </option>
+          <option value="c" selected > C </option>
           <option value="c#"> C# </option>
           <option value="d"> D </option>
           <option value="d#" > D# </option>
@@ -419,17 +422,13 @@
 
     </div>
 
-    <!-- This is where we will display the message -->
     <div  id="messageArea"> </div>
     <div  id="notesArea"> </div>
     <div class="center-div" id="chordArea"> </div>
     <div class="center-div" id="parallelArea"> </div>
 
-    <!-- I don't think a DAW is the best, maybe an area where they can remap  1-7 to other chords, including extended structures -->
     <div id="dawArea"> 
-      
       <p>Click on a button with ⚙️ to modify the chord, or press keys to play!</p> 
-
       <div id="keyboard" class="keyboard center-div">
 
         <div class="row">
@@ -535,69 +534,10 @@
       </div>
     </div>
 
-    <!-- Popup overlay -->
+    <!-- Popup overlay --->
     <div class="popup-overlay" id="popupOverlay"></div>
 
-    <!-- Modifier popup -->
-    <div class="modifier-popup" id="modifierPopup">
-        <div class="popup-header" id="popupHeader">Modify Chord</div>
-        
-        <div class="modifier-section">
-            <h3>Quality:</h3>
-            <div class="modifier-options">
-                <div class="modifier-btn" data-modifier="major">Major</div>
-                <div class="modifier-btn" data-modifier="minor">Minor</div>
-                <div class="modifier-btn" data-modifier="diminished">Diminished</div>
-                <div class="modifier-btn" data-modifier="augmented">Augmented</div>
-            </div>
-        </div>
-
-        <div class="modifier-section">
-            <h3>Extensions:</h3>
-            <div class="modifier-options">
-                <div class="modifier-btn extension-btn" data-modifier="none">None</div>
-                <div class="modifier-btn extension-btn" data-modifier="7">7th</div>
-                <div class="modifier-btn extension-btn" data-modifier="9">9th</div>
-                <div class="modifier-btn extension-btn" data-modifier="11">11th</div>
-                <div class="modifier-btn extension-btn" data-modifier="13">13th</div>
-            </div>
-        </div>
-
-        <div class="modifier-section">
-            <h3>Inversions:</h3>
-            <div class="modifier-options">
-                <div class="modifier-btn" data-modifier="root">Root Position</div>
-                <div class="modifier-btn" data-modifier="inversion1">1st Inversion</div>
-                <div class="modifier-btn" data-modifier="inversion2">2nd Inversion</div>
-            </div>
-        </div>
-
-        <div class="modifier-section">
-            <h3>Root Note:</h3>
-            <div class="root-note-selector">
-                <div class="root-note-btn" data-note="c">C</div>
-                <div class="root-note-btn" data-note="c#">C#</div>
-                <div class="root-note-btn" data-note="d">D</div>
-                <div class="root-note-btn" data-note="d#">D#</div>
-                <div class="root-note-btn" data-note="e">E</div>
-                <div class="root-note-btn" data-note="f">F</div>
-                <div class="root-note-btn" data-note="f#">F#</div>
-                <div class="root-note-btn" data-note="g">G</div>
-                <div class="root-note-btn" data-note="g#">G#</div>
-                <div class="root-note-btn" data-note="a">A</div>
-                <div class="root-note-btn" data-note="a#">A#</div>
-                <div class="root-note-btn" data-note="b">B</div>
-            </div>
-        </div>
-
-        <div class="popup-actions">
-            <button class="action-btn apply-btn" id="applyBtn">Apply Changes</button>
-            <button class="action-btn cancel-btn" id="cancelBtn">Cancel</button>
-        </div>
-    </div>
-
-
-    <!-- xxxxxxx new shit xxxxxxxx -->
+    <!-- xxxxxxx new code xxxxxxxx -->
 
     <!-- OK.  Known issues: contextmenu is not specific to a key.  radio buttons don't work right -->
     <div id="gearMenu" class="context-menu">
@@ -605,67 +545,58 @@
           <li>
             Root Note ▸
             <ul class="submenu">
-              <li>C</li>
-              <li>C#</li>
-              <li>D</li>
-              <li>D#</li>
-              <li>E</li>
-              <li>F</li>
-              <li>F#</li>
-              <li>G</li>
-              <li>G#</li>
-              <li>A</li>
-              <li>A#</li>
-              <li>B</li>
+              <label><li>C <input name="rootMenu" type="radio" id="c" ></li>  </label> 
+              <label><li>C#<input name="rootMenu" type="radio" id="c#" ></li> </label> 
+              <label><li>D <input name="rootMenu" type="radio" id="d" ></li>  </label>
+              <label><li>D#<input name="rootMenu" type="radio" id="d#" ></li> </label> 
+              <label><li>E <input name="rootMenu" type="radio" id="e" ></li>  </label>
+              <label><li>F <input name="rootMenu" type="radio" id="f" ></li>  </label>
+              <label><li>F#<input name="rootMenu" type="radio" id="f#" ></li> </label> 
+              <label><li>G <input name="rootMenu" type="radio" id="g" ></li>  </label>
+              <label><li>G#<input name="rootMenu" type="radio" id="g#" ></li> </label> 
+              <label><li>A <input name="rootMenu" type="radio" id="a" ></li>  </label>
+              <label><li>A#<input name="rootMenu" type="radio" id="a#" ></li> </label> 
+              <label><li>B <input name="rootMenu" type="radio" id="b" ></li>  </label>
             </ul>
           </li>
           <li>
             Quality ▸
             <ul class="submenu">
-              <li>Major</li>
-              <li>Minor</li>
-              <li>Diminished</li>
-              <li>Augmented</li>
-              <li>Suspended 2nd</li>
-              <li>Suspended 4th</li>
-              <li>Suspended 2nd and 4th</li>
+              <label><li>Major<input name="QualityMenu" type="radio" id="major" ></li></label>
+              <label><li>Minor <input name="QualityMenu" type="radio" id="minor" > </li></label>
+              <label><li>Diminished<input name="QualityMenu" type="radio" id="diminished" ></li></label>
+              <label><li>Augmented<input name="QualityMenu" type="radio" id="augmented" ></li></label>
+              <label><li>Suspended 2nd<input name="QualityMenu" type="radio" id="sus2" ></li></label>
+              <label><li>Suspended 4th<input name="QualityMenu" type="radio" id="sus4" ></li></label>
+              <label><li>Suspended 2nd and 4th<input name="QualityMenu" type="radio" id="sus2sus4" ></li></label>
             </ul>
           </li>
           <li>
             Voicings ▸
             <ul class="submenu">
-              <li>Root Position<input type="radio" id="root" value = "checked"></li>
-              <li>1st Inversion<input type="radio" id="first" ></li>
-              <li>2nd Inversion<input type="radio" id="second" ></li>
+               <label> <li>Root Position<input name="voicingsMenu" type="radio" id="root" ></li></label>
+               <label> <li>1st Inversion<input name="voicingsMenu" type="radio" id="first" ></li></label>
+               <label> <li>2nd Inversion<input name="voicingsMenu" type="radio" id="second" ></li></label>
             </ul>
           </li>
           <li>
             Extensions ▸
             <ul class="submenu">
-              <li>  #5  <input type="checkbox" id="#5" > </li>
-              <li>   6  <input type="checkbox" id="6"  > </li>
-              <li>   ♭7 <input type="checkbox" id="♭7" >  </li>
-              <li>   7  <input type="checkbox" id="7"  > </li>
-              <li>   ♭9 <input type="checkbox" id="♭9" >  </li>
-              <li>  #9  <input type="checkbox" id="#9" >  </li>
-              <li>  ♭11 <input type="checkbox" id="♭11"> </li>
-              <li>  11  <input type="checkbox" id="11" >  </li>
-              <li> #11  <input type="checkbox" id="#11"> </li>
-              <li>  ♭13<input type="checkbox" id="♭13"> </li>
-              <li>  13  <input type="checkbox" id="13" >  </li>
-              <li> #13  <input type="checkbox" id="#13"> </li>
+              <label><li>  #5  <input type="checkbox" id="#5" > </li>  </label>
+              <label><li>   6  <input type="checkbox" id="6"  > </li>  </label>
+              <label><li>   ♭7 <input type="checkbox" id="♭7" >  </li>  </label>
+              <label><li>   7  <input type="checkbox" id="7"  > </li>  </label>
+              <label><li>   ♭9 <input type="checkbox" id="♭9" >  </li>  </label>
+              <label><li>  #9  <input type="checkbox" id="#9" >  </li> </label>
+              <label><li>  ♭11 <input type="checkbox" id="♭11"> </li></label>
+              <label><li>  11  <input type="checkbox" id="11" >  </li> </label>
+              <label><li> #11  <input type="checkbox" id="#11"> </li></label>
+              <label><li>  ♭13<input type="checkbox" id="♭13"> </li></label>
+              <label><li>  13  <input type="checkbox" id="13" >  </li></label>
+              <label><li> #13  <input type="checkbox" id="#13"> </li></label>
             </ul>
           </li>
-          <!-- <li>
-             kinda redundant?
-            Alterations ▸
-            <ul class="submenu">
-              <li>♯5</li>
-              <li>♭5</li>
-              <li>♯9</li>
-              <li>♭9</li>
-            </ul>
-          </li> -->
+          
         </ul>
     </div>
 

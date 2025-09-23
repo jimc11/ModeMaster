@@ -17,8 +17,8 @@ document.querySelectorAll(".key").forEach(gear => {
   gear.addEventListener("click", (e) => {
     e.preventDefault();
     // Position menu
-    menu.style.top = e.pageY + "px";
-    menu.style.left = e.pageX + "px";
+    menu.style.top = e.pageY -10 + "px";
+    menu.style.left = e.pageX -10 + "px";
     menu.style.display = "block";
   });
 });
@@ -30,6 +30,45 @@ document.addEventListener("click", (e) => {
   }
 });
 
+// -- newest code --
+ // chordstates = { root: { "c": true, "c#": false, ... } 
+ // quality: { "major": true, "minor": false, ... }
+ // voicings: { "root": true, "first": false, ... }
+ // extension: { "#5": true, "6": false, ... } }
+
+// array of 21 objects
+// each object has 4 dyanmic data structs, root, quality, voicings, extensions.
+// 
+
+let chordStates = {};
+
+document.querySelectorAll(".key").forEach(gear => {
+  gear.addEventListener("click", (e) => {
+    const keyId = gear.dataset.key; // give each gear a data-key="C", "Dm", etc.
+    showMenuAt(e.pageX, e.pageY, keyId);
+  });
+});
+
+function showMenuAt(x, y, keyId) {
+  const menu = document.getElementById("gearMenu");
+  menu.style.left = x + "px";
+  menu.style.top = y + "px";
+  menu.style.display = "block";
+
+  // Load saved state
+  Object.entries(chordStates[keyId] || {}).forEach(([id, checked]) => {
+    const box = menu.querySelector(`#${CSS.escape(id)}`);
+    if (box) box.checked = checked;
+  });
+
+  // Save state on toggle
+  menu.querySelectorAll("input[type='checkbox']").forEach(input => {
+    input.onchange = () => {
+      if (!chordStates[keyId]) chordStates[keyId] = {};
+      chordStates[keyId][input.id] = input.checked;
+    };
+  });
+}
 // ----- END NEW CODE ----
 
 // ----- 'Main' Function -----
