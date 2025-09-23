@@ -3,65 +3,46 @@ import {commonFormulas} from './CommonFormulas.js'
 
 document.getElementById("generateButton").addEventListener("click", generate);
 
-// I should replace these with CommonFormulas
-function getModeSteps(){
-    const modeSteps =commonFormulas['modeSteps']
-    return modeSteps;
-}
+let sounds 
 
-function getMajorFormula(){
-    const major = commonFormulas['major']
-    return major    
-}
+//default chords upon first visit
+onModeChange(generateDiatonicChords(generateDiatonicNotes(1,'c')))
+renderSounds(1, generateDiatonicChords(generateDiatonicNotes(1,'c')))
 
-function getMinorFormula(){
-    const minor = commonFormulas['minor']
-    return minor    
-}
+// ----- NEW CODE ----
+const menu = document.getElementById("gearMenu");
 
-function getDiminishedFormula(){
-    const diminished = commonFormulas['diminished']
-    return diminished    
-}
+// Example: attach to a gear button
+document.querySelectorAll(".key").forEach(gear => {
+  gear.addEventListener("click", (e) => {
+    e.preventDefault();
+    // Position menu
+    menu.style.top = e.pageY + "px";
+    menu.style.left = e.pageX + "px";
+    menu.style.display = "block";
+  });
+});
 
-let sounds = {}
+// Hide menu on click outside
+document.addEventListener("click", (e) => {
+  if (!menu.contains(e.target) && !e.target.classList.contains("key")) {
+    menu.style.display = "none";
+  }
+});
+
+// ----- END NEW CODE ----
 
 // ----- 'Main' Function -----
 function generate() {
     console.log("------generate()------")
+    //setupModifierPopup();
 
     // user input for the mode (returns a nubmer 1-7)
     let mode = document.getElementById('modeSelect').value;
 
     // user input for the root note (a, a#, b, c ...)
     let key = document.getElementById('keyInput').value;
-
-    let wordMode = ''
-    switch (mode) {
-        case '1':
-            wordMode = 'Ionian'
-            break
-        case '2':
-            wordMode = 'Dorian'
-            break;
-        case '3':
-            wordMode = 'Phrygian'
-            break;
-        case '4':
-            wordMode = 'Lydian'
-            break;
-        case '5':
-            wordMode = 'Mixolydian'
-            break;
-        case '6':
-            wordMode = 'Aeolian'
-            break;
-        case '7':
-            wordMode = 'Locrian'
-            break;
-        default:
-            break;
-    }
+    let wordMode = ['', 'Ionian', 'Dorian', 'Phrygian', 'Lydian', 'Mixolydian', 'Aeolian', 'Locrian'][mode];
 
     let message = `<br> You selected: ${key.toUpperCase()} ${wordMode} 🎵 <br>`;
     messageArea.innerHTML = message;
@@ -134,7 +115,7 @@ function generateDiatonicNotes(modeNumber, tonic) {
         recenteredNotes.push(...split[0]);
     }
 
-    let ms = getModeSteps()
+    let ms = commonFormulas['modeSteps']
     let stepPattern = ms[modeNumber - 1];
     let modeReturned = [];
 
@@ -193,9 +174,9 @@ function chordIdentifier(chordToBeDetermined) {
     let halfsteps = [indexroot, indexMiddle, indexLast]
 
 
-    let IsMinor = areArraysEqual(halfsteps, getMinorFormula() )
-    let IsMajor = areArraysEqual(halfsteps, getMajorFormula() )
-    let IsDiminished = areArraysEqual(halfsteps, getDiminishedFormula() )
+    let IsMinor = areArraysEqual(halfsteps, commonFormulas['minor'] )
+    let IsMajor = areArraysEqual(halfsteps, commonFormulas['major'])
+    let IsDiminished = areArraysEqual(halfsteps, commonFormulas['diminished'] )
 
     let returnMe
 
@@ -309,9 +290,9 @@ function renderSounds (mode, newChords){
 
     modeSelect = Number(document.getElementById('modeSelect').value)-1
 
-    let diminishedTemp = getDiminishedFormula()
-    let minorTemp = getMinorFormula()
-    let majorTemp = getMajorFormula()
+    let diminishedTemp = commonFormulas['diminished']
+    let minorTemp = commonFormulas['minor']
+    let majorTemp = commonFormulas['major']
 
     // let formula = [0,4,7]
     // let rootNote= 'c#'

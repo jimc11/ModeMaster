@@ -25,22 +25,90 @@
         cursor: pointer;
         box-shadow: 1px 2px 4px rgba(0,0,0,0.2);
         transition: background 0.2s;
+
+        transition: all 0.2s;
+        position: relative;
       }
+
       .key:hover {
         background: #d0d0d0;
       }
+
       .key:active {
         background: #b0b0b0;
         transform: translateY(2px);
+      }
+
+      .key.modifiable {
+        /* border-color: #667eea; */
+        box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+      }
+
+      .key.modifiable::after {
+          content: "⚙️";
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        font-size: 10px;
+        opacity: 1;
+        pointer-events: none;
+      }
+      .context-menu {
+        position: absolute;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        min-width: 160px;
+        z-index: 1000;
+        display: none;
+        font-family: sans-serif;
+      }
+
+      /* Menu items */
+      .context-menu ul {
+        list-style: none;
+        margin: 0;
+        padding: 6px 0;
+      }
+
+      .context-menu li {
+        padding: 6px 12px;
+        cursor: pointer;
+        position: relative;
+        white-space: nowrap;
+      }
+
+      .context-menu li:hover {
+        background: #f0f0f0;
+      }
+
+      /* Submenu styling */
+      .context-menu .submenu {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 100%;
+        margin-left: 4px;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        min-width: 140px;
+      }
+
+      .context-menu li:hover > .submenu {
+        display: block;
       }
       .label {
         font-weight: bold;
         font-size: 16px;
       }
+
       .chord {
         font-size: 13px;
         color: darkred; /* make chords stand out */
       }
+
       .center-div {
         width: 50%; /* Example width, adjust as needed */
         margin: auto;
@@ -48,51 +116,268 @@
         padding: 20px;
         text-align: center; /* To center text within the div */
       }
+      
       .dawArea {
-      display: flex;
-      justify-content: center; /* center horizontally */
-      align-items: center;     /* center vertically */
-      height: 100vh;           /* full viewport height */
-      margin: 0;
-      background: #fafafa;
-    }
-    .keyboard {
-      display: flex;
-      flex-direction: column;
-      gap: 8px; /* space between rows */
-      width: max-content;
-    }
-    .row {
-      display: grid;
-      grid-template-columns: repeat(7, 60px); /* 7 columns, each 60px wide */
-      gap: 6px; /* spacing between keys */
-    }
-    .row:nth-child(2) {
-      margin-left: 30px; /* stagger second row */
-    }
-    .row:nth-child(3) {
-      margin-left: 60px; /* stagger third row */
-    }
-    .key {
-      height: 60px;
-      border: 2px solid #333;
-      border-radius: 8px;
-      background: #e0e0e0;
-      font-family: sans-serif;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 1px 2px 4px rgba(0,0,0,0.2);
-      transition: background 0.2s;
-    }
-    .key:hover {
-      background: #d0d0d0;
-    }
-    .key:active {
-      background: #b0b0b0;
-      transform: translateY(2px);
-    }
-  </style>
+        display: flex;
+        justify-content: center; /* center horizontally */
+        align-items: center;     /* center vertically */
+        height: 100vh;           /* full viewport height */
+        margin: 0;
+        background: #fafafa;
+      }
+
+      .keyboard {
+        display: flex;
+        flex-direction: column;
+        gap: 8px; /* space between rows */
+        width: max-content;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: repeat(7, 60px); /* 7 columns, each 60px wide */
+        gap: 6px; /* spacing between keys */
+      }
+
+      .row:nth-child(2) {
+        margin-left: 30px; /* stagger second row */
+      }
+
+      .row:nth-child(3) {
+        margin-left: 60px; /* stagger third row */
+      }
+
+      /* .key {
+        height: 60px;
+        border: 2px solid #333;
+        border-radius: 8px;
+        background: #e0e0e0;
+        font-family: sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 1px 2px 4px rgba(0,0,0,0.2);
+        transition: background 0.2s;
+      }
+      .key:hover {
+        background: #d0d0d0;
+      }
+      .key:active {
+        background: #b0b0b0;
+        transform: translateY(2px);
+      } */
+      
+
+      .label {
+          font-weight: bold;
+          font-size: 16px;
+      }
+
+      /* Modifier Popup Styles */
+      .modifier-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        z-index: 1000;
+        min-width: 350px;
+        display: none;
+      }
+
+      .modifier-popup.show {
+        display: block;
+        animation: popIn 0.3s ease-out;
+      }
+
+      @keyframes popIn {
+        from { 
+          transform: translate(-50%, -50%) scale(0.8); 
+          opacity: 0; 
+        }
+        to { 
+          transform: translate(-50%, -50%) scale(1); 
+          opacity: 1; 
+        }
+      }
+
+      .popup-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.5);
+          z-index: 999;
+          display: none;
+      }
+
+      .popup-overlay.show {
+          display: block;
+      }
+
+      .popup-header {
+          text-align: center;
+          font-size: 24px;
+          margin-bottom: 20px;
+          color: #333;
+          border-bottom: 2px solid #eee;
+          padding-bottom: 10px;
+      }
+
+      .modifier-section {
+          margin-bottom: 20px;
+      }
+
+      .modifier-section h3 {
+          color: #666;
+          margin-bottom: 10px;
+          font-size: 16px;
+          text-align: left;
+      }
+
+      .modifier-options {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+      }
+
+      .modifier-btn {
+          background: #f8f9fa;
+          border: 2px solid #dee2e6;
+          border-radius: 8px;
+          padding: 8px 12px;
+          font-size: 14px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+      }
+
+      .modifier-btn:hover {
+          background: #e9ecef;
+          border-color: #adb5bd;
+      }
+
+      .modifier-btn.selected {
+          background: #667eea;
+          color: white;
+          border-color: #667eea;
+      }
+
+      .root-note-selector {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 5px;
+      }
+
+      .root-note-btn {
+          background: #fff;
+          border: 1px solid #ddd;
+          border-radius: 6px;
+          padding: 6px 10px;
+          font-size: 12px;
+          cursor: pointer;
+          min-width: 35px;
+          text-align: center;
+      }
+
+      .root-note-btn:hover {
+          background: #f0f0f0;
+      }
+
+      .root-note-btn.selected {
+          background: #28a745;
+          color: white;
+          border-color: #28a745;
+      }
+
+      .popup-actions {
+          display: flex;
+          gap: 10px;
+          justify-content: center;
+          margin-top: 20px;
+      }
+
+      .action-btn {
+          padding: 12px 24px;
+          border: none;
+          border-radius: 10px;
+          font-size: 16px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+      }
+
+      .apply-btn {
+          background: #28a745;
+          color: white;
+      }
+
+      .apply-btn:hover {
+          background: #218838;
+      }
+
+      .cancel-btn {
+          background: #6c757d;
+          color: white;
+      }
+
+      .cancel-btn:hover {
+          background: #545b62;
+      }
+
+      .mapper {
+          margin: 20px 0;
+          padding: 20px;
+          background: white;
+          border-radius: 10px;
+          display: inline-block;
+      }
+
+      .mapper label {
+          margin: 0 10px;
+      }
+
+      .mapper select {
+          margin: 0 5px;
+          padding: 5px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+      }
+
+      #generateButton {
+          background: #667eea;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 5px;
+          cursor: pointer;
+          margin-left: 10px;
+      }
+
+      #generateButton:hover {
+          background: #5a6fd8;
+      }
+
+      /* Extensions section */
+      .extensions-section {
+          margin-top: 15px;
+      }
+
+      .extension-btn {
+          background: #fff3cd;
+          border: 2px solid #ffeaa7;
+          color: #856404;
+      }
+
+      .extension-btn.selected {
+          background: #f39c12;
+          color: white;
+          border-color: #f39c12;
+      }
+
+    </style>
 
     <h1> Mode Master </h1>
     <p>Select a root note and a mode you wish to play around with!</p>
@@ -136,45 +421,43 @@
 
     <!-- This is where we will display the message -->
     <div  id="messageArea"> </div>
-
     <div  id="notesArea"> </div>
-
     <div class="center-div" id="chordArea"> </div>
     <div class="center-div" id="parallelArea"> </div>
 
     <!-- I don't think a DAW is the best, maybe an area where they can remap  1-7 to other chords, including extended structures -->
     <div id="dawArea"> 
       
-      <p>Click on a button to modify the bound chord.</p> 
+      <p>Click on a button with ⚙️ to modify the chord, or press keys to play!</p> 
 
       <div id="keyboard" class="keyboard center-div">
 
         <div class="row">
-          <button class="key">
+          <button class="key modifiable" data-key-index="0">
             <span class="label">1</span>
             <span class="chord">C</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="1">
             <span class="label">2</span>
             <span class="chord">Dm</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="2">
             <span class="label">3</span>
             <span class="chord">Em</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="3">
             <span class="label">4</span>
             <span class="chord">F</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="4">
             <span class="label">5</span>
             <span class="chord">G</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="5">
             <span class="label">6</span>
             <span class="chord">Am</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="6">
             <span class="label">7</span>
             <span class="chord">Bdim</span>
           </button>
@@ -185,31 +468,31 @@
         </div>
 
         <div class="row">
-          <button class="key">
+          <button class="key modifiable" data-key-index="7">
             <span class="label">Q</span>
             <span class="chord">A</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="8">
             <span class="label">W</span>
             <span class="chord">Bm</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="9">
             <span class="label">E</span>
             <span class="chord">C#m</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="10">
             <span class="label">R</span>
             <span class="chord">D</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="11">
             <span class="label">T</span>
             <span class="chord">E</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="12">
             <span class="label">Y</span>
             <span class="chord">F#m</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="13">
             <span class="label">U</span>
             <span class="chord">G</span>
           </button>
@@ -220,74 +503,174 @@
         </div>
 
         <div class="row">
-          <button class="key">
+          <button class="key modifiable" data-key-index="14">
             <span class="label">A</span>
             <span class="chord">A</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="15">
             <span class="label">S</span>
             <span class="chord">Bm</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="16">
             <span class="label">D</span>
             <span class="chord">C#m</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="17">
             <span class="label">F</span>
             <span class="chord">D</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="18">
             <span class="label">G</span>
             <span class="chord">E</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="19">
             <span class="label">H</span>
             <span class="chord">F#m</span>
           </button>
-          <button class="key">
+          <button class="key modifiable" data-key-index="20">
             <span class="label">J</span>
             <span class="chord">G</span>
           </button>
-          <!-- <button class="key">
-            <span class="label">K</span>
-            <span class="chord">G</span>
-          </button> -->
         </div>
-
-
-
-        <!-- <div class="row">
-          <div class="key">1</div>
-          <div class="key">2</div>
-          <div class="key">3</div>
-          <div class="key">4</div>
-          <div class="key">5</div>
-          <div class="key">6</div>
-          <div class="key">7</div>
-        </div>
-
-        <div class="row">
-          <div class="key">Q</div>
-          <div class="key">W</div>
-          <div class="key">E</div>
-          <div class="key">R</div>
-          <div class="key">T</div>
-          <div class="key">Y</div>
-          <div class="key">U</div>
-        </div>
-
-        <div class="row">
-          <div class="key">A</div>
-          <div class="key">S</div>
-          <div class="key">D</div>
-          <div class="key">F</div>
-          <div class="key">G</div>
-          <div class="key">H</div>
-          <div class="key">J</div>
-        </div> -->
       </div>
-
     </div>
+
+    <!-- Popup overlay -->
+    <div class="popup-overlay" id="popupOverlay"></div>
+
+    <!-- Modifier popup -->
+    <div class="modifier-popup" id="modifierPopup">
+        <div class="popup-header" id="popupHeader">Modify Chord</div>
+        
+        <div class="modifier-section">
+            <h3>Quality:</h3>
+            <div class="modifier-options">
+                <div class="modifier-btn" data-modifier="major">Major</div>
+                <div class="modifier-btn" data-modifier="minor">Minor</div>
+                <div class="modifier-btn" data-modifier="diminished">Diminished</div>
+                <div class="modifier-btn" data-modifier="augmented">Augmented</div>
+            </div>
+        </div>
+
+        <div class="modifier-section">
+            <h3>Extensions:</h3>
+            <div class="modifier-options">
+                <div class="modifier-btn extension-btn" data-modifier="none">None</div>
+                <div class="modifier-btn extension-btn" data-modifier="7">7th</div>
+                <div class="modifier-btn extension-btn" data-modifier="9">9th</div>
+                <div class="modifier-btn extension-btn" data-modifier="11">11th</div>
+                <div class="modifier-btn extension-btn" data-modifier="13">13th</div>
+            </div>
+        </div>
+
+        <div class="modifier-section">
+            <h3>Inversions:</h3>
+            <div class="modifier-options">
+                <div class="modifier-btn" data-modifier="root">Root Position</div>
+                <div class="modifier-btn" data-modifier="inversion1">1st Inversion</div>
+                <div class="modifier-btn" data-modifier="inversion2">2nd Inversion</div>
+            </div>
+        </div>
+
+        <div class="modifier-section">
+            <h3>Root Note:</h3>
+            <div class="root-note-selector">
+                <div class="root-note-btn" data-note="c">C</div>
+                <div class="root-note-btn" data-note="c#">C#</div>
+                <div class="root-note-btn" data-note="d">D</div>
+                <div class="root-note-btn" data-note="d#">D#</div>
+                <div class="root-note-btn" data-note="e">E</div>
+                <div class="root-note-btn" data-note="f">F</div>
+                <div class="root-note-btn" data-note="f#">F#</div>
+                <div class="root-note-btn" data-note="g">G</div>
+                <div class="root-note-btn" data-note="g#">G#</div>
+                <div class="root-note-btn" data-note="a">A</div>
+                <div class="root-note-btn" data-note="a#">A#</div>
+                <div class="root-note-btn" data-note="b">B</div>
+            </div>
+        </div>
+
+        <div class="popup-actions">
+            <button class="action-btn apply-btn" id="applyBtn">Apply Changes</button>
+            <button class="action-btn cancel-btn" id="cancelBtn">Cancel</button>
+        </div>
+    </div>
+
+
+    <!-- xxxxxxx new shit xxxxxxxx -->
+
+    <!-- OK.  Known issues: contextmenu is not specific to a key.  radio buttons don't work right -->
+    <div id="gearMenu" class="context-menu">
+        <ul>
+          <li>
+            Root Note ▸
+            <ul class="submenu">
+              <li>C</li>
+              <li>C#</li>
+              <li>D</li>
+              <li>D#</li>
+              <li>E</li>
+              <li>F</li>
+              <li>F#</li>
+              <li>G</li>
+              <li>G#</li>
+              <li>A</li>
+              <li>A#</li>
+              <li>B</li>
+            </ul>
+          </li>
+          <li>
+            Quality ▸
+            <ul class="submenu">
+              <li>Major</li>
+              <li>Minor</li>
+              <li>Diminished</li>
+              <li>Augmented</li>
+              <li>Suspended 2nd</li>
+              <li>Suspended 4th</li>
+              <li>Suspended 2nd and 4th</li>
+            </ul>
+          </li>
+          <li>
+            Voicings ▸
+            <ul class="submenu">
+              <li>Root Position<input type="radio" id="root" value = "checked"></li>
+              <li>1st Inversion<input type="radio" id="first" ></li>
+              <li>2nd Inversion<input type="radio" id="second" ></li>
+            </ul>
+          </li>
+          <li>
+            Extensions ▸
+            <ul class="submenu">
+              <li>  #5  <input type="checkbox" id="#5" > </li>
+              <li>   6  <input type="checkbox" id="6"  > </li>
+              <li>   ♭7 <input type="checkbox" id="♭7" >  </li>
+              <li>   7  <input type="checkbox" id="7"  > </li>
+              <li>   ♭9 <input type="checkbox" id="♭9" >  </li>
+              <li>  #9  <input type="checkbox" id="#9" >  </li>
+              <li>  ♭11 <input type="checkbox" id="♭11"> </li>
+              <li>  11  <input type="checkbox" id="11" >  </li>
+              <li> #11  <input type="checkbox" id="#11"> </li>
+              <li>  ♭13<input type="checkbox" id="♭13"> </li>
+              <li>  13  <input type="checkbox" id="13" >  </li>
+              <li> #13  <input type="checkbox" id="#13"> </li>
+            </ul>
+          </li>
+          <!-- <li>
+             kinda redundant?
+            Alterations ▸
+            <ul class="submenu">
+              <li>♯5</li>
+              <li>♭5</li>
+              <li>♯9</li>
+              <li>♭9</li>
+            </ul>
+          </li> -->
+        </ul>
+    </div>
+
+    <!-- xxxxxxx end of new shit xxxxxxxx -->
+
 
     <script src="script.js" type="module" ></script>
     <!-- type="module" -->
@@ -295,14 +678,3 @@
 </html>
 
 
-<!-- //// ----- new code below ----- -->
-
-<!-- <script>
-  // Example: dynamically update chords
-  const chords = ["A", "Bm", "C#m", "D", "E", "F#m", "G"];
-  const chordEls = document.querySelectorAll('.chord');
-
-  chords.forEach((chord, i) => {
-    chordEls[i].textContent = chord; // set chord label
-  });
-</script> -->
