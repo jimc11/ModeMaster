@@ -352,30 +352,53 @@ function renderSounds (mode, newChords){
 
 
     for (let k=0;k<chords.length; k++){
-       console.log("--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
+       console.log("row1--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
     }
-    console.log("--------")
 
     // populate row 2-3 of keyboard
     // I believe that for both the root note and starting octave, we can just loook at the first row and use 
     // those values.  we don't need to worry about the octave of each note, either, since the chord object has functions for that
 
-    for(let i = 7; i< 21; i++){
+
+   // row 3 equals row 2 right now...  
+
+    for(let i = 7; i< 14; i++){
+        console.log("chords["+i+"%7].rootNote: " + chords[i%7].rootNote)
         switch (currentModeChordPattern[i%7]) {
             case 'major':
-                chords.push(new Chord(minorTemp,keyInput.value,3)) //keyInput.value may cause issues
+                chords.push(new Chord(minorTemp,chords[i%7].rootNote, chords[i%7].startingOctave)) //keyInput.value may cause issues
                 break
             case 'minor':
-                chords.push(new Chord (diminishedTemp,keyInput.value,3)) //keyInput.value may cause issues
+                chords.push(new Chord (diminishedTemp,chords[i%7].rootNote,chords[i%7].startingOctave)) //keyInput.value may cause issues
                 break
             case 'diminished':
-                chords.push(new Chord (majorTemp,keyInput.value,3)) //keyInput.value may cause issues
+                chords.push(new Chord (majorTemp,chords[i%7].rootNote,chords[i%7].startingOctave)) //keyInput.value may cause issues
                 break
         }
     }
 
     for (let k=0;k<chords.length; k++){
-       console.log("--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
+       console.log("row2--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
+    }
+
+    for(let i = 14; i< 21; i++){
+        // console.log('===x===')
+        // console.log("chords["+i+"%7].rootNote: " + chords[i%7].rootNote)
+        switch (currentModeChordPattern[i%7]) {
+            case 'major':
+                chords.push(new Chord(diminishedTemp,chords[i%7].rootNote, chords[i%7].startingOctave)) //keyInput.value may cause issues
+                break
+            case 'minor':
+                chords.push(new Chord (majorTemp,chords[i%7].rootNote,chords[i%7].startingOctave)) //keyInput.value may cause issues
+                break
+            case 'diminished':
+                chords.push(new Chord (minorTemp,chords[i%7].rootNote,chords[i%7].startingOctave)) //keyInput.value may cause issues
+                break
+        }
+    }
+
+    for (let k=0;k<chords.length; k++){
+       console.log("row3--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
     }
 
         
