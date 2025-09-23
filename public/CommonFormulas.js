@@ -26,6 +26,7 @@ export const commonFormulas = {
         ['diminished','major','minor','minor','major','major','minor',], // Locrian 6
     ],
 
+    // ---CHORDS ---
 
     'major' : [0, 4 ,7],// 1-3-5
     'minor' : [0, 3, 7], // 1-♭3-5
