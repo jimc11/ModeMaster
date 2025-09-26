@@ -4,15 +4,15 @@ import {commonFormulas} from './CommonFormulas.js'
 document.getElementById("generateButton").addEventListener("click", generate);
 
 let sounds 
+let chordStates = {}; // array of 21 objects with info gathered from user input on HTML
 
 //default chords upon first visit
 onModeChange(generateDiatonicChords(generateDiatonicNotes(1,'c')))
 renderSounds(1, generateDiatonicChords(generateDiatonicNotes(1,'c')))
 
-// ----- NEW CODE ----
+// ----- Context Menu Code  ----
 
  // I want chordstates to look like this: chordstates = { root: 'c', name: 'dom7flat5' }
-let chordStates = {}; // array of 21 objects with info gathered from user input on HTML
 //const chordStates = {};
 
 // Cache DOM elements
@@ -122,7 +122,9 @@ function adjustSubmenus(menu) {
     sub.style.top = `${topOffset}px`;
   });
 }
-// ----- END NEW CODE ----
+// ----- Context Menu Code End ----
+
+
 
 // ----- 'Main' Function -----
 function generate() {
@@ -150,6 +152,8 @@ function generate() {
     onModeChange(modeChords)
     renderSounds(mode, modeChords)
 }
+
+// ----- Helper Functions -----
 
 // takes the 'notes' array and splits it.  now, the first element of the array is 
 // splitValue and the rest of the array is the chromatic scale.
@@ -283,6 +287,27 @@ function chordIdentifier(chordToBeDetermined) {
     return returnMe
 }
 
+function computeParalelModes(userTonic){
+    
+    // we want to generate all modes of userTonic
+    //userMode is just a number
+
+    let allModeNotes = []
+    for (let i=0; i<7;i++){
+        allModeNotes[i] = generateDiatonicNotes(i+1, userTonic); // returns 7x7 array
+    }
+    
+    let modeChords = []
+
+    for (let i=0; i<7;i++){
+        modeChords[i] = generateDiatonicChords(allModeNotes[i]); 
+    } 
+
+    return modeChords// must be 7x7x3 array
+}
+
+// ----- End Helper Functions -----
+
 function renderParalellModes(userTonic){
 
     // 7 modes, 7 chords, 3 notes
@@ -329,25 +354,6 @@ function renderMultiChordsTable(chordsOfAllModes){
   return tableHtml;
 }
 
-function computeParalelModes(userTonic){
-    
-    // we want to generate all modes of userTonic
-    //userMode is just a number
-
-    let allModeNotes = []
-    for (let i=0; i<7;i++){
-        allModeNotes[i] = generateDiatonicNotes(i+1, userTonic); // returns 7x7 array
-    }
-    
-    let modeChords = []
-
-    for (let i=0; i<7;i++){
-        modeChords[i] = generateDiatonicChords(allModeNotes[i]); 
-    } 
-
-    return modeChords// must be 7x7x3 array
-}
-
 function renderChordsTable(modeChords) {
     let tableHtml = '<table border="1" cellspacing="0" cellpadding="5">';
 
@@ -375,9 +381,7 @@ function renderChordsTable(modeChords) {
   return tableHtml;
 }
 
-// Example usage:
-//document.getElementById("chordsArea").innerHTML = renderChordsTable(modeChords);
-function renderSounds (mode, newChords){
+function renderSounds (){
     console.log('----renderSounds()----')
 
     modeSelect = Number(document.getElementById('modeSelect').value)-1
@@ -392,6 +396,15 @@ function renderSounds (mode, newChords){
     let notesOfCurrentMode = commonFormulas.modeSteps[modeSelect]    
     let startingPosition = commonFormulas.notes.indexOf(keyInput.value)
 
+    console.log( chordStates)
+    //so, it looks like this:
+// Object { 1: { g: true }, 2: { f: true, major: true, "d#": true } }
+// and before user has input, it looks like this: 
+// Object {  }
+// so, do we want to populate chordStates with hardcoding? no
+// but we do want to prepopulate it with whatever is on the HTML.  In fact, we always want to 
+// pull directly from HTML.  The radio menu will adjust the HTML, JS grabs from HTML and stores,  then sounds render from js logic
+READ THIS ^^^^^
 
     // --- add functionality where chords[i] reads the property of the user selected shit
     // -- fuck, this may be tricky.
@@ -575,22 +588,6 @@ function renderSounds (mode, newChords){
     //    console.log("---" + k + ': '+ enumeratedEncodedChords[k])
     // }
 
-
-
-    // ---- test zone ----
-    // right now, I need to create an array of chord objects 'chords' and use my existing logic to fill out each object
-    // then I need to add html and scripts that can add/modify those chord objects
-    // what am I going to display in the keyboard section when a user makes a crazy ass chord?
-    // am I going to have a chord identifier function?
-    // that would be nuts
-    // maybe instead, I only allow users to select chords from a list
-    // use that reddit screenshot as a guide
-    // then just use similar logic to what I have now...
-    //////////////////////start another time with a fresh brain. But maybe implement the chord objects first
-    // read the user's selection and store as a variable-> put it on the html -> use the formula to add the notes... 
-    
-    // should I just hardcode the diatonic chords of each mode?  Make a section of 7 patterns in common formulas?
-    // this would only be useful for the first time the user hits enter.  If they want to bind chords to keys it'll be pointless(?)
     sounds = {
         '1': chords[0].getArrayOfAudioObjects(),
         '2': chords[1].getArrayOfAudioObjects(),
@@ -616,37 +613,10 @@ function renderSounds (mode, newChords){
         'h': chords[19].getArrayOfAudioObjects(),
         'j': chords[20].getArrayOfAudioObjects()
     }
-    // ---- end test zone ----
-
-    // sounds = {
-    //     '1': [new Audio('sounds/'+enumeratedEncodedChords[0][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[0][2]+'.wav'),],
-    //     '2': [new Audio('sounds/'+enumeratedEncodedChords[1][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[1][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[1][2]+'.wav'),],
-    //     '3': [new Audio('sounds/'+enumeratedEncodedChords[2][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[2][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[2][2]+'.wav'),],
-    //     '4': [new Audio('sounds/'+enumeratedEncodedChords[3][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[3][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[3][2]+'.wav'),],
-    //     '5': [new Audio('sounds/'+enumeratedEncodedChords[4][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[4][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[4][2]+'.wav'),],
-    //     '6': [new Audio('sounds/'+enumeratedEncodedChords[5][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[5][2]+'.wav'),],
-    //     '7': [new Audio('sounds/'+enumeratedEncodedChords[6][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[6][2]+'.wav'),],
-        
-    //     'q': [new Audio('sounds/'+enumeratedEncodedChords[7][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[7][2]+'.wav'),],
-    //     'w': [new Audio('sounds/'+enumeratedEncodedChords[8][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[8][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[8][2]+'.wav'),],
-    //     'e': [new Audio('sounds/'+enumeratedEncodedChords[9][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[9][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[9][2]+'.wav'),],
-    //     'r': [new Audio('sounds/'+enumeratedEncodedChords[10][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[10][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[10][2]+'.wav'),],
-    //     't': [new Audio('sounds/'+enumeratedEncodedChords[11][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[11][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[11][2]+'.wav'),],
-    //     'y': [new Audio('sounds/'+enumeratedEncodedChords[12][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[12][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[12][2]+'.wav'),],
-    //     'u': [new Audio('sounds/'+enumeratedEncodedChords[13][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[13][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[13][2]+'.wav'),],
-        
-    //     'a': [new Audio('sounds/'+enumeratedEncodedChords[14][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[14][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[14][2]+'.wav'),],
-    //     's': [new Audio('sounds/'+enumeratedEncodedChords[15][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[15][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[15][2]+'.wav'),],
-    //     'd': [new Audio('sounds/'+enumeratedEncodedChords[16][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[16][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[16][2]+'.wav'),],
-    //     'f': [new Audio('sounds/'+enumeratedEncodedChords[17][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[17][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[17][2]+'.wav'),],
-    //     'g': [new Audio('sounds/'+enumeratedEncodedChords[18][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[18][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[18][2]+'.wav'),],
-    //     'h': [new Audio('sounds/'+enumeratedEncodedChords[19][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[19][2]+'.wav'),],
-    //     'j': [new Audio('sounds/'+enumeratedEncodedChords[20][0]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][1]+'.wav'),new Audio('sounds/'+enumeratedEncodedChords[20][2]+'.wav'),],
-    // }
 
 }
 
-
+// ----- Keyboard Stuff -----
 document.addEventListener('keydown', (event) => {
     const key = event.key.toLowerCase();
         
@@ -664,6 +634,7 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
+// We will need to update this!  This will need to display the new user selected chords
 function updateKeyboard(buttonsNewChords) {
     const chordEls = document.querySelectorAll('#keyboard .chord'); // returns nodeArray of all text in the chord class 
     let chordsChords= []    
@@ -693,7 +664,6 @@ function updateKeyboard(buttonsNewChords) {
 
     });
 
-    // here is where I want to update the remaining 14 buttons
     for (let i = 0; i<7; i++){ // this used to be i<14.  
         if (types[i] == ' '){
             chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + "m"
@@ -713,24 +683,3 @@ function onModeChange(newChords) {
     //modeChords = newChords;
     updateKeyboard(newChords);
 }
-
-
-// TODO:
-
-// 1. Fix octave issues with rows 2-3
-// 2.should I make a 'Chord' class?  That way I can dynamically add/remove notes without hardcoding?
-// ^ this may come in handy with octave issue and extended structs issue
-// 3. be able to modify the chords on screen and chords played
-// 4.when keyboard button is pressed, the button on the screen highlights
-// 5. It would be cool to have it that when you click on a note, a keyboard pops up and highlights the notes being played
-// then the user can click/unclick notes to bind that chord to that keypress
-// 
-
-// What would it take for this to actually make money?  How would I advertise?  Would people actually use it?
-// we either need to make this a desktop app or a DAW or something.  the performance on laptops is likely bad
-
-
-
-// how about mobile?
-
-// users with accounts can save chord presets!
