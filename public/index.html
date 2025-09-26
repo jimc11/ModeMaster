@@ -79,7 +79,7 @@
         cursor: pointer;
         position: relative;
         white-space: nowrap;
-        right: 3px
+        right: 5px
       }
 
       .context-menu li:hover {
@@ -380,6 +380,19 @@
           border-color: #f39c12;
       }
 
+      /* normal submenu (flies right) */
+      .submenu {
+        position: absolute;
+        left: 100%;
+        top: 0;
+      }
+
+      /* reversed submenu (flies left) */
+      .submenu.reverse {
+        left: auto;
+        right: 100%;
+      }
+
     </style>
 
     <h1> Mode Master </h1>
@@ -469,31 +482,31 @@
         <div class="row">
           <button class="key modifiable" data-key-index="7">
             <span class="label">Q</span>
-            <span class="chord">A</span>
+            <span class="chord">Cm</span>
           </button>
           <button class="key modifiable" data-key-index="8">
             <span class="label">W</span>
-            <span class="chord">Bm</span>
+            <span class="chord">Ddim</span>
           </button>
           <button class="key modifiable" data-key-index="9">
             <span class="label">E</span>
-            <span class="chord">C#m</span>
+            <span class="chord">Edim</span>
           </button>
           <button class="key modifiable" data-key-index="10">
             <span class="label">R</span>
-            <span class="chord">D</span>
+            <span class="chord">Fm</span>
           </button>
           <button class="key modifiable" data-key-index="11">
             <span class="label">T</span>
-            <span class="chord">E</span>
+            <span class="chord">Gm</span>
           </button>
           <button class="key modifiable" data-key-index="12">
             <span class="label">Y</span>
-            <span class="chord">F#m</span>
+            <span class="chord">Adim</span>
           </button>
           <button class="key modifiable" data-key-index="13">
             <span class="label">U</span>
-            <span class="chord">G</span>
+            <span class="chord">B</span>
           </button>
           <!-- <button class="key">
             <span class="label">I</span>
@@ -504,31 +517,31 @@
         <div class="row">
           <button class="key modifiable" data-key-index="14">
             <span class="label">A</span>
-            <span class="chord">A</span>
+            <span class="chord">Cdim</span>
           </button>
           <button class="key modifiable" data-key-index="15">
             <span class="label">S</span>
-            <span class="chord">Bm</span>
+            <span class="chord">D</span>
           </button>
           <button class="key modifiable" data-key-index="16">
             <span class="label">D</span>
-            <span class="chord">C#m</span>
+            <span class="chord">E</span>
           </button>
           <button class="key modifiable" data-key-index="17">
             <span class="label">F</span>
-            <span class="chord">D</span>
+            <span class="chord">Fdim</span>
           </button>
           <button class="key modifiable" data-key-index="18">
             <span class="label">G</span>
-            <span class="chord">E</span>
+            <span class="chord">Gdim</span>
           </button>
           <button class="key modifiable" data-key-index="19">
             <span class="label">H</span>
-            <span class="chord">F#m</span>
+            <span class="chord">A</span>
           </button>
           <button class="key modifiable" data-key-index="20">
             <span class="label">J</span>
-            <span class="chord">G</span>
+            <span class="chord">Bm</span>
           </button>
         </div>
       </div>
@@ -537,7 +550,6 @@
     <!-- Popup overlay --->
     <div class="popup-overlay" id="popupOverlay"></div>
 
-    <!-- xxxxxxx new code xxxxxxxx -->
 
     <!-- OK.  Known issues: contextmenu is not specific to a key.  radio buttons don't work right -->
     <div id="gearMenu" class="context-menu">
@@ -545,55 +557,121 @@
           <li>
             Root Note ▸
             <ul class="submenu">
-              <label><li>C <input name="rootMenu" type="radio" id="c" ></li>  </label> 
-              <label><li>C#<input name="rootMenu" type="radio" id="c#" ></li> </label> 
-              <label><li>D <input name="rootMenu" type="radio" id="d" ></li>  </label>
-              <label><li>D#<input name="rootMenu" type="radio" id="d#" ></li> </label> 
-              <label><li>E <input name="rootMenu" type="radio" id="e" ></li>  </label>
-              <label><li>F <input name="rootMenu" type="radio" id="f" ></li>  </label>
-              <label><li>F#<input name="rootMenu" type="radio" id="f#" ></li> </label> 
-              <label><li>G <input name="rootMenu" type="radio" id="g" ></li>  </label>
-              <label><li>G#<input name="rootMenu" type="radio" id="g#" ></li> </label> 
-              <label><li>A <input name="rootMenu" type="radio" id="a" ></li>  </label>
-              <label><li>A#<input name="rootMenu" type="radio" id="a#" ></li> </label> 
-              <label><li>B <input name="rootMenu" type="radio" id="b" ></li>  </label>
+              <li><label>C <input name="rootMenu" type="radio" id="c" ></label></li>   
+              <li><label>C#<input name="rootMenu" type="radio" id="c#"></label></li>  
+              <li><label>D <input name="rootMenu" type="radio" id="d" ></label></li>  
+              <li><label>D#<input name="rootMenu" type="radio" id="d#"></label></li>  
+              <li><label>E <input name="rootMenu" type="radio" id="e" ></label></li>  
+              <li><label>F <input name="rootMenu" type="radio" id="f" ></label></li>  
+              <li><label>F#<input name="rootMenu" type="radio" id="f#"></label></li>  
+              <li><label>G <input name="rootMenu" type="radio" id="g" ></label></li>  
+              <li><label>G#<input name="rootMenu" type="radio" id="g#"></label></li>  
+              <li><label>A <input name="rootMenu" type="radio" id="a" ></label></li>  
+              <li><label>A#<input name="rootMenu" type="radio" id="a#"></label></li>  
+              <li><label>B <input name="rootMenu" type="radio" id="b" ></label></li>  
             </ul>
           </li>
+
           <li>
-            Quality ▸
-            <ul class="submenu">
-              <label><li>Major<input name="QualityMenu" type="radio" id="major" ></li></label>
-              <label><li>Minor <input name="QualityMenu" type="radio" id="minor" > </li></label>
-              <label><li>Diminished<input name="QualityMenu" type="radio" id="diminished" ></li></label>
-              <label><li>Augmented<input name="QualityMenu" type="radio" id="augmented" ></li></label>
-              <label><li>Suspended 2nd<input name="QualityMenu" type="radio" id="sus2" ></li></label>
-              <label><li>Suspended 4th<input name="QualityMenu" type="radio" id="sus4" ></li></label>
-              <label><li>Suspended 2nd and 4th<input name="QualityMenu" type="radio" id="sus2sus4" ></li></label>
+            Major ▸
+            <ul class="submenu">         
+              <li><label> Major Triad     <input name="majorTriad" type="radio" id="major" ></label></li>
+
+              <li>
+                Dominant ▸
+                <ul class ="submenu">
+                  <li><label> Δ7             <input name="DominantMenu" type="radio" id="dom7" ></label></li>
+                  <li><label> Δ9             <input name="DominantMenu" type="radio" id="dom9" ></label></li>
+                  <li><label> Δ11            <input name="DominantMenu" type="radio" id="dom11" ></label></li>
+                  <li><label> Δ13            <input name="DominantMenu" type="radio" id="dom13" ></label></li>
+
+                  <li><label> Δ7add6         <input name="DominantMenu" type="radio" id="dom7add6" ></label></li>
+                  <li><label> Δ7♭5        <input name="DominantMenu" type="radio" id="dom7flat5" ></label></li>
+                  <li><label> Δ7add♭9        <input name="DominantMenu" type="radio" id="dom7flat9" ></label></li>
+                  <li><label> Δ7add#9       <input name="DominantMenu" type="radio" id="dom7sharp9" ></label></li>
+                  <li><label> Δ7#11      <input name="DominantMenu" type="radio" id="dom7sharp11" ></label></li>
+                  <li><label> Δ13#11     <input name="DominantMenu" type="radio" id="dom13sharp11" ></label></li>
+                </ul>
+              </li>
+
+              <li>
+                Add ▸
+                <ul class ="submenu">
+                  <li><label> add ♭6    <input name="AddMenu" type="radio" id="major_flat6" ></label></li>
+                  <li><label> add 6     <input name="AddMenu" type="radio" id="major6" ></label></li>
+                  <li><label> add 6 add9    <input name="AddMenu" type="radio" id="6add9" ></label></li>
+                  <li><label> add 9     <input name="AddMenu" type="radio" id="major9" ></label></li>
+                  <li><label> add ♭9    <input name="AddMenu" type="radio" id="major_flat9" ></label></li>
+                  <li><label> add #9    <input name="AddMenu" type="radio" id="major_sharp9" ></label></li>
+                </ul>
+              </li>
+
+              <li>
+                Extended ▸
+                <ul class ="submenu">
+                  <li><label> Maj 7 ♭5      <input name="ExtendedMenu" type="radio" id="maj7flat5" ></label></li>
+                  <li><label> Major 11      <input name="ExtendedMenu" type="radio" id="major11" ></label></li>
+                  <li><label> Major #11     <input name="ExtendedMenu" type="radio" id="major_sharp11" ></label></li>
+                  <li><label> Major 13      <input name="ExtendedMenu" type="radio" id="major13" ></label></li>
+                  <li><label> Major 13 #11  <input name="ExtendedMenu" type="radio" id="major13sharp11" ></label></li>
+                </ul>
+              </li>
+
+              
             </ul>
           </li>
+
           <li>
-            Voicings ▸
+            Minor ▸
             <ul class="submenu">
-               <label> <li>Root Position<input name="voicingsMenu" type="radio" id="root" ></li></label>
-               <label> <li>1st Inversion<input name="voicingsMenu" type="radio" id="first" ></li></label>
-               <label> <li>2nd Inversion<input name="voicingsMenu" type="radio" id="second" ></li></label>
+              <li><label> Minor Triad       <input name="MinorMenu" type="radio" id="minor" ></label></li>
+              <li><label> m add 6           <input name="MinorMenu" type="radio" id="madd6" ></label></li>
+              <li><label> m add ♭6          <input name="MinorMenu" type="radio" id="maddflat6" ></label></li>
+              <li><label> m7                <input name="MinorMenu" type="radio" id="m7" ></label></li>
+              <li><label> minor major7      <input name="MinorMenu" type="radio" id="minormajor7" ></label></li>
+              <li><label> m7♭9              <input name="MinorMenu" type="radio" id="m7flat9" ></label></li>
+              <li><label> m9                <input name="MinorMenu" type="radio" id="m9" ></label></li>
+              <li><label> minor major ♭9    <input name="MinorMenu" type="radio" id="minorMajorflat9" ></label></li>
+              <li><label> minor6add9        <input name="MinorMenu" type="radio" id="m6add9" ></label></li>
+              <li><label> m11               <input name="MinorMenu" type="radio" id="m11" ></label></li>
+              <li><label> m7#11             <input name="MinorMenu" type="radio" id="m7#11" ></label></li>
+              <li><label> minor major 11    <input name="MinorMenu" type="radio" id="minormajor11" ></label></li>
+              <li><label> minor major #11   <input name="MinorMenu" type="radio" id="minormajorsharp11" ></label></li>
+              <li><label> m13               <input name="MinorMenu" type="radio" id="m13" ></label></li>
+              <li><label> m13#11            <input name="MinorMenu" type="radio" id="m13sharp11" ></label></li>
+              <li><label> minor major 13    <input name="MinorMenu" type="radio" id="minormajor13" ></label></li>
+              <li><label> minor major 13 #11<input name="MinorMenu" type="radio" id="minormajor13sharp11" ></label></li>
             </ul>
           </li>
+
           <li>
-            Extensions ▸
+            Augmented ▸
             <ul class="submenu">
-              <label><li>  #5  <input type="checkbox" id="#5" > </li>  </label>
-              <label><li>   6  <input type="checkbox" id="6"  > </li>  </label>
-              <label><li>   ♭7 <input type="checkbox" id="♭7" >  </li>  </label>
-              <label><li>   7  <input type="checkbox" id="7"  > </li>  </label>
-              <label><li>   ♭9 <input type="checkbox" id="♭9" >  </li>  </label>
-              <label><li>  #9  <input type="checkbox" id="#9" >  </li> </label>
-              <label><li>  ♭11 <input type="checkbox" id="♭11"> </li></label>
-              <label><li>  11  <input type="checkbox" id="11" >  </li> </label>
-              <label><li> #11  <input type="checkbox" id="#11"> </li></label>
-              <label><li>  ♭13<input type="checkbox" id="♭13"> </li></label>
-              <label><li>  13  <input type="checkbox" id="13" >  </li></label>
-              <label><li> #13  <input type="checkbox" id="#13"> </li></label>
+              <li><label> augmented triad <input name="AugmentedMenu" type="radio" id="augmented" > </label></li>
+              <li><label> Δ7#5  <input name="AugmentedMenu" type="radio" id="dom7sharp5"  > </label></li>
+              <li><label> maj7#5 <input name="AugmentedMenu" type="radio" id="maj7sharp5" >  </label></li>
+            </ul>
+          </li>
+
+          <li>
+            Diminished ▸
+            <ul class="submenu">
+              <li><label> diminished  <input name="DiminishedMenu" type="radio" id="diminished" > </label></li>
+              <li><label> diminished 7  <input name="DiminishedMenu" type="radio" id="diminished7" > </label></li>
+              <li><label> half diminished 7  <input name="DiminishedMenu" type="radio" id="halfDiminished7" > </label></li>
+            </ul>
+          </li>
+
+          <li>
+            Suspended ▸
+            <ul class="submenu">
+              <li><label> sus2  <input name="SuspendedMenu" type="radio" id="#5" > </label></li>
+              <li><label> sus4  <input name="SuspendedMenu" type="radio" id="6"  > </label></li>
+              <li><label> sus2sus4 <input name="SuspendedMenu" type="radio" id="flat7" >  </label></li>
+              <li><label> Δ7sus2  <input name="SuspendedMenu" type="radio" id="7"  > </label></li>
+              <li><label> Δ7sus4 <input name="SuspendedMenu" type="radio" id="flat9" >  </label></li>
+              <li><label> maj7sus2  <input name="SuspendedMenu" type="radio" id="#9" >  </label></li>
+              <li><label> maj7sus4 <input name="SuspendedMenu" type="radio" id="flat11"> </label></li>
             </ul>
           </li>
           
@@ -603,7 +681,7 @@
     <!-- xxxxxxx end of new shit xxxxxxxx -->
 
 
-    <script src="script.js" type="module" ></script>
+    <script src="script.js" type="module" defer></script>
     <!-- type="module" -->
   </body>
 </html>

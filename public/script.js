@@ -10,63 +10,116 @@ onModeChange(generateDiatonicChords(generateDiatonicNotes(1,'c')))
 renderSounds(1, generateDiatonicChords(generateDiatonicNotes(1,'c')))
 
 // ----- NEW CODE ----
+
+ // I want chordstates to look like this: chordstates = { root: 'c', name: 'dom7flat5' }
+let chordStates = {}; // array of 21 objects with info gathered from user input on HTML
+//const chordStates = {};
+
+// Cache DOM elements
 const menu = document.getElementById("gearMenu");
+const overlay = document.getElementById("popupOverlay");
 
-// Example: attach to a gear button
-document.querySelectorAll(".key").forEach(gear => {
-  gear.addEventListener("click", (e) => {
-    e.preventDefault();
-    // Position menu
-    menu.style.top = e.pageY -10 + "px";
-    menu.style.left = e.pageX -10 + "px";
-    menu.style.display = "block";
+// Attach event listeners to keys
+document.querySelectorAll(".key.modifiable").forEach(key => {
+  key.addEventListener("click", (e) => {
+    const keyIndex = key.dataset.keyIndex;
+    openMenu(e.pageX, e.pageY, keyIndex);
   });
 });
 
-// Hide menu on click outside
-document.addEventListener("click", (e) => {
-  if (!menu.contains(e.target) && !e.target.classList.contains("key")) {
-    menu.style.display = "none";
+// Open and position the menu
+function openMenu(x, y, keyIndex) {
+  menu.style.display = "block"; // show first so width/height are real
+  overlay.style.display = "block";
+
+  const menuRect = menu.getBoundingClientRect();
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+
+  let left = x;
+  let top = y;
+
+  // clamp to right edge
+  if (x + menuRect.width > viewportWidth) {
+    left = viewportWidth - menuRect.width - 5;
   }
-});
+  // clamp to bottom edge
+  if (y + menuRect.height > viewportHeight) {
+    top = viewportHeight - menuRect.height - 5;
+  }
 
-// -- newest code --
- // chordstates = { root: { "c": true, "c#": false, ... } 
- // quality: { "major": true, "minor": false, ... }
- // voicings: { "root": true, "first": false, ... }
- // extension: { "#5": true, "6": false, ... } }
+  menu.style.left = `${Math.max(0, left)}px`;
+  menu.style.top = `${Math.max(0, top)}px`;
 
-// array of 21 objects
-// each object has 4 dyanmic data structs, root, quality, voicings, extensions.
-// 
+  loadChordState(keyIndex);
+  bindInputs(keyIndex);
 
-let chordStates = {};
+  // adjust submenus too
+  adjustSubmenus(menu);
+}
 
-document.querySelectorAll(".key").forEach(gear => {
-  gear.addEventListener("click", (e) => {
-    const keyId = gear.dataset.key; // give each gear a data-key="C", "Dm", etc.
-    showMenuAt(e.pageX, e.pageY, keyId);
-  });
-});
+// Load saved state for a key
+function loadChordState(keyIndex) {
+  const savedState = chordStates[keyIndex] || {};
 
-function showMenuAt(x, y, keyId) {
-  const menu = document.getElementById("gearMenu");
-  menu.style.left = x + "px";
-  menu.style.top = y + "px";
-  menu.style.display = "block";
-
-  // Load saved state
-  Object.entries(chordStates[keyId] || {}).forEach(([id, checked]) => {
-    const box = menu.querySelector(`#${CSS.escape(id)}`);
-    if (box) box.checked = checked;
+  // Reset inputs before applying state
+  menu.querySelectorAll("input").forEach(input => {
+    input.checked = false;
   });
 
-  // Save state on toggle
-  menu.querySelectorAll("input[type='checkbox']").forEach(input => {
+  Object.entries(savedState).forEach(([id, checked]) => {
+    const input = menu.querySelector(`#${CSS.escape(id)}`);
+    if (input) input.checked = checked;
+  });
+}
+menu.querySelectorAll("li").forEach(li => {
+  li.addEventListener("mouseenter", () => adjustSubmenus(menu));
+});
+// Bind input listeners once per open
+function bindInputs(keyIndex) {
+  menu.querySelectorAll("input").forEach(input => {
     input.onchange = () => {
-      if (!chordStates[keyId]) chordStates[keyId] = {};
-      chordStates[keyId][input.id] = input.checked;
+      if (!chordStates[keyIndex]) chordStates[keyIndex] = {};
+      chordStates[keyIndex][input.id] = input.checked;
     };
+  });
+}
+
+// Close menu when clicking outside
+overlay.addEventListener("click", closeMenu);
+function closeMenu() {
+  menu.style.display = "none";
+  overlay.style.display = "none";
+}
+function adjustSubmenus(menu) {
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+
+  menu.querySelectorAll(".submenu").forEach(sub => {
+    sub.classList.remove("reverse"); // reset
+    sub.style.top = ""; // reset
+
+    const rect = sub.getBoundingClientRect();
+
+    // Flip horizontally if overflowing right
+    if (rect.right > viewportWidth) {
+      sub.classList.add("reverse");
+    }
+    if (sub.parentElement.closest(".submenu")?.classList.contains("reverse")) {
+      sub.classList.add("reverse");
+    }
+
+    // Nudge vertically using absolute position
+    let topOffset = 0;
+    const subHeight = rect.height;
+    const parentRect = sub.parentElement.getBoundingClientRect();
+    const spaceBelow = viewportHeight - parentRect.bottom;
+
+    if (subHeight > spaceBelow) {
+      topOffset = spaceBelow - subHeight - 5; // push up
+    }
+
+    sub.style.top = `${topOffset}px`;
   });
 }
 // ----- END NEW CODE ----
@@ -332,51 +385,59 @@ function renderSounds (mode, newChords){
     let diminishedTemp = commonFormulas['diminished']
     let minorTemp = commonFormulas['minor']
     let majorTemp = commonFormulas['major']
-
-    // let formula = [0,4,7]
-    // let rootNote= 'c#'
-    // let startingOctave= '4' 
-    // let myChord = new Chord(formula, rootNote, startingOctave )
     
-    let chords = [] // NEW CODE: this will be an array of Chord objects
+    let chords = [] 
     let currentModeChordPattern = commonFormulas['modeChords'][modeSelect] // ['major','minor','minor','major','major','minor','diminished']
-    
-    //console.log('currentModeChordPattern: ' + currentModeChordPattern)
     
     let notesOfCurrentMode = commonFormulas.modeSteps[modeSelect]    
     let startingPosition = commonFormulas.notes.indexOf(keyInput.value)
 
-   //console.log("notesOfCurrentMode: " + notesOfCurrentMode)
 
-    // populate row 1 of keyboard
-
-    // we just want the root note to ascend
-    // take allNumberedNotes, just iterate up that, split the note to one side and the number to the other?
-
-    for(let i = 0; i< 7; i++){
-        //console.log('commonFormulas.notes[startingPosition + notesOfCurrentMode[i]].slice(0,-1): ' + commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(0,-1))
-
-        switch (currentModeChordPattern[i]) {
-            case 'major':
-                chords.push(new Chord (majorTemp,commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(0,-1),commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(-1))) //keyInput.value may cause issues
-                break
-            case 'minor':
-                chords.push(new Chord (minorTemp,commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(0,-1),commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(-1))) //keyInput.value may cause issues
-                break
-            case 'diminished':
-                chords.push(new Chord(diminishedTemp,commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(0,-1),commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(-1))) //keyInput.value may cause issues
-                break
-        }
+    // --- add functionality where chords[i] reads the property of the user selected shit
+    // -- fuck, this may be tricky.
+    // -- should this come after these 3 rows are populated?  No, need to change current code
+    // honestly, we first need a way to get the context menu working and storing data.
     
+    // for now, user just selects a chord.  no modding the chords.  give them a list of popular ones.
+
+    // I think what we have to do is have these 3 rows read directly from html.  We can probably use this code, just changed slightly.  the swithc maybe shouldn't be based on currentModeChordPattern, but instead on the actual HTML
+    //
+
+
+    const chordEls = document.querySelectorAll('#keyboard .chord'); // returns nodeArray of all text in the chord class 
+    //hordEls[i].textContent
+
+    // Populate row 1 of keyboard (pre user input)
+    for(let i = 0; i< 7; i++){
+
+        // this is reading directly from the HTML, which isn't exactly a  bad thing.
+        // but this doesn't scale to the other extended structures...
+        // how can we make that work?
+
+        if (chordEls[i].textContent.includes('dim')) {
+            chords.push(new Chord(diminishedTemp,commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(0,-1),commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(-1))) //keyInput.value may cause issues
+        } else if (chordEls[i].textContent.includes('m')) {
+            chords.push(new Chord (minorTemp,commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(0,-1),commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(-1))) //keyInput.value may cause issues
+        } else {
+            chords.push(new Chord (majorTemp,commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(0,-1),commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(-1))) //keyInput.value may cause issues
+        }
+
+        // switch (currentModeChordPattern[i]) {
+        //     case 'major':
+        //         chords.push(new Chord (majorTemp,commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(0,-1),commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(-1))) //keyInput.value may cause issues
+        //         break
+        //     case 'minor':
+        //         chords.push(new Chord (minorTemp,commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(0,-1),commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(-1))) //keyInput.value may cause issues
+        //         break
+        //     case 'diminished':
+        //         chords.push(new Chord(diminishedTemp,commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(0,-1),commonFormulas.allNumberedNotes[startingPosition + notesOfCurrentMode[i]].slice(-1))) //keyInput.value may cause issues
+        //         break
+        // }
+
     }
 
-
-    // for (let k=0;k<chords.length; k++){
-    //    console.log("row1--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
-    // }
-
+    // Row 2 (pre user input)
     for(let i = 7; i< 14; i++){
-        //console.log("chords["+i+"%7].rootNote: " + chords[i%7].rootNote)
         switch (currentModeChordPattern[i%7]) {
             case 'major':
                 chords.push(new Chord(minorTemp,chords[i%7].rootNote, chords[i%7].startingOctave)) //keyInput.value may cause issues
@@ -390,10 +451,7 @@ function renderSounds (mode, newChords){
         }
     }
 
-    // for (let k=0;k<chords.length; k++){
-    //    console.log("row2--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
-    // }
-
+    // Row 3 (pre user input)
     for(let i = 14; i< 21; i++){
         // console.log('===x===')
         // console.log("chords["+i+"%7].rootNote: " + chords[i%7].rootNote)
@@ -410,16 +468,10 @@ function renderSounds (mode, newChords){
         }
     }
 
-    // for (let k=0;k<chords.length; k++){
-    //    console.log("row3--------chords" + k + ': '+ chords[k].numberedEncodedNotes)
-    // }
-
-        
-    // row 2-3 are easy, even with this current way of doing things
-    // row 1 
 
     // ---- All this is probably pointless lol ----
     // const chordEls = document.querySelectorAll('#keyboard .chord'); // returns nodeArray of all text in the chord class 
+   0 //chordEls[i].textContent
     // sounds = {}
     // const referenceNotes = [ 'c3','c#3','d3','d#3','e3','f3','f#3','g3','g#3','a3','a#3','b3', 'c4','c#4','d4','d#4','e4','f4','f#4','g4','g#4','a4','a#4','b4', 'c5','c#5','d5','d#5','e5','f5','f#5','g5','g#5','a5','a#5','b5', ];
 
