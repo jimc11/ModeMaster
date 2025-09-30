@@ -5,8 +5,9 @@ document.getElementById("generateButton").addEventListener("click", generate);
 
 let sounds 
 let chordStates = {}; // array of 21 objects with info gathered from user input on HTML
-
+let keyIndexGlobal
 //default chords upon first visit
+populateChordStates()
 onModeChange(generateDiatonicChords(generateDiatonicNotes(1,'c')))
 renderSounds(1, generateDiatonicChords(generateDiatonicNotes(1,'c')))
 
@@ -29,6 +30,8 @@ document.querySelectorAll(".key.modifiable").forEach(key => {
 
 // Open and position the menu
 function openMenu(x, y, keyIndex) {
+
+    keyIndexGlobal = keyIndex
   menu.style.display = "block"; // show first so width/height are real
   overlay.style.display = "block";
 
@@ -51,14 +54,39 @@ function openMenu(x, y, keyIndex) {
   menu.style.left = `${Math.max(0, left)}px`;
   menu.style.top = `${Math.max(0, top)}px`;
 
+  
+
+  // this function wipes the radio buttons and only populates the ones that are true
   loadChordState(keyIndex);
   bindInputs(keyIndex);
-
   // adjust submenus too
   adjustSubmenus(menu);
+
+  //updateKeyboard()
+
 }
 
-// Load saved state for a key
+// Takes the list of all true inputs on the contextmenu radio buttons and
+// saves the true ones into chordStates for the keyIndex that was clicked on
+
+function saveChordState() {
+  const newState = {};
+
+  menu.querySelectorAll("input").forEach(input => {
+    if (input.checked) {
+      newState[input.id] = true;
+    }
+  });
+
+
+   chordStates[keyIndexGlobal] = newState; // overwrite instead of merging
+
+//   console.log('chordStates 2')
+  console.log(chordStates)
+}
+
+// Load saved state for a key on the contextmenu radio buttons 
+// doesn't load anything into chordStates
 function loadChordState(keyIndex) {
   const savedState = chordStates[keyIndex] || {};
 
@@ -67,29 +95,37 @@ function loadChordState(keyIndex) {
     input.checked = false;
   });
 
+  // Apply saved state
   Object.entries(savedState).forEach(([id, checked]) => {
     const input = menu.querySelector(`#${CSS.escape(id)}`);
     if (input) input.checked = checked;
   });
 }
+
 menu.querySelectorAll("li").forEach(li => {
-  li.addEventListener("mouseenter", () => adjustSubmenus(menu));
+    li.addEventListener("mouseenter", () => adjustSubmenus(menu));
 });
+
 // Bind input listeners once per open
 function bindInputs(keyIndex) {
-  menu.querySelectorAll("input").forEach(input => {
-    input.onchange = () => {
-      if (!chordStates[keyIndex]) chordStates[keyIndex] = {};
-      chordStates[keyIndex][input.id] = input.checked;
-    };
-  });
+    menu.querySelectorAll("input").forEach(input => {
+        input.onchange = () => {
+        if (!chordStates[keyIndex]) chordStates[keyIndex] = {};
+        chordStates[keyIndex][input.id] = input.checked;
+        };
+    });
 }
 
 // Close menu when clicking outside
 overlay.addEventListener("click", closeMenu);
+
 function closeMenu() {
   menu.style.display = "none";
   overlay.style.display = "none";
+
+  // Surely this must happen when the user clicks off the menu...
+  saveChordState()
+  generate() // this may cause issues...
 }
 function adjustSubmenus(menu) {
   const viewportWidth = window.innerWidth;
@@ -396,7 +432,7 @@ function renderSounds (){
     let notesOfCurrentMode = commonFormulas.modeSteps[modeSelect]    
     let startingPosition = commonFormulas.notes.indexOf(keyInput.value)
 
-    console.log( chordStates)
+    //console.log( chordStates)
     //so, it looks like this:
 // Object { 1: { g: true }, 2: { f: true, major: true, "d#": true } }
 // and before user has input, it looks like this: 
@@ -404,7 +440,8 @@ function renderSounds (){
 // so, do we want to populate chordStates with hardcoding? no
 // but we do want to prepopulate it with whatever is on the HTML.  In fact, we always want to 
 // pull directly from HTML.  The radio menu will adjust the HTML, JS grabs from HTML and stores,  then sounds render from js logic
-READ THIS ^^^^^
+// This is technically no
+//READ THIS ^^^^^
 
     // --- add functionality where chords[i] reads the property of the user selected shit
     // -- fuck, this may be tricky.
@@ -637,44 +674,33 @@ document.addEventListener('keydown', (event) => {
 // We will need to update this!  This will need to display the new user selected chords
 function updateKeyboard(buttonsNewChords) {
     const chordEls = document.querySelectorAll('#keyboard .chord'); // returns nodeArray of all text in the chord class 
-    let chordsChords= []    
 
-    let types= []
-    // buttonsNewChords is 7x3 array
-    buttonsNewChords.forEach((chordNotes, i) => {
+    for (let i = 0; i < 21; i++) {
+        const chord = chordStates[i];
+        if (!chord) continue; // skip empty slots
 
-        if (chordEls[i]) {
-        
-            for (let i = 0 ; i < chordNotes.length-3; i++){
-                chordsChords.push(chordIdentifier(chordNotes[i],chordNotes[i+1],chordNotes[i+2]))
+        // Step 1: Find the root (c, d, e, f, g, a, b)
+        const root = Object.keys(chord)
+            .find(k => ['c','d','e','f','g','a','b'].includes(k))
+            .toUpperCase();
+
+        // Step 2: Build suffix from the other keys
+        const qualities = Object.keys(chord).filter(k => !['c','d','e','f','g','a','b'].includes(k));
+
+        let suffix = '';
+        for (const q of qualities) {
+            switch (q) {
+            case 'minor': suffix += 'm'; break;
+            case 'diminished': suffix += 'dim'; break;
+            case 'major': suffix += ''; break; // no suffix for major triad
+            default: suffix += ' ' +q; // fallback: use key name directly
             }
-            let chordType = chordIdentifier(chordNotes);
-            // display root note + chord type
-            if(chordType == 'diminished') {
-                chordType = 'dim'
-            } else if(chordType == 'major') {
-                chordType = ' '
-            } else if(chordType == 'minor') {
-                chordType = 'm'
-            }
-            types.push(chordType)
-
-            chordEls[i].textContent = chordNotes[0].toUpperCase() + " " + chordType;
         }
 
-    });
+        // Step 3: Assign to DOM
+        chordEls[i].textContent = root + suffix;
+        //console.log('chordEls[i].textContent: ' + chordEls[0].textContent)
 
-    for (let i = 0; i<7; i++){ // this used to be i<14.  
-        if (types[i] == ' '){
-            chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + "m"
-            chordEls[i+14].textContent = buttonsNewChords[i][0].toUpperCase() + "dim"
-        } else if (types[i] == 'm'){
-            chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + "dim"
-            chordEls[i+14].textContent = buttonsNewChords[i][0].toUpperCase() + " "
-        } else {
-            chordEls[i+7].textContent = buttonsNewChords[i][0].toUpperCase() + " "
-            chordEls[i+14].textContent = buttonsNewChords[i][0].toUpperCase() + "m"
-        }
     }
 }
 
@@ -682,4 +708,33 @@ function updateKeyboard(buttonsNewChords) {
 function onModeChange(newChords) {
     //modeChords = newChords;
     updateKeyboard(newChords);
+}
+//{ 1: { g: true }, 2: { f: true, major: true, "d#": true } }
+function populateChordStates(){
+    chordStates = {
+        0: {c: true, major: true},
+        1: {d: true, minor: true},
+        2: {e: true, minor: true},
+        3: {f: true, major: true},
+        4: {g: true, major: true},
+        5: {a: true, minor: true},
+        6: {b: true, diminished: true},
+
+        7: {c: true, minor: true},
+        8: {d: true, diminished: true},
+        9: {e: true, diminished: true},
+        10: {f: true, minor: true},
+        11: {g: true, minor: true},
+        12: {a: true, diminished: true},
+        13: {b: true, major: true},
+
+        14: {c: true, diminished: true},
+        15: {d: true, major: true},
+        16: {e: true, major: true},
+        18: {f: true, diminished: true},
+        19: {g: true, diminished: true},
+        20: {a: true, major: true},
+        21: {b: true, minor: true},
+
+    }
 }
